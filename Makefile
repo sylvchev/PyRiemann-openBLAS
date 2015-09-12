@@ -30,3 +30,4 @@ Class/RealSqPosDefRegMat.o : Class/RealSqPosDefRegMat.cpp
 
 Main : Main.cpp
 	g++ -Wall -I Eigen/ Main.cpp $(Objects) -o Main
+	
