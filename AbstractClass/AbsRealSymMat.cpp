@@ -30,7 +30,7 @@ void AbsRealSymMat::ComputeEigen(bool eigenValuesOnly)
 RealSymPosDefMat& AbsRealSymMat::Expm()
 {
 	if (this->expm != NULL)
-		return *(this->expm);	
+		return *dynamic_cast<RealSymPosDefMat*>(this->expm);	
 
 	this->ComputeEigen();
 
@@ -40,5 +40,5 @@ RealSymPosDefMat& AbsRealSymMat::Expm()
 
 	this->expm = new RealSymPosDefMat(this->eigenVectors * expEigenValues.asDiagonal() * this->eigenVectors.transpose());
 
-	return *(this->expm);
+	return *dynamic_cast<RealSymPosDefMat*>(this->expm);
 }

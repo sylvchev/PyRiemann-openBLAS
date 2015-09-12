@@ -34,18 +34,18 @@ RealSymRegMat::~RealSymRegMat()
 	
 }
 
-/*RealSymRegMat RealSymRegMat::Powm(double power)
+RealSymRegMat& RealSymRegMat::Powm(double power)
 {
 	if (this->powm != NULL)
-		return *(dynamic_cast<RealSymRegMat*>(this->powm));	
+		return *dynamic_cast<RealSymRegMat*>(this->powm);	
 
 	this->ComputeEigen();
 
-	VectorXd pow_eigenvalues(this->nbCols);
+	VectorXd powEigenValues(this->nbCols);
 	for (unsigned int i = 0; i < this->nbCols; i++)
-		pow_eigenvalues(i) = pow(eigenvalues(i), power);
+		powEigenValues(i) = pow(this->eigenValues(i), power);
 
-	this->powm = new RealSymRegMat(this->eigenvectors * pow_eigenvalues.asDiagonal() * this->eigenvectors.transpose());
+	this->powm = new RealSymRegMat(this->eigenVectors * powEigenValues.asDiagonal() * this->eigenVectors.transpose());
 
-	return *(this->powm);
-}*/
+	return *dynamic_cast<RealSymRegMat*>(this->powm);
+}

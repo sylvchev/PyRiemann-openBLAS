@@ -1,8 +1,5 @@
 #include <Eigen>
-#include "RealSymPosDefMat.hpp" 
-
-#include <iostream>
-using namespace std;
+#include "RealSymPosDefMat.hpp"
 
 using namespace Eigen;
 
@@ -43,18 +40,18 @@ RealSymPosDefMat::~RealSymPosDefMat()
 	
 }
 
-/*RealSymPosDefMat RealSymPosDefMat::Powm(double power)
+RealSymPosDefMat& RealSymPosDefMat::Powm(double power)
 {
 	if (this->powm != NULL)
-		return *(dynamic_cast<RealSymPosDefMat*>(this->powm));	
+		return *dynamic_cast<RealSymPosDefMat*>(this->powm);	
 
 	this->ComputeEigen();
 
-	VectorXd pow_eigenvalues(this->nbCols);
+	VectorXd powEigenValues(this->nbCols);
 	for (unsigned int i = 0; i < this->nbCols; i++)
-		pow_eigenvalues(i) = pow(eigenvalues(i), power);
+		powEigenValues(i) = pow(this->eigenValues(i), power);
 
-	this->powm = new RealSymPosDefMat(this->eigenvectors * pow_eigenvalues.asDiagonal() * this->eigenvectors.transpose());
+	this->powm = new RealSymPosDefMat(this->eigenVectors * powEigenValues.asDiagonal() * this->eigenVectors.transpose());
 
-	return *(this->powm);
-}*/
+	return *dynamic_cast<RealSymPosDefMat*>(this->powm);
+}

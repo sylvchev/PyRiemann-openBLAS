@@ -3,6 +3,7 @@
 
 #include <Eigen>
 #include "AbsRealSqMat.hpp"
+
 class RealSymPosDefMat; //#include "../Class/RealSymPosDefMat.hpp"
 
 using namespace Eigen;
@@ -11,11 +12,10 @@ class AbsRealSymMat : public AbsRealSqMat
 {
 	protected:
 		VectorXd eigenValues;
-		MatrixXd eigenVectors;		
-		RealSymPosDefMat* expm;
+		MatrixXd eigenVectors;	
+		void ComputeEigen(bool eigenValuesOnly = false);
 
 	public:
-		void ComputeEigen(bool eigenValuesOnly = false);
 		RealSymPosDefMat& Expm();
 
 		//Virtual destructors for polymorphism

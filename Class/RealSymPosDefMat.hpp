@@ -13,14 +13,13 @@ class RealSymPosDefMat : public AbsRealSymMat
 		RealSymPosDefMat* sqrtm;
 		RealSymPosDefMat* invsqrtm;
 		RealSymRegMat* logm;
-		RealSymPosDefMat* powm;
 
 	public:
 		RealSymPosDefMat(double* array, unsigned int matrixOrder);
 		RealSymPosDefMat(MatrixXd matrix);
 		~RealSymPosDefMat();
 
-		//RealSymPosDefMat Powm(double power);
+		RealSymPosDefMat& Powm(double power);
 };
 
 #endif
