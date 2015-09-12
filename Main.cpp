@@ -12,12 +12,8 @@ int main()
 	RealSymPosDefMat symRegMat((double*)(&array2), 3);
 
 	cout << "sym reg mat\n" << symRegMat << endl << endl;
-
 	cout << "sym reg mat expm\n" << symRegMat.Expm() << endl << endl;
-	cout << "sym reg mat powm\n" << symRegMat.Powm(2) << endl << endl;
 
 	cout << "sym pos def mat\n" << symPosDefMat << endl << endl;
-
 	cout << "sym pos def mat expm\n" << symPosDefMat.Expm() << endl << endl;
-	cout << "sym pos def mat powm\n" << symPosDefMat.Powm(2) << endl << endl;
 }

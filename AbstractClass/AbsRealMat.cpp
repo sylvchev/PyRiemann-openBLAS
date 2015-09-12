@@ -7,11 +7,11 @@ using namespace Eigen;
 
 double AbsRealMat::Norm()
 {
-	return this->matrix.norm();
+	return this->eigenMatrix.norm();
 }
 
 ostream& operator << (ostream &output, const AbsRealMat& absRealMat)
 { 
-    output << absRealMat.matrix;
+    output << absRealMat.eigenMatrix;
     return output;            
 }

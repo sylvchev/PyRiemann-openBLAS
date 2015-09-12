@@ -5,5 +5,5 @@ using namespace Eigen;
 
 double AbsRealSqMat::Determinant ()
 {
-	return this->matrix.determinant();
+	return this->eigenMatrix.determinant();
 } 

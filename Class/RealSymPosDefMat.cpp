@@ -8,12 +8,12 @@ using namespace Eigen;
 
 RealSymPosDefMat::RealSymPosDefMat(double* array, unsigned int matrixOrder)
 {
-	this->matrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
+	this->eigenMatrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
 	this->nbCols = matrixOrder;
 	this->nbRows = matrixOrder;
 
-	b_eigenvalues = false;
-	b_eigenvectors = false;
+	b_eigenValues = false;
+	b_eigenVectors = false;
 
 	this->sqrtm = NULL;
 	this->invsqrtm = NULL;
@@ -24,12 +24,12 @@ RealSymPosDefMat::RealSymPosDefMat(double* array, unsigned int matrixOrder)
 
 RealSymPosDefMat::RealSymPosDefMat(MatrixXd matrix)
 {
-	this->matrix = matrix;
+	this->eigenMatrix = matrix;
 	this->nbCols = matrix.cols();
 	this->nbRows = matrix.rows();
 
-	b_eigenvalues = false;
-	b_eigenvectors = false;
+	b_eigenValues = false;
+	b_eigenVectors = false;
 
 	this->sqrtm = NULL;
 	this->invsqrtm = NULL;
@@ -43,7 +43,7 @@ RealSymPosDefMat::~RealSymPosDefMat()
 	
 }
 
-RealSymPosDefMat RealSymPosDefMat::Powm(double power)
+/*RealSymPosDefMat RealSymPosDefMat::Powm(double power)
 {
 	if (this->powm != NULL)
 		return *(dynamic_cast<RealSymPosDefMat*>(this->powm));	
@@ -56,5 +56,5 @@ RealSymPosDefMat RealSymPosDefMat::Powm(double power)
 
 	this->powm = new RealSymPosDefMat(this->eigenvectors * pow_eigenvalues.asDiagonal() * this->eigenvectors.transpose());
 
-	return *(dynamic_cast<RealSymPosDefMat*>(this->powm));
-}
+	return *(this->powm);
+}*/

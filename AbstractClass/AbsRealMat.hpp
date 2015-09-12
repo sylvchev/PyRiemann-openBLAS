@@ -10,20 +10,19 @@ using namespace Eigen;
 
 class AbsRealMat : public AbsMat
 {
-	protected:
+	protected:		
+		//Fields
+		MatrixXd eigenMatrix;
 
 	public:
-		//Fields
-		MatrixXd matrix;
-
-		//Virtual destructors for polymorphism
-		virtual ~AbsRealMat() {}
-
 		//Methods
 		double Norm();
 
 		//<< operator overload
 		friend ostream& operator << (ostream &output, const AbsRealMat& absRealMat);
+
+		//Virtual destructors for polymorphism
+		virtual ~AbsRealMat() {}
 };
 
 #endif

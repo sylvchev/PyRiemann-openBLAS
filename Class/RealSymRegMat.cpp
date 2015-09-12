@@ -5,12 +5,12 @@ using namespace Eigen;
 
 RealSymRegMat::RealSymRegMat(double* array, unsigned int matrixOrder)
 {
-	this->matrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
+	this->eigenMatrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
 	this->nbCols = matrixOrder;
 	this->nbRows = matrixOrder;
 
-	b_eigenvalues = false;
-	b_eigenvectors = false;
+	b_eigenValues = false;
+	b_eigenVectors = false;
 
 	this->expm = NULL;
 	this->powm = NULL;
@@ -18,12 +18,12 @@ RealSymRegMat::RealSymRegMat(double* array, unsigned int matrixOrder)
 
 RealSymRegMat::RealSymRegMat(MatrixXd matrix)
 {
-	this->matrix = matrix;
+	this->eigenMatrix = matrix;
 	this->nbCols = matrix.cols();
 	this->nbRows = matrix.rows();
 
-	b_eigenvalues = false;
-	b_eigenvectors = false;
+	b_eigenValues = false;
+	b_eigenVectors = false;
 
 	this->expm = NULL;
 	this->powm = NULL;
@@ -34,7 +34,7 @@ RealSymRegMat::~RealSymRegMat()
 	
 }
 
-RealSymRegMat RealSymRegMat::Powm(double power)
+/*RealSymRegMat RealSymRegMat::Powm(double power)
 {
 	if (this->powm != NULL)
 		return *(dynamic_cast<RealSymRegMat*>(this->powm));	
@@ -47,5 +47,5 @@ RealSymRegMat RealSymRegMat::Powm(double power)
 
 	this->powm = new RealSymRegMat(this->eigenvectors * pow_eigenvalues.asDiagonal() * this->eigenvectors.transpose());
 
-	return *(dynamic_cast<RealSymRegMat*>(this->powm));
-}
+	return *(this->powm);
+}*/

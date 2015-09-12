@@ -10,12 +10,13 @@ using namespace Eigen;
 class AbsRealSymMat : public AbsRealSqMat
 {
 	protected:
-		VectorXd eigenvalues;
-		MatrixXd eigenvectors;
+		VectorXd eigenValues;
+		MatrixXd eigenVectors;		
+		RealSymPosDefMat* expm;
 
 	public:
-		void ComputeEigen(bool eigenvaluesOnly = false);
-		RealSymPosDefMat Expm();
+		void ComputeEigen(bool eigenValuesOnly = false);
+		RealSymPosDefMat& Expm();
 
 		//Virtual destructors for polymorphism
 		virtual ~AbsRealSymMat() {}

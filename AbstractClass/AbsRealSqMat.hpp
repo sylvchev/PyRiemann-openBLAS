@@ -6,10 +6,8 @@
 class AbsRealSqMat : public AbsRealMat
 {
 	protected:
-		bool b_eigenvalues;
-		bool b_eigenvectors;
-		AbsRealSqMat* expm;
-		AbsRealSqMat* powm;
+		bool b_eigenValues;
+		bool b_eigenVectors;
 
 	public:
 		//Methods

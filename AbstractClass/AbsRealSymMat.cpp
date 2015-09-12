@@ -4,41 +4,41 @@
 
 using namespace Eigen;
 
-void AbsRealSymMat::ComputeEigen(bool eigenvaluesOnly)
+void AbsRealSymMat::ComputeEigen(bool eigenValuesOnly)
 {
-	if ((this->b_eigenvalues)&&(this->b_eigenvectors))
+	if ((this->b_eigenValues)&&(this->b_eigenVectors))
 		return;
 	
-	if ((this->b_eigenvalues)&&(eigenvaluesOnly))
+	if ((this->b_eigenValues)&&(eigenValuesOnly))
 		return;
 
-	if (eigenvaluesOnly)
+	if (eigenValuesOnly)
 	{
-		SelfAdjointEigenSolver<MatrixXd> es(this->matrix, EigenvaluesOnly);
-		this->eigenvalues = es.eigenvalues().real();
-		this->b_eigenvalues = true;
+		SelfAdjointEigenSolver<MatrixXd> es(this->eigenMatrix, EigenvaluesOnly);
+		this->eigenValues = es.eigenvalues().real();
+		this->b_eigenValues = true;
 		return;
 	}
 
-	SelfAdjointEigenSolver<MatrixXd> es(this->matrix);
-	this->eigenvalues = es.eigenvalues().real();
-	this->eigenvectors = es.eigenvectors().real();
-	this->b_eigenvalues = true;
-	this->b_eigenvectors = true;
+	SelfAdjointEigenSolver<MatrixXd> es(this->eigenMatrix);
+	this->eigenValues = es.eigenvalues().real();
+	this->eigenVectors = es.eigenvectors().real();
+	this->b_eigenValues = true;
+	this->b_eigenVectors = true;
 }
 
-RealSymPosDefMat AbsRealSymMat::Expm()
+RealSymPosDefMat& AbsRealSymMat::Expm()
 {
 	if (this->expm != NULL)
-		return *(dynamic_cast<RealSymPosDefMat*>(this->expm));	
+		return *(this->expm);	
 
 	this->ComputeEigen();
 
-	VectorXd exp_eigenvalues(this->nbCols);
+	VectorXd expEigenValues(this->nbCols);
 	for (unsigned int i = 0; i < this->nbCols; i++)
-		exp_eigenvalues(i) = exp(eigenvalues(i));
+		expEigenValues(i) = exp(this->eigenValues(i));
 
-	this->expm = new RealSymPosDefMat(this->eigenvectors * exp_eigenvalues.asDiagonal() * this->eigenvectors.transpose());
+	this->expm = new RealSymPosDefMat(this->eigenVectors * expEigenValues.asDiagonal() * this->eigenVectors.transpose());
 
-	return *(dynamic_cast<RealSymPosDefMat*>(this->expm));
+	return *(this->expm);
 }

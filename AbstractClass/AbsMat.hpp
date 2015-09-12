@@ -4,11 +4,11 @@
 class AbsMat
 {
 	protected:
-
-	public:
 		//Fields
 		unsigned int nbCols;
 		unsigned int nbRows;
+
+	public:
 
 		//Virtual destructors for polymorphism
 		virtual ~AbsMat() {}
