@@ -4,6 +4,8 @@ sudo: false
 
 compiler: g++
 
-script: 
+script:
+  - echo | gcc -dM -E - -march=native
+  - echo | gcc -dM -E - -march=native | grep avx
   - make -B
   - ./Main
