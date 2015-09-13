@@ -5,7 +5,6 @@ sudo: false
 compiler: g++
 
 script:
-  - echo | gcc -dM -E - -march=native
-  - echo | gcc -dM -E - -march=native | grep avx
+  - less /proc/cpuinfo
   - make -B
   - ./Main
