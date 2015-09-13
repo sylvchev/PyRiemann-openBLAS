@@ -5,6 +5,5 @@ sudo: false
 compiler: g++
 
 script:
-  - less /proc/cpuinfo
   - make -B
   - ./Main
