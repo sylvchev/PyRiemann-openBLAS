@@ -29,7 +29,7 @@ class CovMat
 
 		//Constructors
 		CovMat(double* array, unsigned matrixOrder);
-		CovMat(MatrixXd eigenMatrix);
+		CovMat(const MatrixXd& eigenMatrix);
 
 		//Destructors
 		~CovMat();
@@ -41,7 +41,7 @@ class CovMat
 		CovMat& Logm();
 
 		//<< operator overload
-		friend ostream& operator << (ostream &output, CovMat& covMat);
+		friend ostream& operator << (ostream &output, const CovMat& covMat);
 };
 
 #endif
