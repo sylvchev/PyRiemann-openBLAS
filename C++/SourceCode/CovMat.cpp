@@ -57,12 +57,33 @@ CovMat::CovMat(const unsigned int matrixOrder)
 	this->powm = NULL;
 }
 
+CovMat::CovMat()
+{
+
+}
+
 CovMat::~CovMat()
 {
 	delete this->sqrtm;
 	delete this->invsqrtm;
 	delete this->expm;
 	delete this->logm;
+}
+
+void CovMat::SetToZero()
+{
+	this->eigenMatrix.setZero();
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
 }
 
 void CovMat::Randomize()
@@ -90,6 +111,11 @@ double CovMat::Norm() const
 double CovMat::Determinant() const
 {
 	return this->eigenMatrix.determinant();
+}
+
+CovMat CovMat::Inverse() const
+{
+	return CovMat(this->eigenMatrix.inverse());
 }
 
 void CovMat::ComputeEigen(bool eigenValuesOnly)

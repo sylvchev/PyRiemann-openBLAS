@@ -14,7 +14,11 @@ class Mean
 	private:
 
 	public:
+		static CovMat IdentityMean (const vector<CovMat>& covMats);
 		static CovMat EuclideanMean (const vector<CovMat>& covMats);
+		static CovMat LogEuclideanMean (const vector<CovMat>& covMats);
+		static CovMat LogDeterminantMean (const vector<CovMat>& covMats, const double tol = 10e-5, const unsigned int maxIter = 50, CovMat* covMatInit = NULL);
+		static CovMat RiemmanianMean (const vector<CovMat>& covMats, const double tol = 10e-9, const unsigned int maxIter = 50, CovMat* covMatInit = NULL);
 };
  
 #endif 

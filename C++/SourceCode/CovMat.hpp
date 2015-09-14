@@ -32,14 +32,17 @@ class CovMat
 		CovMat(double* array, const unsigned matrixOrder);
 		CovMat(const MatrixXd eigenMatrix);
 		CovMat(const unsigned int matrixOrder);
+		CovMat();
 
 		//Destructors
 		~CovMat();
 
 		//Methods
 		void Randomize();
+		void SetToZero();
 		double Norm() const;
 		double Determinant() const;
+		CovMat Inverse() const;
 		CovMat Sqrtm();
 		CovMat Invsqrtm();
 		CovMat Expm();
