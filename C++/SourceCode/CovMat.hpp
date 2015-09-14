@@ -20,6 +20,7 @@ class CovMat
 		CovMat* invsqrtm;
 		CovMat* expm;
 		CovMat* logm;
+		CovMat* powm; double currentPower;
 
 		//Methods
 		void ComputeEigen(bool eigenValuesOnly = false);
@@ -29,19 +30,25 @@ class CovMat
 
 		//Constructors
 		CovMat(double* array, unsigned matrixOrder);
-		CovMat(const MatrixXd& eigenMatrix);
+		CovMat(const MatrixXd eigenMatrix);
 
 		//Destructors
 		~CovMat();
 
 		//Methods
+		double Norm() const;
+		double Determinant() const;
 		CovMat Sqrtm();
 		CovMat Invsqrtm();
 		CovMat Expm();
 		CovMat Logm();
+		CovMat Powm(double power);
 
 		//<< operator overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);
+
+		//<< operator overload
+		double operator () (const int nCol, const int nRow);
 };
 
 #endif

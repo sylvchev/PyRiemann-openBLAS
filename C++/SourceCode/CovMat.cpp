@@ -17,10 +17,13 @@ CovMat::CovMat(double* array, unsigned matrixOrder)
 	this->invsqrtm = NULL;
 	this->expm = NULL;
 	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
 }
 
 
-CovMat::CovMat(const MatrixXd& eigenMatrix)
+CovMat::CovMat(const MatrixXd eigenMatrix)
 {
 	this->eigenMatrix = eigenMatrix;
 	this->matrixOrder = eigenMatrix.cols();
@@ -32,6 +35,9 @@ CovMat::CovMat(const MatrixXd& eigenMatrix)
 	this->invsqrtm = NULL;
 	this->expm = NULL;
 	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
 }
 
 CovMat::~CovMat()
@@ -40,6 +46,16 @@ CovMat::~CovMat()
 	delete this->invsqrtm;
 	delete this->expm;
 	delete this->logm;
+}
+
+double CovMat::Norm() const
+{
+	return this->eigenMatrix.norm();
+}
+
+double CovMat::Determinant() const
+{
+	return this->eigenMatrix.determinant();
 }
 
 void CovMat::ComputeEigen(bool eigenValuesOnly)
@@ -126,8 +142,36 @@ CovMat CovMat::Logm()
 	return *(this->logm);
 }
 
+CovMat CovMat::Powm(double power)
+{
+	if (power == 1)
+		return *this;
+
+	if (power == this->currentPower)
+		return *(this->powm);
+
+	delete this->powm;
+
+	this->ComputeEigen();
+
+	VectorXd tmp(this->matrixOrder);
+	for (unsigned int i = 0; i < this->matrixOrder; i++)
+		tmp(i) = pow(this->eigenSolver.eigenvalues()(i), power);
+
+	this->powm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->currentPower = power;
+
+	return *(this->powm);
+}
+
 ostream& operator << (ostream &output, const CovMat& covMat)
 { 
     output << covMat.eigenMatrix;
     return output;            
+}
+
+//<< operator overload
+double CovMat::operator () (const int nCol, const int nRow)
+{
+	return this->eigenMatrix(nCol, nRow);
 }
