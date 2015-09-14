@@ -1,5 +1,5 @@
 #include <iostream>
-#include "C++/CovMat.hpp"
+#include "SourceCode/CovMat.hpp"
 
 using namespace std;
 
