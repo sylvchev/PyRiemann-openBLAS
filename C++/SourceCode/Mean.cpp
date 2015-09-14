@@ -18,20 +18,20 @@ CovMat Mean::EuclideanMean (const vector<CovMat>& covMats)
 {
 	CovMat covMatResult(covMats[0].matrixOrder);
 
-	for (CovMat covMat : covMats)
-		covMatResult += covMat;
+	for (unsigned int i = 0; i < covMats.size(); i++)
+		covMatResult += covMats[i];
 
 	covMatResult /= covMats.size();
 
 	return covMatResult;
 }
 
-CovMat Mean::LogEuclideanMean (const vector<CovMat>& covMats)
+CovMat Mean::LogEuclideanMean (vector<CovMat>& covMats)
 {
 	CovMat covMatResult(covMats[0].matrixOrder);
 
-	for (CovMat covMat : covMats)
-		covMatResult += covMat.Logm();
+	for (unsigned int i = 0; i < covMats.size(); i++)
+		covMatResult += covMats[i].Logm();
 
 	covMatResult /= covMats.size();
 
@@ -57,8 +57,8 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 
 		covMatTmp.SetToZero();
 
-		for (CovMat covMat : covMats)
-			covMatTmp += (0.5 * (covMat + covMatResult)).Inverse();
+		for (unsigned int i = 0; i < covMats.size(); i++)
+			covMatTmp += (0.5 * (covMats[i] + covMatResult)).Inverse();
 
 		covMatTmp /= covMats.size();
 
@@ -99,8 +99,8 @@ CovMat Mean::RiemmanianMean (const vector<CovMat>& covMats, const double tol, co
 
 		covMatTmp.SetToZero();
 
-		for (CovMat covMat : covMats)
-			covMatTmp += (covMatResultInvsqrtm * covMat * covMatResultInvsqrtm).Logm();
+		for (unsigned int i = 0; i < covMats.size(); i++)
+			covMatTmp += (covMatResultInvsqrtm * covMats[i] * covMatResultInvsqrtm).Logm();
 
 		covMatTmp /= covMats.size();
 
