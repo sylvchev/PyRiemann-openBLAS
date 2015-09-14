@@ -5,7 +5,7 @@
 using namespace std;
 using namespace Eigen;
 
-CovMat::CovMat(double* array, unsigned matrixOrder)
+CovMat::CovMat(double* array, const unsigned matrixOrder)
 {
 	this->eigenMatrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
 	this->matrixOrder = matrixOrder;
@@ -40,12 +40,46 @@ CovMat::CovMat(const MatrixXd eigenMatrix)
 	this->powm = NULL;
 }
 
+CovMat::CovMat(const unsigned int matrixOrder)
+{
+	this->eigenMatrix = MatrixXd::Zero(matrixOrder, matrixOrder);
+	this->matrixOrder = matrixOrder;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+}
+
 CovMat::~CovMat()
 {
 	delete this->sqrtm;
 	delete this->invsqrtm;
 	delete this->expm;
 	delete this->logm;
+}
+
+void CovMat::Randomize()
+{
+	MatrixXd tmp = MatrixXd::Random(this->matrixOrder, 20 * this->matrixOrder);
+	this->eigenMatrix = tmp * tmp.transpose();
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
 }
 
 double CovMat::Norm() const
@@ -142,7 +176,7 @@ CovMat CovMat::Logm()
 	return *(this->logm);
 }
 
-CovMat CovMat::Powm(double power)
+CovMat CovMat::Powm(const double power)
 {
 	if (power == 1)
 		return *this;
@@ -203,4 +237,94 @@ CovMat operator * (const CovMat& covMat1, const CovMat& covMat2)
 CovMat operator / (const CovMat& covMat, const double div)
 {
 	return CovMat(covMat.eigenMatrix / div);
+}
+
+CovMat& CovMat::operator += (const CovMat& covMat)
+{
+	this->eigenMatrix += covMat.eigenMatrix;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+
+	return *this;
+}
+
+CovMat& CovMat::operator -= (const CovMat& covMat)
+{
+	this->eigenMatrix -= covMat.eigenMatrix;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+
+	return *this;
+}
+
+CovMat& CovMat::operator *= (const double mul)
+{
+	this->eigenMatrix *= mul;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+
+	return *this;
+}
+
+CovMat& CovMat::operator *= (const CovMat& covMat)
+{
+	this->eigenMatrix *= covMat.eigenMatrix;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+
+	return *this;
+}
+
+CovMat& CovMat::operator /= (const double mul)
+{
+	this->eigenMatrix /= mul;
+
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+
+	this->currentPower = 1;
+	this->powm = NULL;
+
+	return *this;
 }

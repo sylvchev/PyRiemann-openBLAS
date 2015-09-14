@@ -29,20 +29,22 @@ class CovMat
 		unsigned int matrixOrder;
 
 		//Constructors
-		CovMat(double* array, unsigned matrixOrder);
+		CovMat(double* array, const unsigned matrixOrder);
 		CovMat(const MatrixXd eigenMatrix);
+		CovMat(const unsigned int matrixOrder);
 
 		//Destructors
 		~CovMat();
 
 		//Methods
+		void Randomize();
 		double Norm() const;
 		double Determinant() const;
 		CovMat Sqrtm();
 		CovMat Invsqrtm();
 		CovMat Expm();
 		CovMat Logm();
-		CovMat Powm(double power);
+		CovMat Powm(const double power);
 
 		//<< operators overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);
@@ -53,6 +55,11 @@ class CovMat
 		friend CovMat operator * (const CovMat& covMat, const double mul);
 		friend CovMat operator * (const CovMat& covMat1, const CovMat& covMat2);
 		friend CovMat operator / (const CovMat& covMat, const double div);
+		CovMat& operator += (const CovMat& covMat);
+		CovMat& operator -= (const CovMat& covMat);
+		CovMat& operator *= (const double mul);
+		CovMat& operator *= (const CovMat& covMat);
+		CovMat& operator /= (const double div);
 };
 
 #endif
