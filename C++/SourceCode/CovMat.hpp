@@ -11,8 +11,6 @@ class CovMat
 {
 	private:
 		//Fields
-		MatrixXd eigenMatrix;
-		unsigned int matrixOrder;
 		bool b_eigenValues;
 		bool b_eigenVectors;
 		SelfAdjointEigenSolver<MatrixXd> eigenSolver;
@@ -26,7 +24,9 @@ class CovMat
 		void ComputeEigen(bool eigenValuesOnly = false);
 
 	public:
-		//Fields
+		//Fields		
+		MatrixXd eigenMatrix;
+		unsigned int matrixOrder;
 
 		//Constructors
 		CovMat(double* array, unsigned matrixOrder);
@@ -44,11 +44,15 @@ class CovMat
 		CovMat Logm();
 		CovMat Powm(double power);
 
-		//<< operator overload
+		//<< operators overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);
-
-		//<< operator overload
 		double operator () (const int nCol, const int nRow);
+		friend CovMat operator + (const CovMat& covMat1, const CovMat& covMat2);
+		friend CovMat operator - (const CovMat& covMat1, const CovMat& covMat2);
+		friend CovMat operator * (const double mul, const CovMat& covMat);
+		friend CovMat operator * (const CovMat& covMat, const double mul);
+		friend CovMat operator * (const CovMat& covMat1, const CovMat& covMat2);
+		friend CovMat operator / (const CovMat& covMat, const double div);
 };
 
 #endif

@@ -170,8 +170,37 @@ ostream& operator << (ostream &output, const CovMat& covMat)
     return output;            
 }
 
-//<< operator overload
 double CovMat::operator () (const int nCol, const int nRow)
 {
 	return this->eigenMatrix(nCol, nRow);
+}
+
+CovMat operator + (const CovMat& covMat1, const CovMat& covMat2)
+{
+	return CovMat(covMat1.eigenMatrix + covMat2.eigenMatrix);
+}
+
+CovMat operator - (const CovMat& covMat1, const CovMat& covMat2)
+{
+	return CovMat(covMat1.eigenMatrix - covMat2.eigenMatrix);
+}
+
+CovMat operator * (const double mul, const CovMat& covMat)
+{
+	return CovMat(mul * covMat.eigenMatrix);
+}
+
+CovMat operator * (const CovMat& covMat, const double mul)
+{
+	return CovMat(mul * covMat.eigenMatrix);
+}
+
+CovMat operator * (const CovMat& covMat1, const CovMat& covMat2)
+{
+	return CovMat(covMat1.eigenMatrix * covMat2.eigenMatrix);
+}
+
+CovMat operator / (const CovMat& covMat, const double div)
+{
+	return CovMat(covMat.eigenMatrix / div);
 }
