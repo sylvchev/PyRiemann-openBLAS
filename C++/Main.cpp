@@ -24,6 +24,7 @@ int main()
 
 	cout << "covMat1 :\n" << covMat1 << endl << endl;
 	cout << "covMat2 :\n" << covMat2 << endl << endl;
+	cout << "covMat3 :\n" << covMat3 << endl << endl;
 
 	cout << "covMat1.Sqrtm() :\n" << covMat1.Sqrtm() << endl << endl;
 	cout << "covMat1.Invsqrtm() :\n" << covMat1.Invsqrtm() << endl << endl;
