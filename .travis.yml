@@ -5,5 +5,6 @@ sudo: false
 compiler: g++
 
 script:
+  - cd C++
   - make -B
   - ./Main
