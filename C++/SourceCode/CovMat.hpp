@@ -15,7 +15,7 @@ class CovMat
 		unsigned int matrixOrder;
 		bool b_eigenValues;
 		bool b_eigenVectors;
-		SelfAdjointEigenSolver<MatrixXd> es;
+		SelfAdjointEigenSolver<MatrixXd> eigenSolver;
 		CovMat* sqrtm;
 		CovMat* invsqrtm;
 		CovMat* expm;
@@ -35,10 +35,10 @@ class CovMat
 		~CovMat();
 
 		//Methods
-		CovMat& Sqrtm();
-		CovMat& Invsqrtm();
-		CovMat& Expm();
-		CovMat& Logm();
+		CovMat Sqrtm();
+		CovMat Invsqrtm();
+		CovMat Expm();
+		CovMat Logm();
 
 		//<< operator overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);

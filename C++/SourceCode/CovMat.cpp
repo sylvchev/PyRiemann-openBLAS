@@ -52,17 +52,17 @@ void CovMat::ComputeEigen(bool eigenValuesOnly)
 
 	if (eigenValuesOnly)
 	{
-		this->es.compute(this->eigenMatrix, EigenvaluesOnly);
+		this->eigenSolver.compute(this->eigenMatrix, EigenvaluesOnly);
 		this->b_eigenValues = true;
 		return;
 	}
 
-	this->es.compute(this->eigenMatrix);
+	this->eigenSolver.compute(this->eigenMatrix);
 	this->b_eigenValues = true;
 	this->b_eigenVectors = true;
 }
 
-CovMat& CovMat::Sqrtm()
+CovMat CovMat::Sqrtm()
 {
 	if (this->sqrtm != NULL)
 		return *(this->sqrtm);
@@ -71,14 +71,14 @@ CovMat& CovMat::Sqrtm()
 
 	VectorXd tmp(this->matrixOrder);
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = sqrt(this->es.eigenvalues()(i));
+		tmp(i) = sqrt(this->eigenSolver.eigenvalues()(i));
 
-	this->sqrtm = new CovMat(this->es.eigenvectors() * tmp.asDiagonal() * this->es.eigenvectors().transpose());
+	this->sqrtm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
 
 	return *(this->sqrtm);
 }
 
-CovMat& CovMat::Invsqrtm()
+CovMat CovMat::Invsqrtm()
 {
 	if (this->invsqrtm != NULL)
 		return *(this->invsqrtm);
@@ -87,14 +87,14 @@ CovMat& CovMat::Invsqrtm()
 
 	VectorXd tmp(this->matrixOrder);
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = 1/sqrt(this->es.eigenvalues()(i));
+		tmp(i) = 1/sqrt(this->eigenSolver.eigenvalues()(i));
 
-	this->invsqrtm = new CovMat(this->es.eigenvectors() * tmp.asDiagonal() * this->es.eigenvectors().transpose());
+	this->invsqrtm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
 
 	return *(this->invsqrtm);
 }
 
-CovMat& CovMat::Expm()
+CovMat CovMat::Expm()
 {
 	if (this->expm != NULL)
 		return *(this->expm);
@@ -103,14 +103,14 @@ CovMat& CovMat::Expm()
 
 	VectorXd tmp(this->matrixOrder);
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = exp(this->es.eigenvalues()(i));
+		tmp(i) = exp(this->eigenSolver.eigenvalues()(i));
 
-	this->expm = new CovMat(this->es.eigenvectors() * tmp.asDiagonal() * this->es.eigenvectors().transpose());
+	this->expm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
 
 	return *(this->expm);
 }
 
-CovMat& CovMat::Logm()
+CovMat CovMat::Logm()
 {
 	if (this->logm != NULL)
 		return *(this->logm);
@@ -119,9 +119,9 @@ CovMat& CovMat::Logm()
 
 	VectorXd tmp(this->matrixOrder);
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = log(this->es.eigenvalues()(i));
+		tmp(i) = log(this->eigenSolver.eigenvalues()(i));
 
-	this->logm = new CovMat(this->es.eigenvectors() * tmp.asDiagonal() * this->es.eigenvectors().transpose());
+	this->logm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
 
 	return *(this->logm);
 }
