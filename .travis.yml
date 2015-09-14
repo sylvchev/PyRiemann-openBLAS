@@ -9,3 +9,4 @@ script:
   - cd C++
   - make -B
   - ./Main
+  - ./Benchmark
