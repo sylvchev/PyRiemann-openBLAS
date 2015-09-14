@@ -4,6 +4,6 @@ sudo: false
 
 compiler: g++
 
-script: 
+script:
   - make -B
   - ./Main

@@ -20,7 +20,7 @@ CovMat::CovMat(double* array, unsigned matrixOrder)
 }
 
 
-CovMat::CovMat(MatrixXd eigenMatrix)
+CovMat::CovMat(const MatrixXd& eigenMatrix)
 {
 	this->eigenMatrix = eigenMatrix;
 	this->matrixOrder = eigenMatrix.cols();
@@ -126,7 +126,7 @@ CovMat& CovMat::Logm()
 	return *(this->logm);
 }
 
-ostream& operator << (ostream &output, CovMat& covMat)
+ostream& operator << (ostream &output, const CovMat& covMat)
 { 
     output << covMat.eigenMatrix;
     return output;            
