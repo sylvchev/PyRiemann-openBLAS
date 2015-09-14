@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SourceCode/CovMat.hpp"
 #include "SourceCode/Distance.hpp"
+#include "SourceCode/Geodesic.hpp"
 
 using namespace std;
 
@@ -25,4 +26,8 @@ int main()
 	cout << "LogEuclideanDistance(covMat1, covMat2)\n" << Distance::LogEuclideanDistance(covMat1, covMat2) << endl << endl;
 	cout << "LogDeterminantDistance(covMat1, covMat2)\n" << Distance::LogDeterminantDistance(covMat1, covMat2) << endl << endl;
 	cout << "RiemannianDistance(covMat1, covMat2)\n" << Distance::RiemannianDistance(covMat1, covMat2) << endl << endl;
+
+	cout << "EuclideanGeodesic(covMat1, covMat2, 0.5)\n" << Geodesic::EuclideanGeodesic(covMat1, covMat2, 0.5) << endl << endl;
+	cout << "LogEuclideanGeodesic(covMat1, covMat2, 0.5)\n" << Geodesic::LogEuclideanGeodesic(covMat1, covMat2, 0.5) << endl << endl;
+	cout << "RiemannianGeodesic(covMat1, covMat2, 0.5)\n" << Geodesic::RiemannianGeodesic(covMat1, covMat2, 0.5) << endl << endl;
 }
