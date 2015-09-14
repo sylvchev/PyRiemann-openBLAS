@@ -2,9 +2,10 @@ language: cpp
 
 sudo: false
 
-#compiler: g++
+compiler: g++
 
 script:
   - cd C++
+  - g++ --version
   - make -B
   - ./Main
