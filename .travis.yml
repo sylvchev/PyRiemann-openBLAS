@@ -6,6 +6,9 @@ compiler: g++
 
 script:
   - g++ --version
-  - cd C++
+  - cd C++/EigenBuild
+  - cmake ../Eigen
+  - make install
+  - cd ..
   - make -B
   - ./Main
