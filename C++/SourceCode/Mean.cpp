@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-#include <Eigen>
+#include <eigen3/Eigen/Dense>
 #include "Mean.hpp"
 #include "CovMat.hpp"
 
@@ -63,7 +63,7 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 
 		covMatTmp /= covMats.size();
 
-		covMatResultNew = covMatTmp.Inverse(); //memory leak here
+		covMatResultNew = covMatTmp.Inverse();
 		crit = (covMatResultNew - covMatResult).Norm();
 
 		covMatResult = covMatResultNew;
@@ -76,7 +76,7 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 }
 
 
-CovMat Mean::RiemmanianMean (const vector<CovMat>& covMats, const double tol, const unsigned int maxIter, CovMat* covMatInit)
+CovMat Mean::RiemannianMean (const vector<CovMat>& covMats, const double tol, const unsigned int maxIter, CovMat* covMatInit)
 {
 	CovMat covMatResult;
 

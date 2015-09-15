@@ -6,35 +6,29 @@
 #include "SourceCode/Geodesic.hpp" 
 #include "SourceCode/Mean.hpp"
 
-#define MATRIXSIZE 200
-#define NBITER 20
+#define MATRIXSIZE 100
+#define COVMATSSIZE 10
+#define NBITER 10
+
+void RandomizeCovMats(vector<CovMat>& covMats)
+{
+	for (unsigned int i = 0; i < COVMATSSIZE; i++)
+	{
+		CovMat c(MATRIXSIZE);
+		c.Randomize();
+		covMats.push_back(c);
+	}
+}
 
 int main()
 {
 	string completionText = "";
 
-	CovMat covMat1(MATRIXSIZE); covMat1.Randomize();
-	CovMat covMat2(MATRIXSIZE); covMat2.Randomize();
-	CovMat covMat3(MATRIXSIZE); covMat3.Randomize();
-	CovMat covMat4(MATRIXSIZE); covMat4.Randomize();
-	CovMat covMat5(MATRIXSIZE); covMat5.Randomize();
-	CovMat covMat6(MATRIXSIZE); covMat6.Randomize();
-	CovMat covMat7(MATRIXSIZE); covMat7.Randomize();
-	CovMat covMat8(MATRIXSIZE); covMat8.Randomize();
-	CovMat covMat9(MATRIXSIZE); covMat9.Randomize();
-	CovMat covMat10(MATRIXSIZE); covMat10.Randomize();
+	CovMat covMat1(MATRIXSIZE);
+	CovMat covMat2(MATRIXSIZE);
 
 	vector<CovMat> covMats;
-	covMats.push_back(covMat1);
-	covMats.push_back(covMat2);
-	covMats.push_back(covMat3);
-	covMats.push_back(covMat4);
-	covMats.push_back(covMat5);
-	covMats.push_back(covMat6);
-	covMats.push_back(covMat7);
-	covMats.push_back(covMat8);
-	covMats.push_back(covMat9);
-	covMats.push_back(covMat10);
+	RandomizeCovMats(covMats);
 
 	completionText += "Variable initialization : 100%\n";
 	cout << completionText;
@@ -121,6 +115,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "EuclideanDistance progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Distance::EuclideanDistance(covMat1, covMat2);
 		euclideanDistanceTime += clock() - start;
@@ -135,6 +131,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "LogEuclideanDistance progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Distance::LogEuclideanDistance(covMat1, covMat2);
 		logEuclideanDistanceTime += clock() - start;
@@ -149,6 +147,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "LogDeterminantDistance progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Distance::LogDeterminantDistance(covMat1, covMat2);
 		logDeterminantDistanceTime += clock() - start;
@@ -163,6 +163,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "RiemannianDistance progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Distance::RiemannianDistance(covMat1, covMat2);
 		riemannianDistanceTime += clock() - start;
@@ -177,6 +179,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "EuclideanGeodesic progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Geodesic::EuclideanGeodesic(covMat1, covMat2, 0.5);
 		euclideanGeodesicTime += clock() - start;
@@ -191,6 +195,8 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "LogEuclideanGeodesic progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Geodesic::EuclideanGeodesic(covMat1, covMat2, 0.5);
 		logEuclideanGeodesicTime += clock() - start;
@@ -205,12 +211,89 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "RiemannianGeodesic progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		covMat1.Randomize();
+		covMat2.Randomize();
 		double start = clock();
 		Geodesic::RiemannianGeodesic(covMat1, covMat2, 0.5);
 		riemannianGeodesicTime += clock() - start;
 	}
 	riemannianGeodesicTime /= NBITER;
 	completionText += "RiemannianGeodesic progression benchmark : 100%\n";
+
+	//IdentityMean benchmark
+	double identityMeanTime = 0;
+	for (unsigned int i = 1; i <= NBITER; i++)
+	{	
+		if(system("clear"));
+		cout << completionText;
+		cout << "IdentityMean progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		RandomizeCovMats(covMats);
+		double start = clock();
+		Mean::IdentityMean(covMats);
+		identityMeanTime += clock() - start;
+	}
+	identityMeanTime /= NBITER;
+	completionText += "IdentityMean progression benchmark : 100%\n";
+
+	//EuclideanMean benchmark
+	double euclideanMeanTime = 0;
+	for (unsigned int i = 1; i <= NBITER; i++)
+	{	
+		if(system("clear"));
+		cout << completionText;
+		cout << "EuclideanMean progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		RandomizeCovMats(covMats);
+		double start = clock();
+		Mean::EuclideanMean(covMats);
+		euclideanMeanTime += clock() - start;
+	}
+	euclideanMeanTime /= NBITER;
+	completionText += "EuclideanMean progression benchmark : 100%\n";
+
+	//LogEuclideanMean benchmark
+	double logEuclideanMeanTime = 0;
+	for (unsigned int i = 1; i <= NBITER; i++)
+	{	
+		if(system("clear"));
+		cout << completionText;
+		cout << "LogEuclideanMean progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		RandomizeCovMats(covMats);
+		double start = clock();
+		Mean::LogEuclideanMean(covMats);
+		logEuclideanMeanTime += clock() - start;
+	}
+	logEuclideanMeanTime /= NBITER;
+	completionText += "LogEuclideanMean progression benchmark : 100%\n";
+
+	//LogDeterminantMean benchmark
+	double logDeterminantMeanTime = 0;
+	for (unsigned int i = 1; i <= NBITER; i++)
+	{	
+		if(system("clear"));
+		cout << completionText;
+		cout << "LogDeterminantMean progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		RandomizeCovMats(covMats);
+		double start = clock();
+		Mean::LogDeterminantMean(covMats);
+		logDeterminantMeanTime += clock() - start;
+	}
+	logDeterminantMeanTime /= NBITER;
+	completionText += "LogDeterminantMean progression benchmark : 100%\n";
+
+	//RiemannianMean benchmark
+	double riemannianMeanTime = 0;
+	for (unsigned int i = 1; i <= NBITER; i++)
+	{	
+		if(system("clear"));
+		cout << completionText;
+		cout << "RiemannianMean progression benchmark : " << (double)(i*100)/(double)NBITER << "%" << endl;
+		RandomizeCovMats(covMats);
+		double start = clock();
+		Mean::RiemannianMean(covMats);
+		riemannianMeanTime += clock() - start;
+	}
+	riemannianMeanTime /= NBITER;
+	completionText += "RiemannianMean progression benchmark : 100%\n";
 
 	//Print result
 	if(system("clear"));
@@ -230,7 +313,10 @@ int main()
 	cout << "EuclideanGeodesic time : " << euclideanGeodesicTime / (double)CLOCKS_PER_SEC << "sec" << endl;
 	cout << "LogEuclideanGeodesic time : " << logEuclideanGeodesicTime / (double)CLOCKS_PER_SEC << "sec" << endl;
 	cout << "RiemannianGeodesic time : " << riemannianGeodesicTime / (double)CLOCKS_PER_SEC << "sec" << endl;
-
-
+	cout << "IdentityMean time : " << identityMeanTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "EuclideanMean time : " << euclideanMeanTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "LogEuclideanMean time : " << logEuclideanMeanTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "LogDeterminantMean time : " << logDeterminantMeanTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "RiemannianMean time : " << riemannianMeanTime / (double)CLOCKS_PER_SEC << "sec" << endl;
 	cout << endl << endl;
 }

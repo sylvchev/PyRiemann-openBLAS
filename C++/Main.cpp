@@ -49,5 +49,5 @@ int main()
 	cout << "EucldieanMean(covMats)\n" << Mean::EuclideanMean(covMats) << endl << endl;
 	cout << "LogEuclideanMean(covMats)\n" << Mean::LogEuclideanMean(covMats) << endl << endl;
 	cout << "LogDeterminantMean(covMats)\n" << Mean::LogDeterminantMean(covMats) << endl << endl;
-	cout << "RiemmanianMean(covMats)\n" << Mean::RiemmanianMean(covMats) << endl << endl;
+	cout << "RiemmanianMean(covMats)\n" << Mean::RiemannianMean(covMats) << endl << endl;
 }

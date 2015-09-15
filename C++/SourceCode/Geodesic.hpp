@@ -2,7 +2,7 @@
 #define GEODESIC_HPP
 
 #include <iostream>
-#include <Eigen>
+#include <eigen3/Eigen/Dense>
 #include "CovMat.hpp"
 
 using namespace std;

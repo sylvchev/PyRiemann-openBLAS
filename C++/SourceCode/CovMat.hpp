@@ -2,7 +2,7 @@
 #define COVMAT_HPP
 
 #include <iostream>
-#include <Eigen>
+#include <eigen3/Eigen/Dense>
 
 using namespace std;
 using namespace Eigen;

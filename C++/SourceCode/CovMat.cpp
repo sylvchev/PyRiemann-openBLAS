@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Eigen>
+#include <eigen3/Eigen/Dense>
 #include "CovMat.hpp" 
 
 using namespace std;
@@ -119,7 +119,7 @@ void CovMat::SetToZero()
 
 void CovMat::Randomize()
 {
-	MatrixXd tmp = MatrixXd::Random(this->matrixOrder, 20 * this->matrixOrder);
+	MatrixXd tmp = MatrixXd::Random(this->matrixOrder, 2 * this->matrixOrder);
 	this->eigenMatrix = tmp * tmp.transpose();
 
 	this->DeleteAllocatedVar();

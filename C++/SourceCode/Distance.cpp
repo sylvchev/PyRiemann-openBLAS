@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Eigen>
+#include <eigen3/Eigen/Dense>
 #include "Distance.hpp"
 #include "CovMat.hpp"
 
