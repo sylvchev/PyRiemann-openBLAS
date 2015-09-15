@@ -50,6 +50,7 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 	unsigned int k = 0;
 	double crit = numeric_limits<double>::max();
 	CovMat covMatTmp(covMats[0].matrixOrder);
+	CovMat covMatResultNew;
 
 	while ((crit > tol) && (k < maxIter))
 	{
@@ -62,7 +63,7 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 
 		covMatTmp /= covMats.size();
 
-		CovMat covMatResultNew = covMatTmp.Inverse();
+		covMatResultNew = covMatTmp.Inverse(); //memory leak here
 		crit = (covMatResultNew - covMatResult).Norm();
 
 		covMatResult = covMatResultNew;
@@ -89,13 +90,15 @@ CovMat Mean::RiemmanianMean (const vector<CovMat>& covMats, const double tol, co
 	double tau = numeric_limits<double>::max();
 	double crit = numeric_limits<double>::max();
 	CovMat covMatTmp(covMats[0].matrixOrder);
+	CovMat covMatResultSqrtm;
+	CovMat covMatResultInvsqrtm;
 
 	while ((crit > tol)&&(k < maxIter)&&(nu > tol))
 	{
 		k++;
 
-		CovMat covMatResultSqrtm = covMatResult.Sqrtm();
-		CovMat covMatResultInvsqrtm = covMatResult.Invsqrtm();
+		covMatResultSqrtm = covMatResult.Sqrtm();
+		covMatResultInvsqrtm = covMatResult.Invsqrtm();
 
 		covMatTmp.SetToZero();
 

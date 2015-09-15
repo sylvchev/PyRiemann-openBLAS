@@ -26,6 +26,10 @@ int main()
 	cout << "covMat2 :\n" << covMat2 << endl << endl;
 	cout << "covMat3 :\n" << covMat3 << endl << endl;
 
+	cout << "covMat1.Determinant() :\n" << covMat1.Determinant() << endl << endl;
+	cout << "covMat1.Norm() :\n" << covMat1.Norm() << endl << endl;
+	cout << "covMat1.Inverse() :\n" << covMat1.Inverse() << endl << endl;
+	cout << "covMat1.Transpose() :\n" << covMat1.Transpose() << endl << endl;
 	cout << "covMat1.Sqrtm() :\n" << covMat1.Sqrtm() << endl << endl;
 	cout << "covMat1.Invsqrtm() :\n" << covMat1.Invsqrtm() << endl << endl;
 	cout << "covMat1.Expm() :\n" << covMat1.Expm() << endl << endl;

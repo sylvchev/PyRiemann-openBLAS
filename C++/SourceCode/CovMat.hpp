@@ -14,6 +14,9 @@ class CovMat
 		bool b_eigenValues;
 		bool b_eigenVectors;
 		SelfAdjointEigenSolver<MatrixXd> eigenSolver;
+		double norm; bool b_norm;
+		double determinant; bool b_determinant;
+		CovMat* inverse;
 		CovMat* sqrtm;
 		CovMat* invsqrtm;
 		CovMat* expm;
@@ -21,6 +24,9 @@ class CovMat
 		CovMat* powm; double currentPower;
 
 		//Methods
+		void ConstructorInitialize();
+		void DeleteAllocatedVar();
+		void Copy(const CovMat& covMat);
 		void ComputeEigen(bool eigenValuesOnly = false);
 
 	public:
@@ -32,6 +38,7 @@ class CovMat
 		CovMat(double* array, const unsigned matrixOrder);
 		CovMat(const MatrixXd eigenMatrix);
 		CovMat(const unsigned int matrixOrder);
+		CovMat(const CovMat& covMat);
 		CovMat();
 
 		//Destructors
@@ -40,9 +47,10 @@ class CovMat
 		//Methods
 		void Randomize();
 		void SetToZero();
-		double Norm() const;
-		double Determinant() const;
-		CovMat Inverse() const;
+		double Norm();
+		double Determinant();
+		CovMat Inverse();
+		CovMat Transpose();
 		CovMat Sqrtm();
 		CovMat Invsqrtm();
 		CovMat Expm();
@@ -52,6 +60,7 @@ class CovMat
 		//<< operators overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);
 		double operator () (const int nCol, const int nRow);
+		CovMat& operator = (const CovMat& covMat);
 		friend CovMat operator + (const CovMat& covMat1, const CovMat& covMat2);
 		friend CovMat operator - (const CovMat& covMat1, const CovMat& covMat2);
 		friend CovMat operator * (const double mul, const CovMat& covMat);

@@ -5,21 +5,75 @@
 using namespace std;
 using namespace Eigen;
 
+void CovMat::ConstructorInitialize()
+{
+	this->b_eigenValues = false;
+	this->b_eigenVectors = false;
+	this->b_norm = false;
+	this->b_determinant = false;
+
+	this->inverse = NULL;
+	this->sqrtm = NULL;
+	this->invsqrtm = NULL;
+	this->expm = NULL;
+	this->logm = NULL;
+	this->powm = NULL; this->currentPower = 1;
+}
+
+void CovMat::DeleteAllocatedVar()
+{
+	delete this->inverse;
+	delete this->sqrtm;
+	delete this->invsqrtm;
+	delete this->expm;
+	delete this->logm;
+	delete this->powm;
+}
+
+void CovMat::Copy(const CovMat& covMat)
+{
+	this->eigenMatrix = covMat.eigenMatrix;
+	this->matrixOrder = covMat.matrixOrder;
+	this->b_eigenValues = covMat.b_eigenValues;
+	this->b_eigenVectors = covMat.b_eigenVectors;
+	this->eigenSolver = covMat.eigenSolver;
+	this->norm = covMat.norm;
+	this->b_norm = covMat.b_norm;
+	this->determinant = covMat.determinant;
+	this->b_determinant = covMat.b_determinant;
+
+	this->inverse = NULL;
+	if (covMat.inverse != NULL)
+		this->inverse = new CovMat(*(covMat.inverse));
+
+	this->sqrtm = NULL;
+	if (covMat.sqrtm != NULL)
+		this->sqrtm = new CovMat(*(covMat.sqrtm));
+
+	this->invsqrtm = NULL;
+	if (covMat.invsqrtm != NULL)
+		this->invsqrtm = new CovMat(*(covMat.invsqrtm));
+
+	this->expm = NULL;
+	if (covMat.expm != NULL)
+		this->expm = new CovMat(*(covMat.expm));
+
+	this->logm = NULL;
+	if (covMat.logm != NULL)
+		this->logm = new CovMat(*(covMat.logm));
+
+	this->currentPower = covMat.currentPower;
+	this->powm = NULL;
+	if (covMat.powm != NULL)
+		this->powm = new CovMat(*(covMat.powm));
+}
+
 CovMat::CovMat(double* array, const unsigned matrixOrder)
 {
 	this->eigenMatrix = Map<MatrixXd, Aligned> (array, matrixOrder, matrixOrder);
 	this->matrixOrder = matrixOrder;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->ConstructorInitialize();
 }
 
 
@@ -28,16 +82,7 @@ CovMat::CovMat(const MatrixXd eigenMatrix)
 	this->eigenMatrix = eigenMatrix;
 	this->matrixOrder = eigenMatrix.cols();
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->ConstructorInitialize();
 }
 
 CovMat::CovMat(const unsigned int matrixOrder)
@@ -45,45 +90,31 @@ CovMat::CovMat(const unsigned int matrixOrder)
 	this->eigenMatrix = MatrixXd::Zero(matrixOrder, matrixOrder);
 	this->matrixOrder = matrixOrder;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->ConstructorInitialize();
 }
+
+CovMat::CovMat(const CovMat& covMat)
+{
+	this->Copy(covMat);
+}
+
 
 CovMat::CovMat()
 {
-
+	this->ConstructorInitialize();
 }
 
 CovMat::~CovMat()
 {
-	delete this->sqrtm;
-	delete this->invsqrtm;
-	delete this->expm;
-	delete this->logm;
+	this->DeleteAllocatedVar();
 }
 
 void CovMat::SetToZero()
 {
 	this->eigenMatrix.setZero();
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 }
 
 void CovMat::Randomize()
@@ -91,31 +122,45 @@ void CovMat::Randomize()
 	MatrixXd tmp = MatrixXd::Random(this->matrixOrder, 20 * this->matrixOrder);
 	this->eigenMatrix = tmp * tmp.transpose();
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 }
 
-double CovMat::Norm() const
+double CovMat::Norm()
 {
-	return this->eigenMatrix.norm();
+	if (this->b_norm)
+		return this->norm;
+
+	this->norm = this->eigenMatrix.norm();
+	this->b_norm = true;
+
+	return this->b_norm;
 }
 
-double CovMat::Determinant() const
+double CovMat::Determinant()
 {
-	return this->eigenMatrix.determinant();
+	if (this->b_determinant)
+		return this->determinant;
+
+	this->determinant = this->eigenMatrix.determinant();
+	this->b_determinant = true;
+
+	return this->determinant;
 }
 
-CovMat CovMat::Inverse() const
+CovMat CovMat::Transpose()
 {
-	return CovMat(this->eigenMatrix.inverse());
+	return *this;
+}
+
+CovMat CovMat::Inverse()
+{
+	if (this->inverse != NULL)
+		return *(this->inverse);
+
+	this->inverse = new CovMat(this->eigenMatrix.inverse());
+
+	return *(this->inverse);
 }
 
 void CovMat::ComputeEigen(bool eigenValuesOnly)
@@ -235,6 +280,14 @@ double CovMat::operator () (const int nCol, const int nRow)
 	return this->eigenMatrix(nCol, nRow);
 }
 
+CovMat& CovMat::operator = (const CovMat& covMat)
+{
+	this->DeleteAllocatedVar();
+	this->Copy(covMat);
+
+	return *this;
+}
+
 CovMat operator + (const CovMat& covMat1, const CovMat& covMat2)
 {
 	return CovMat(covMat1.eigenMatrix + covMat2.eigenMatrix);
@@ -269,16 +322,8 @@ CovMat& CovMat::operator += (const CovMat& covMat)
 {
 	this->eigenMatrix += covMat.eigenMatrix;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 
 	return *this;
 }
@@ -287,16 +332,8 @@ CovMat& CovMat::operator -= (const CovMat& covMat)
 {
 	this->eigenMatrix -= covMat.eigenMatrix;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 
 	return *this;
 }
@@ -305,16 +342,8 @@ CovMat& CovMat::operator *= (const double mul)
 {
 	this->eigenMatrix *= mul;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 
 	return *this;
 }
@@ -323,16 +352,8 @@ CovMat& CovMat::operator *= (const CovMat& covMat)
 {
 	this->eigenMatrix *= covMat.eigenMatrix;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 
 	return *this;
 }
@@ -341,16 +362,8 @@ CovMat& CovMat::operator /= (const double mul)
 {
 	this->eigenMatrix /= mul;
 
-	this->b_eigenValues = false;
-	this->b_eigenVectors = false;
-
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-
-	this->currentPower = 1;
-	this->powm = NULL;
+	this->DeleteAllocatedVar();
+	this->ConstructorInitialize();
 
 	return *this;
 }

@@ -7,7 +7,7 @@
 #include "SourceCode/Mean.hpp"
 
 #define MATRIXSIZE 200
-#define NBITER 100
+#define NBITER 30
 
 int main()
 {
@@ -94,11 +94,11 @@ int main()
 	if(system("clear"));
 	cout << completionText << endl;
 
-	cout << "Sqrtm time : " << sqrtmTime / (double)CLOCKS_PER_SEC << endl;
-	cout << "Invsqrtm time : " << invsqrtmTime / (double)CLOCKS_PER_SEC << endl;
-	cout << "Expm time : " << expmTime / (double)CLOCKS_PER_SEC << endl;
-	cout << "Logm time : " << logmTime / (double)CLOCKS_PER_SEC << endl;
-	cout << "Powm time : " << powmTime / (double)CLOCKS_PER_SEC << endl;
+	cout << "Sqrtm time : " << sqrtmTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "Invsqrtm time : " << invsqrtmTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "Expm time : " << expmTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "Logm time : " << logmTime / (double)CLOCKS_PER_SEC << "sec" << endl;
+	cout << "Powm time : " << powmTime / (double)CLOCKS_PER_SEC << "sec" << endl;
 
 
 
