@@ -10,7 +10,7 @@ script:
   - mkdir EigenBuild
   - cd EigenBuild
   - cmake ../Eigen
-  - make install
+  - sudo make install
   - cd ..
   - make -B
   - ./Main
