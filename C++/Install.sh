@@ -6,6 +6,7 @@ sudo apt-get install liblapack-dev
 
 #Build and install Eigen
 cd Armadillo
+rm -f CMakeCache.txt
 cmake .
 make
 sudo make install
