@@ -13,4 +13,4 @@ Mean.o : Mean.cpp
 	g++ -Wall -c -O3 -march=native Mean.cpp -o Mean.o -larmadillo -lopenblas -llapack 
 
 TestSourceCode : TestSourceCode.cpp
-	g++ -Wall -O3 -march=native CovMat.o Distance.o Geodesic.o Mean.o TestSourceCode.cpp -o TestSourceCode -larmadillo -lopenblas -llapack 
+	g++ -Wall CovMat.o Distance.o Geodesic.o Mean.o TestSourceCode.cpp -o TestSourceCode -larmadillo
