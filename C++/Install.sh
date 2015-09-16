@@ -1,20 +1,12 @@
 #!/bin/bash
 
-#Uninstall any previous libopenblas
-sudo apt-get remove libopenblas-dev
-sudo apt-get remove libopenblas-base
-
-#Install libopenblas et liblapack
+#Install librairies
+sudo apt-get install cmake
+sudo apt-get install libopenblas-dev
 sudo apt-get install liblapack-dev
-
-#Build and install OpenBlas
-rm -rf OpenBLAS
-git clone git://github.com/xianyi/OpenBLAS
-cd OpenBLAS
-make
-sudo make install
-cd..
-rm -rf OpenBLAS
+sudo apt-get install libarpack-dev
+sudo apt-get update
+sudo apt-get upgrade
 
 #Build and install Armadillo
 cd Armadillo
