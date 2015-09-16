@@ -236,6 +236,7 @@ CovMat CovMat::Logm()
 	this->ComputeEigen();
 
 	vec tmp(this->matrixOrder);
+
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = log(this->vecEigenValues(i));
 

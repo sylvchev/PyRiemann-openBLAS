@@ -2,6 +2,7 @@
 #include <vector>
 #include <ctime>
 #include "../../SourceCode/CovMat.hpp"
+#include "../../SourceCode/Distance.hpp"
 
 #define NBREPET 20
 
@@ -12,7 +13,8 @@ int main()
 	//Variable initialization
 	unsigned int v[9] = {10, 25, 50, 75, 100, 250, 500, 750, 1000};
 	double time[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-	vector<CovMat> covMats;
+	vector<CovMat> covMats1;
+	vector<CovMat> covMats2;
 
 	string completionText = "";
 
@@ -21,9 +23,12 @@ int main()
 		if(system("clear"));
 		cout << completionText;
 		cout << "Initializing variables : " << ((double)i/(double)9)*100 << "%" << endl;
-		CovMat c(v[i]);
-		c.Randomize();
-		covMats.push_back(c);
+		CovMat c1(v[i]);
+		CovMat c2(v[i]);
+		c1.Randomize();
+		c2.Randomize();
+		covMats1.push_back(c1);
+		covMats2.push_back(c2);
 	}
 	completionText += "Initializing variables : 100%\n";
 
@@ -35,7 +40,7 @@ int main()
 		cout << "Warm up : " << ((double)i/(double)NBREPET)*100 << "%" << endl;
 		CovMat c(500);
 		c.Randomize();
-		c.Expm();
+		c.Logm();
 	}
 	completionText += "Warm up : 100%\n";
 
@@ -46,16 +51,17 @@ int main()
 		{			
 			if(system("clear"));
 			cout << completionText;
-			cout << "Benchmarking expm : " << ((double)(i*NBREPET + j)/(double)(9*NBREPET))*100 << "%" << endl;
-
-			covMats[i].DeleteAllocatedVar();
-			covMats[i].ConstructorInitialize();
-			double start = clock();
-			covMats[i].Expm();
+			cout << "Benchmarking log determinant distance : " << ((double)(i*NBREPET + j)/(double)(9*NBREPET))*100 << "%" << endl;
+			covMats1[i].DeleteAllocatedVar();
+			covMats1[i].ConstructorInitialize();
+			covMats2[i].DeleteAllocatedVar();
+			covMats2[i].ConstructorInitialize();
+			double start = clock();			
+			Distance::LogDeterminantDistance(covMats1[i], covMats2[i]);
 			time[i] += clock() - start;
 		}
 	}
-	completionText += "Benchmarking expm : 100%\n\n";
+	completionText += "Benchmarking log determinant distance : 100%\n\n";
 
 	//Print results
 	if(system("clear"));
@@ -68,4 +74,7 @@ int main()
 
 		cout << "Matrix type : " << v[i] << "x" << v[i] << "	time : " << time[i] << " sec" << endl;
 	}
-}
+} 
+ 
+ 
+ 

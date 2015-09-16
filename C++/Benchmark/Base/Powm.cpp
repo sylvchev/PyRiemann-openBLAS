@@ -35,7 +35,7 @@ int main()
 		cout << "Warm up : " << ((double)i/(double)NBREPET)*100 << "%" << endl;
 		CovMat c(500);
 		c.Randomize();
-		c.Expm();
+		c.Powm(2);
 	}
 	completionText += "Warm up : 100%\n";
 
@@ -46,16 +46,16 @@ int main()
 		{			
 			if(system("clear"));
 			cout << completionText;
-			cout << "Benchmarking expm : " << ((double)(i*NBREPET + j)/(double)(9*NBREPET))*100 << "%" << endl;
+			cout << "Benchmarking powm : " << ((double)(i*NBREPET + j)/(double)(9*NBREPET))*100 << "%" << endl;
 
 			covMats[i].DeleteAllocatedVar();
 			covMats[i].ConstructorInitialize();
 			double start = clock();
-			covMats[i].Expm();
+			covMats[i].Powm(2);
 			time[i] += clock() - start;
 		}
 	}
-	completionText += "Benchmarking expm : 100%\n\n";
+	completionText += "Benchmarking powm : 100%\n\n";
 
 	//Print results
 	if(system("clear"));
@@ -68,4 +68,6 @@ int main()
 
 		cout << "Matrix type : " << v[i] << "x" << v[i] << "	time : " << time[i] << " sec" << endl;
 	}
-}
+} 
+ 
+ 
