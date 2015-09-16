@@ -5,12 +5,7 @@ sudo: required
 compiler: g++
 
 script:
-  - g++ --version
   - cd C++
-  - mkdir EigenBuild
-  - cd EigenBuild
-  - cmake ../Eigen
-  - sudo make install
-  - cd ..
-  - make -B
-  - ./Main
+  - ./Install.sh
+  - cd SourceCode
+  - ./TestSourceCode
