@@ -120,7 +120,7 @@ void CovMat::SetToZero()
 void CovMat::Randomize()
 {
 	MatrixXd tmp = MatrixXd::Random(this->matrixOrder, 2 * this->matrixOrder);
-	this->eigenMatrix = tmp * tmp.transpose();
+	this->eigenMatrix.noalias() = tmp * tmp.transpose();
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
@@ -194,7 +194,9 @@ CovMat CovMat::Sqrtm()
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = sqrt(this->eigenSolver.eigenvalues()(i));
 
-	this->sqrtm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->sqrtm = new CovMat(this->matrixOrder);
+	this->sqrtm->eigenMatrix.noalias() = this->eigenSolver.eigenvectors() * tmp.asDiagonal();
+	this->sqrtm->eigenMatrix *= this->eigenSolver.eigenvectors().transpose();
 
 	return *(this->sqrtm);
 }
@@ -210,7 +212,9 @@ CovMat CovMat::Invsqrtm()
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = 1/sqrt(this->eigenSolver.eigenvalues()(i));
 
-	this->invsqrtm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->invsqrtm = new CovMat(this->matrixOrder);
+	this->invsqrtm->eigenMatrix.noalias() = this->eigenSolver.eigenvectors() * tmp.asDiagonal();
+	this->invsqrtm->eigenMatrix *= this->eigenSolver.eigenvectors().transpose();
 
 	return *(this->invsqrtm);
 }
@@ -226,7 +230,9 @@ CovMat CovMat::Expm()
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = exp(this->eigenSolver.eigenvalues()(i));
 
-	this->expm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->expm = new CovMat(this->matrixOrder);
+	this->expm->eigenMatrix.noalias() = this->eigenSolver.eigenvectors() * tmp.asDiagonal();
+	this->expm->eigenMatrix *= this->eigenSolver.eigenvectors().transpose();
 
 	return *(this->expm);
 }
@@ -242,7 +248,9 @@ CovMat CovMat::Logm()
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = log(this->eigenSolver.eigenvalues()(i));
 
-	this->logm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->logm = new CovMat(this->matrixOrder);
+	this->logm->eigenMatrix.noalias() = this->eigenSolver.eigenvectors() * tmp.asDiagonal();
+	this->logm->eigenMatrix *= this->eigenSolver.eigenvectors().transpose();
 
 	return *(this->logm);
 }
@@ -263,7 +271,9 @@ CovMat CovMat::Powm(const double power)
 	for (unsigned int i = 0; i < this->matrixOrder; i++)
 		tmp(i) = pow(this->eigenSolver.eigenvalues()(i), power);
 
-	this->powm = new CovMat(this->eigenSolver.eigenvectors() * tmp.asDiagonal() * this->eigenSolver.eigenvectors().transpose());
+	this->powm = new CovMat(this->matrixOrder);
+	this->powm->eigenMatrix.noalias() = this->eigenSolver.eigenvectors() * tmp.asDiagonal();
+	this->powm->eigenMatrix *= this->eigenSolver.eigenvectors().transpose();
 	this->currentPower = power;
 
 	return *(this->powm);
@@ -310,7 +320,10 @@ CovMat operator * (const CovMat& covMat, const double mul)
 
 CovMat operator * (const CovMat& covMat1, const CovMat& covMat2)
 {
-	return CovMat(covMat1.eigenMatrix * covMat2.eigenMatrix);
+	CovMat c(covMat1.matrixOrder);
+	c.eigenMatrix.noalias() = covMat1.eigenMatrix * covMat2.eigenMatrix;
+
+	return c;
 }
 
 CovMat operator / (const CovMat& covMat, const double div)

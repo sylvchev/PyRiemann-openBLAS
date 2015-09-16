@@ -19,9 +19,9 @@ CovMat Mean::EuclideanMean (const vector<CovMat>& covMats)
 	CovMat covMatResult(covMats[0].matrixOrder);
 
 	for (unsigned int i = 0; i < covMats.size(); i++)
-		covMatResult += covMats[i];
+		covMatResult.eigenMatrix += covMats[i].eigenMatrix;
 
-	covMatResult /= covMats.size();
+	covMatResult.eigenMatrix /= covMats.size();
 
 	return covMatResult;
 }
@@ -31,9 +31,9 @@ CovMat Mean::LogEuclideanMean (vector<CovMat>& covMats)
 	CovMat covMatResult(covMats[0].matrixOrder);
 
 	for (unsigned int i = 0; i < covMats.size(); i++)
-		covMatResult += covMats[i].Logm();
+		covMatResult.eigenMatrix += covMats[i].Logm().eigenMatrix;
 
-	covMatResult /= covMats.size();
+	covMatResult.eigenMatrix /= covMats.size();
 
 	return covMatResult.Expm();
 }
@@ -59,9 +59,9 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 		covMatTmp.SetToZero();
 
 		for (unsigned int i = 0; i < covMats.size(); i++)
-			covMatTmp += (0.5 * (covMats[i] + covMatResult)).Inverse();
+			covMatTmp.eigenMatrix += (0.5 * (covMats[i].eigenMatrix + covMatResult.eigenMatrix)).inverse();
 
-		covMatTmp /= covMats.size();
+		covMatTmp.eigenMatrix /= covMats.size();
 
 		covMatResultNew = covMatTmp.Inverse();
 		crit = (covMatResultNew - covMatResult).Norm();
@@ -93,6 +93,9 @@ CovMat Mean::RiemannianMean (const vector<CovMat>& covMats, const double tol, co
 	CovMat covMatResultSqrtm;
 	CovMat covMatResultInvsqrtm;
 
+	MatrixXd m(covMats[0].matrixOrder, covMats[0].matrixOrder);
+	CovMat c(covMats[0].matrixOrder);
+
 	while ((crit > tol)&&(k < maxIter)&&(nu > tol))
 	{
 		k++;
@@ -103,14 +106,23 @@ CovMat Mean::RiemannianMean (const vector<CovMat>& covMats, const double tol, co
 		covMatTmp.SetToZero();
 
 		for (unsigned int i = 0; i < covMats.size(); i++)
-			covMatTmp += (covMatResultInvsqrtm * covMats[i] * covMatResultInvsqrtm).Logm();
+		{			
+			m.noalias() = covMatResultInvsqrtm.eigenMatrix * covMats[i].eigenMatrix;
+			c.eigenMatrix.noalias() = m * covMatResultInvsqrtm.eigenMatrix;
+			c.DeleteAllocatedVar();
+			c.ConstructorInitialize();
+			covMatTmp += c.Logm();
+		}
 
-		covMatTmp /= covMats.size();
+		covMatTmp.eigenMatrix /= covMats.size();
 
 		crit = covMatTmp.Norm();
 		const double h = nu * crit;
 
-		covMatResult = covMatResultSqrtm * (nu * covMatTmp).Expm() * covMatResultSqrtm;
+		m.noalias() = covMatResultSqrtm.eigenMatrix * (nu * covMatTmp).Expm().eigenMatrix;
+		covMatResult.DeleteAllocatedVar();
+		covMatResult.ConstructorInitialize();
+		covMatResult.eigenMatrix.noalias() = m * covMatResultSqrtm.eigenMatrix;
 
 		if (h < tau)
 		{

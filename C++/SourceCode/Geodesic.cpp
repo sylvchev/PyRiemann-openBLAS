@@ -20,7 +20,14 @@ CovMat Geodesic::RiemannianGeodesic (CovMat& covMat1, CovMat& covMat2, double al
 {
 	CovMat covMat1Sqrtm = covMat1.Sqrtm();
 	CovMat covMat1Invsqrtm = covMat1.Invsqrtm();
-	CovMat tmp = covMat1Invsqrtm * covMat2 * covMat1Invsqrtm;
 
-	return covMat1Sqrtm * tmp.Powm(alpha) * covMat1Sqrtm;
+	CovMat tmp(covMat1.matrixOrder);
+	tmp.eigenMatrix.noalias() = covMat1Invsqrtm.eigenMatrix * covMat2.eigenMatrix;
+	tmp.eigenMatrix *= covMat1Invsqrtm.eigenMatrix;
+
+	CovMat result(covMat1.matrixOrder);
+	result.eigenMatrix.noalias() = covMat1Sqrtm.eigenMatrix * tmp.Powm(alpha).eigenMatrix;
+	result.eigenMatrix *= covMat1Sqrtm.eigenMatrix;
+
+	return result;
 }

@@ -1,14 +1,18 @@
 #include <iostream>
 #include <vector>
-#include "SourceCode/CovMat.hpp"
-#include "SourceCode/Distance.hpp"
-#include "SourceCode/Geodesic.hpp"
-#include "SourceCode/Mean.hpp"
+#include <eigen3/Eigen/Core>
+#include "CovMat.hpp"
+#include "Distance.hpp"
+#include "Geodesic.hpp"
+#include "Mean.hpp"
 
 using namespace std;
 
 int main()
 {
+	cout << "Nb threads : " << Eigen::nbThreads() << endl << endl;
+
+
 	double array[] = {2, -1, 0, -1, 2, -1, 0, -1, 2};
 	double array2[] = {4, -2, -6, -2, 10, 9, -6, 9, 14};
 	double array3[] = {1, 0, 3, 0, 4, 2, 3, 2, 11};

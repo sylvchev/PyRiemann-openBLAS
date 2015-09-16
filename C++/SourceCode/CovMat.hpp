@@ -24,8 +24,6 @@ class CovMat
 		CovMat* powm; double currentPower;
 
 		//Methods
-		void ConstructorInitialize();
-		void DeleteAllocatedVar();
 		void Copy(const CovMat& covMat);
 		void ComputeEigen(bool eigenValuesOnly = false);
 
@@ -44,7 +42,9 @@ class CovMat
 		//Destructors
 		~CovMat();
 
-		//Methods
+		//Methods		
+		void ConstructorInitialize();
+		void DeleteAllocatedVar();
 		void Randomize();
 		void SetToZero();
 		double Norm();
