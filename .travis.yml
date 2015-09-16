@@ -6,6 +6,8 @@ compiler: g++
 
 script:
   - cd C++
+  - chmod 777 Install.sh
+  - chmod 777 Compile.sh
   - ./Install.sh
   - cd SourceCode
   - ./TestSourceCode
