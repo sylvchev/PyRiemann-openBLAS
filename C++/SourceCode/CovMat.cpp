@@ -59,7 +59,7 @@ CovMat::CovMat(double* array, const unsigned matrixOrder)
 	this->ConstructorInitialize();
 }
 
-CovMat::CovMat(const mat matrix)
+CovMat::CovMat(const mat& matrix)
 {
 	this->matrix = matrix;
 	this->matrixOrder = matrix.n_cols;
