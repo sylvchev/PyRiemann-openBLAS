@@ -103,7 +103,7 @@ CovMat Mean::RiemannianMean (const vector<CovMat>& covMats, const double tol, co
 		crit = covMatTmp.Norm();
 		const double h = nu * crit;
 
-		covMatResult = covMatResult.Sqrtm() * (nu * covMatTmp).Expm() * covMatResult.Sqrtm();
+		covMatResult = covMatResult.Sqrtm() * (covMatTmp *= nu).Expm() * covMatResult.Sqrtm();
 
 		if (h < tau)
 		{
