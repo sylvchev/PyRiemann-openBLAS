@@ -41,30 +41,12 @@ void CovMat::Copy(const CovMat& covMat)
 	this->determinant = covMat.determinant;
 	this->b_determinant = covMat.b_determinant;
 
-	this->inverse = NULL;
-	if (covMat.inverse != NULL)
-		this->inverse = new CovMat(*(covMat.inverse));
-
-	this->sqrtm = NULL;
-	if (covMat.sqrtm != NULL)
-		this->sqrtm = covMat.sqrtm;
-
-	this->invsqrtm = NULL;
-	if (covMat.invsqrtm != NULL)
-		this->invsqrtm = new CovMat(*(covMat.invsqrtm));
-
-	this->expm = NULL;
-	if (covMat.expm != NULL)
-		this->expm = new CovMat(*(covMat.expm));
-
-	this->logm = NULL;
-	if (covMat.logm != NULL)
-		this->logm = new CovMat(*(covMat.logm));
-
-	this->currentPower = covMat.currentPower;
-	this->powm = NULL;
-	if (covMat.powm != NULL)
-		this->powm = new CovMat(*(covMat.powm));
+	this->inverse = covMat.inverse;
+	this->sqrtm = covMat.sqrtm;
+	this->invsqrtm = covMat.invsqrtm;
+	this->expm = covMat.expm;
+	this->logm = covMat.logm;
+	this->powm = covMat.powm; this->currentPower = covMat.currentPower;
 }
 
 CovMat::CovMat(double* array, const unsigned matrixOrder)
