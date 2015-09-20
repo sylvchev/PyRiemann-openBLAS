@@ -34,7 +34,7 @@ class CovMat
 
 		//Constructors
 		CovMat(double* array, const unsigned matrixOrder);
-		CovMat(const mat matrix);
+		CovMat(const mat& matrix);
 		CovMat(const unsigned int matrixOrder);
 		CovMat(const CovMat& covMat);
 		CovMat();
