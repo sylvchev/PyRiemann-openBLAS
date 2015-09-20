@@ -69,7 +69,7 @@ void CovMat::Copy(const CovMat& covMat)
 
 CovMat::CovMat(double* array, const unsigned matrixOrder)
 {
-	this->matrix = mat(array, matrixOrder, matrixOrder, true, true);
+	this->matrix = mat(array, matrixOrder, matrixOrder, false, true);
 	this->matrixOrder = matrixOrder;
 	this->ConstructorInitialize();
 }
@@ -165,12 +165,12 @@ double CovMat::Determinant()
 	return this->determinant;
 }
 
-CovMat CovMat::Transpose()
+CovMat& CovMat::Transpose()
 {
 	return *this;
 }
 
-CovMat CovMat::Inverse()
+CovMat& CovMat::Inverse()
 {
 	if (this->inverse != NULL)
 		return *(this->inverse);
@@ -180,7 +180,7 @@ CovMat CovMat::Inverse()
 	return *(this->inverse);
 }
 
-CovMat CovMat::Sqrtm()
+CovMat& CovMat::Sqrtm()
 {
 	if (this->sqrtm != NULL)
 		return *(this->sqrtm);
@@ -196,7 +196,7 @@ CovMat CovMat::Sqrtm()
 	return *(this->sqrtm);
 }
 
-CovMat CovMat::Invsqrtm()
+CovMat& CovMat::Invsqrtm()
 {
 	if (this->invsqrtm != NULL)
 		return *(this->invsqrtm);
@@ -212,7 +212,7 @@ CovMat CovMat::Invsqrtm()
 	return *(this->invsqrtm);
 }
 
-CovMat CovMat::Expm()
+CovMat& CovMat::Expm()
 {
 	if (this->expm != NULL)
 		return *(this->expm);
@@ -228,7 +228,7 @@ CovMat CovMat::Expm()
 	return *(this->expm);
 }
 
-CovMat CovMat::Logm()
+CovMat& CovMat::Logm()
 {
 	if (this->logm != NULL)
 		return *(this->logm);
@@ -245,7 +245,7 @@ CovMat CovMat::Logm()
 	return *(this->logm);
 }
 
-CovMat CovMat::Powm(const double power)
+CovMat& CovMat::Powm(const double power)
 {
 	if (power == 1)
 		return *this;
