@@ -50,7 +50,6 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 	unsigned int k = 0;
 	double crit = numeric_limits<double>::max();
 	CovMat covMatTmp(covMats[0].matrixOrder);
-	CovMat covMatResultNew;
 
 	while ((crit > tol) && (k < maxIter))
 	{
@@ -63,10 +62,9 @@ CovMat Mean::LogDeterminantMean (const vector<CovMat>& covMats, const double tol
 
 		covMatTmp /= covMats.size();
 
-		covMatResultNew = covMatTmp.Inverse();
-		crit = (covMatResultNew - covMatResult).Norm();
+		crit = (covMatTmp.Inverse() - covMatResult).Norm();
 
-		covMatResult = covMatResultNew;
+		covMatResult = covMatTmp.Inverse();
 	}
 
 	if (k == maxIter)
@@ -90,27 +88,22 @@ CovMat Mean::RiemannianMean (const vector<CovMat>& covMats, const double tol, co
 	double tau = numeric_limits<double>::max();
 	double crit = numeric_limits<double>::max();
 	CovMat covMatTmp(covMats[0].matrixOrder);
-	CovMat covMatResultSqrtm;
-	CovMat covMatResultInvsqrtm;
-	
+
 	while ((crit > tol)&&(k < maxIter)&&(nu > tol))
 	{
 		k++;
 
-		covMatResultSqrtm = covMatResult.Sqrtm();
-		covMatResultInvsqrtm = covMatResult.Invsqrtm();
-
 		covMatTmp.SetToZero();
 
 		for (unsigned int i = 0; i < covMats.size(); i++)
-			covMatTmp += (covMatResultInvsqrtm * covMats[i] * covMatResultInvsqrtm).Logm();
+			covMatTmp += (covMatResult.Invsqrtm() * covMats[i] * covMatResult.Invsqrtm()).Logm();
 
 		covMatTmp /= covMats.size();
 
 		crit = covMatTmp.Norm();
 		const double h = nu * crit;
 
-		covMatResult = covMatResultSqrtm * (nu * covMatTmp).Expm() * covMatResultSqrtm;
+		covMatResult = covMatResult.Sqrtm() * (nu * covMatTmp).Expm() * covMatResult.Sqrtm();
 
 		if (h < tau)
 		{
