@@ -18,10 +18,5 @@ CovMat Geodesic::LogEuclideanGeodesic (CovMat& covMat1, CovMat& covMat2, double 
 
 CovMat Geodesic::RiemannianGeodesic (CovMat& covMat1, CovMat& covMat2, double alpha)
 {
-	CovMat covMat1Sqrtm = covMat1.Sqrtm();
-	CovMat covMat1Invsqrtm = covMat1.Invsqrtm();
-
-	CovMat tmp = covMat1Invsqrtm * covMat2 * covMat1Invsqrtm;
-
-	return CovMat(covMat1Sqrtm * tmp.Powm(alpha) * covMat1Sqrtm);
+	return CovMat(covMat1.Sqrtm() * (covMat1.Invsqrtm() * covMat2 * covMat1.Invsqrtm()).Powm(alpha) * covMat1.Sqrtm());
 }
