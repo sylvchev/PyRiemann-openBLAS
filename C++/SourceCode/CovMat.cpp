@@ -47,7 +47,7 @@ void CovMat::Copy(const CovMat& covMat)
 
 	this->sqrtm = NULL;
 	if (covMat.sqrtm != NULL)
-		this->sqrtm = new CovMat(*(covMat.sqrtm));
+		this->sqrtm = covMat.sqrtm;
 
 	this->invsqrtm = NULL;
 	if (covMat.invsqrtm != NULL)
