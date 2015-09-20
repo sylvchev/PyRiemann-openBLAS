@@ -48,13 +48,13 @@ class CovMat
 		void SetToZero();
 		double Norm();
 		double Determinant();
-		CovMat Transpose();
-		CovMat Inverse();
-		CovMat Sqrtm();
-		CovMat Invsqrtm();
-		CovMat Expm();
-		CovMat Logm();
-		CovMat Powm(const double power);
+		CovMat& Transpose();
+		CovMat& Inverse();
+		CovMat& Sqrtm();
+		CovMat& Invsqrtm();
+		CovMat& Expm();
+		CovMat& Logm();
+		CovMat& Powm(const double power);
 
 		//<< operators overload
 		friend ostream& operator << (ostream &output, const CovMat& covMat);
