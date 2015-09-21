@@ -4,7 +4,7 @@
 sudo apt-get install cmake
 sudo apt-get remove libopenblas-base
 sudo apt-get remove libopenblas-dev
-sudo apt-get remove liblapack-dev
+#sudo apt-get remove liblapack-dev
 
 #Build ans install OpenBLAS
 git clone git://github.com/xianyi/OpenBLAS
