@@ -11,6 +11,8 @@ git clone git://github.com/xianyi/OpenBLAS
 cd OpenBLAS
 make FC=gfortran
 sudo make install
+cd ..
+rm -rf OpenBLAS
 
 #Build and install Armadillo
 cd Armadillo
