@@ -8,19 +8,19 @@ CXX=g++
 ## When using the Sun Studio compiler
 
 
-ARMA_INCLUDE_FLAG = -I ../include
-## If you've installed Armadillo's headers manually, you may need to tell the compiler where they are.
-## For example, change ../include to /usr/local/include
+# flags configured by CMake
+ifeq (unix,macos)
+  LIB_FLAGS = -larmadillo -framework Accelerate
+else
+  LIB_FLAGS = -larmadillo
+  ## NOTE: on Ubuntu and Debian based systems you may need to add -lgfortran
+  
+  #LIB_FLAGS = -larmadillo -library=sunperf
+  ## When using the Sun Studio compiler
+endif
 
 
-LIB_FLAGS = -lblas -llapack 
-#LIB_FLAGS = -lopenblas -llapack 
-#LIB_FLAGS = -framework Accelerate
-#LIB_FLAGS = -library=sunperf
 
-## NOTE: on Ubuntu and Debian based systems you may need to add -lgfortran to LIB_FLAGS
-## NOTE: if you're using Mac OS, use the line with -framework Accelerate 
-## NOTE: if you're using the Sun Studio compiler, use the line with -library=sunperf
 
 
 OPT = -O2
@@ -50,7 +50,7 @@ OPT = -O2
 ## Not recommended unless your code has been first thoroughly tested!
 
 
-CXXFLAGS = $(ARMA_INCLUDE_FLAG) $(DEBUG) $(FINAL) $(OPT) $(EXTRA_OPT) 
+CXXFLAGS = $(DEBUG) $(FINAL) $(OPT) $(EXTRA_OPT)
 
 all: example1
 

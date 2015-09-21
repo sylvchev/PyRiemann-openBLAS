@@ -39,8 +39,8 @@ void CovMat::Copy(const CovMat& covMat)
 	this->copy = true;
 	this->matrix = covMat.matrix;
 	this->matrixOrder = covMat.matrixOrder;
-	this->b_eigenValues = covMat.b_eigenValues; this->vecEigenValues = covMat.vecEigenValues; this->matEigenValues = covMat.matEigenValues;
-	this->b_eigenVectors = covMat.b_eigenVectors; this->matEigenVectors = covMat.matEigenVectors;
+	this->b_eigenValues = covMat.b_eigenValues; this->eigenValues = covMat.eigenValues;
+	this->b_eigenVectors = covMat.b_eigenVectors; this->eigenVectors = covMat.eigenVectors; this->eigenVectorsTranspose = covMat.eigenVectorsTranspose;
 	this->b_norm = covMat.b_norm; this->norm = covMat.norm;
 	this->b_determinant = covMat.b_determinant; this->determinant = covMat.determinant;
 
@@ -99,15 +99,13 @@ void CovMat::ComputeEigen(bool eigenValuesOnly)
 
 	if (eigenValuesOnly)
 	{
-		this->vecEigenValues = eig_sym(this->matrix);
-		this->matEigenValues = diagmat(this->vecEigenValues);
+		this->eigenValues = eig_sym(this->matrix);
 		this->b_eigenValues = true;
 		return;
 	}
 
-	eig_sym(this->vecEigenValues, this->matEigenVectors, this->matrix);
-	this->matEigenValues = diagmat(this->vecEigenValues);
-	this->matEigenVectorsTranspose = this->matEigenVectors.t();
+	eig_sym(this->eigenValues, this->eigenVectors, this->matrix);
+	this->eigenVectorsTranspose = this->eigenVectors.t();
 	this->b_eigenValues = true;
 	this->b_eigenVectors = true;
 }
@@ -171,12 +169,8 @@ CovMat& CovMat::Sqrtm()
 		return *(this->sqrtm);
 
 	this->ComputeEigen();
-
-	vec tmp(this->matrixOrder);
-	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = sqrt(this->vecEigenValues(i));
-
-	this->sqrtm = new CovMat(this->matEigenVectors * diagmat(tmp) * this->matEigenVectorsTranspose);
+	
+	this->sqrtm = new CovMat(this->eigenVectors * diagmat(sqrt(this->eigenValues)) * this->eigenVectorsTranspose);
 
 	return *(this->sqrtm);
 }
@@ -188,11 +182,7 @@ CovMat& CovMat::Invsqrtm()
 
 	this->ComputeEigen();
 
-	vec tmp(this->matrixOrder);
-	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = 1/sqrt(this->vecEigenValues(i));
-
-	this->invsqrtm = new CovMat(this->matEigenVectors * diagmat(tmp) * this->matEigenVectorsTranspose);
+	this->invsqrtm = new CovMat(this->eigenVectors * diagmat(pow(this->eigenValues, -0.5)) * this->eigenVectorsTranspose);
 
 	return *(this->invsqrtm);
 }
@@ -204,11 +194,7 @@ CovMat& CovMat::Expm()
 
 	this->ComputeEigen();
 
-	vec tmp(this->matrixOrder);
-	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = exp(this->vecEigenValues(i));
-
-	this->expm = new CovMat(this->matEigenVectors * diagmat(tmp) * this->matEigenVectorsTranspose);
+	this->expm = new CovMat(this->eigenVectors * diagmat(exp(this->eigenValues)) * this->eigenVectorsTranspose);
 
 	return *(this->expm);
 }
@@ -220,12 +206,7 @@ CovMat& CovMat::Logm()
 
 	this->ComputeEigen();
 
-	vec tmp(this->matrixOrder);
-
-	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = log(this->vecEigenValues(i));
-
-	this->logm = new CovMat(this->matEigenVectors * diagmat(tmp) * this->matEigenVectorsTranspose);
+	this->logm = new CovMat(this->eigenVectors * diagmat(log(this->eigenValues)) * this->eigenVectorsTranspose);
 
 	return *(this->logm);
 }
@@ -242,11 +223,7 @@ CovMat& CovMat::Powm(const double power)
 
 	this->ComputeEigen();
 
-	vec tmp(this->matrixOrder);
-	for (unsigned int i = 0; i < this->matrixOrder; i++)
-		tmp(i) = pow(this->vecEigenValues(i), power);
-
-	this->powm = new CovMat(this->matEigenVectors * diagmat(tmp) * this->matEigenVectorsTranspose);
+	this->powm = new CovMat(this->eigenVectors * diagmat(pow(this->eigenValues, power)) * this->eigenVectorsTranspose);
 	this->currentPower = power;
 
 	return *(this->powm);
