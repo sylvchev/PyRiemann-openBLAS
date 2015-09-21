@@ -11,6 +11,7 @@ class CovMat
 {
 	private:
 		//Fields
+		bool copy;
 		vec eigenValues; bool b_eigenValues;
 		mat eigenVectors; mat eigenVectorsTranspose; bool b_eigenVectors;
 		double norm; bool b_norm;
