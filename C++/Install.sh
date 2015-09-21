@@ -13,6 +13,7 @@ rm -rf OpenBLAS
 git clone git://github.com/xianyi/OpenBLAS
 mv OpenBLAS tmp
 cd tmp
+make
 make install PREFIX=../OpenBLAS
 cd ..
 rm -rf tmp
@@ -29,5 +30,5 @@ cd ..
 rm -rf armadillo-5.600.2
 
 #Compile everything
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/OpenBLAS/lib
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/OpenBLAS/lib
 ./Compile.sh
