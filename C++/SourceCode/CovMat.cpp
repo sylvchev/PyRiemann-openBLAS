@@ -7,7 +7,6 @@ using namespace arma;
 
 void CovMat::ConstructorInitialize()
 {
-	this->copy = false;
 	this->b_eigenValues = false;
 	this->b_eigenVectors = false;
 	this->b_norm = false;
@@ -23,20 +22,16 @@ void CovMat::ConstructorInitialize()
 
 void CovMat::DeleteAllocatedVar()
 {
-	if (this->copy)
-	{
-		delete this->inverse;
-		delete this->sqrtm;
-		delete this->invsqrtm;
-		delete this->expm;
-		delete this->logm;
-		delete this->powm;
-	}
+	delete this->inverse;
+	delete this->sqrtm;
+	delete this->invsqrtm;
+	delete this->expm;
+	delete this->logm;
+	delete this->powm;
 }
 
 void CovMat::Copy(const CovMat& covMat)
 {
-	this->copy = true;
 	this->matrix = covMat.matrix;
 	this->matrixOrder = covMat.matrixOrder;
 	this->b_eigenValues = covMat.b_eigenValues; this->eigenValues = covMat.eigenValues;
