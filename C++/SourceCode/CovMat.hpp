@@ -2,6 +2,7 @@
 #define COVMAT_HPP
 
 #include <iostream>
+#include <memory>
 #include <armadillo>
 
 using namespace std;
@@ -11,17 +12,16 @@ class CovMat
 {
 	private:
 		//Fields
-		bool copy;
-		vec eigenValues; bool b_eigenValues;
-		mat eigenVectors; mat eigenVectorsTranspose; bool b_eigenVectors;
+		shared_ptr<vec> eigenValues; bool b_eigenValues;
+		shared_ptr<mat> eigenVectors; shared_ptr<mat> eigenVectorsTranspose; bool b_eigenVectors;
 		double norm; bool b_norm;
 		double determinant; bool b_determinant;
-		CovMat* inverse;
-		CovMat* sqrtm;
-		CovMat* invsqrtm;
-		CovMat* expm;
-		CovMat* logm;
-		CovMat* powm; double currentPower;
+		shared_ptr<CovMat> inverse;
+		shared_ptr<CovMat> sqrtm;
+		shared_ptr<CovMat> invsqrtm;
+		shared_ptr<CovMat> expm;
+		shared_ptr<CovMat> logm;
+		shared_ptr<CovMat> powm; double currentPower;
 
 		//Methods
 		void Copy(const CovMat& covMat);
@@ -29,7 +29,7 @@ class CovMat
 
 	public:
 		//Fields		
-		mat matrix;
+		shared_ptr<mat> matrix;
 		unsigned int matrixOrder;
 
 		//Constructors

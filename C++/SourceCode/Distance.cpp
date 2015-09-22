@@ -23,7 +23,7 @@ double Distance::LogDeterminantDistance(const CovMat& covMat1, const CovMat& cov
 	
 double Distance::RiemannianDistance(const CovMat& covMat1, const CovMat& covMat2)
 {
-	cx_vec eigenValues = eig_gen(inv_sympd(covMat1.matrix)*covMat2.matrix);	
+	cx_vec eigenValues = eig_gen(inv_sympd(*covMat1.matrix) * *covMat2.matrix);	
 
 	vec tmp(covMat1.matrixOrder);
 

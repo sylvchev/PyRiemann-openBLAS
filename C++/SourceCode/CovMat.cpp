@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <armadillo>
 #include "CovMat.hpp" 
 
@@ -7,36 +8,29 @@ using namespace arma;
 
 void CovMat::ConstructorInitialize()
 {
-	this->copy = false;
 	this->b_eigenValues = false;
 	this->b_eigenVectors = false;
 	this->b_norm = false;
 	this->b_determinant = false;
 
-	this->inverse = NULL;
-	this->sqrtm = NULL;
-	this->invsqrtm = NULL;
-	this->expm = NULL;
-	this->logm = NULL;
-	this->powm = NULL; this->currentPower = 1;
+	this->eigenValues = shared_ptr<vec> (new vec);
+	this->eigenVectors = shared_ptr<mat> (new mat);
+	this->inverse = nullptr;
+	this->sqrtm = nullptr;
+	this->invsqrtm = nullptr;
+	this->expm = nullptr;
+	this->logm = nullptr;
+	this->powm = nullptr;
+	this->currentPower = 1;
 }
 
 void CovMat::DeleteAllocatedVar()
 {
-	if (!this->copy)
-	{
-		delete this->inverse;
-		delete this->sqrtm;
-		delete this->invsqrtm;
-		delete this->expm;
-		delete this->logm;
-		delete this->powm;
-	}
+
 }
 
 void CovMat::Copy(const CovMat& covMat)
 {
-	this->copy = true;
 	this->matrix = covMat.matrix;
 	this->matrixOrder = covMat.matrixOrder;
 	this->b_eigenValues = covMat.b_eigenValues; this->eigenValues = covMat.eigenValues;
@@ -54,22 +48,22 @@ void CovMat::Copy(const CovMat& covMat)
 
 CovMat::CovMat(double* array, const unsigned matrixOrder)
 {
-	this->matrix = mat(array, matrixOrder, matrixOrder, false, true);
+	this->matrix = shared_ptr<mat> (new mat(array, matrixOrder, matrixOrder, false, true));
 	this->matrixOrder = matrixOrder;
 	this->ConstructorInitialize();
 }
 
 CovMat::CovMat(const mat& matrix)
 {
-	this->matrix = matrix;
+	this->matrix = make_shared<mat> (matrix);
 	this->matrixOrder = matrix.n_cols;
 	this->ConstructorInitialize();
 }
 
 CovMat::CovMat(const unsigned int matrixOrder)
 {
-	this->matrix = mat(matrixOrder, matrixOrder);
-	this->matrix.zeros();
+	this->matrix = shared_ptr<mat> (new mat(matrixOrder, matrixOrder));
+	this->matrix->zeros();
 	this->matrixOrder = matrixOrder;
 	this->ConstructorInitialize();
 }
@@ -99,20 +93,20 @@ void CovMat::ComputeEigen(bool eigenValuesOnly)
 
 	if (eigenValuesOnly)
 	{
-		this->eigenValues = eig_sym(this->matrix);
+		*this->eigenValues = eig_sym(*this->matrix);
 		this->b_eigenValues = true;
 		return;
 	}
 
-	eig_sym(this->eigenValues, this->eigenVectors, this->matrix);
-	this->eigenVectorsTranspose = this->eigenVectors.t();
+	eig_sym(*this->eigenValues, *this->eigenVectors, *this->matrix);
+	this->eigenVectorsTranspose = make_shared<mat> (this->eigenVectors->t());
 	this->b_eigenValues = true;
 	this->b_eigenVectors = true;
 }
 
 void CovMat::SetToZero()
 {
-	this->matrix.zeros();
+	this->matrix->zeros();
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
 }
@@ -121,7 +115,7 @@ void CovMat::Randomize()
 {
 	mat tmp(this->matrixOrder, 2*this->matrixOrder);
 	tmp.randu();
-	this->matrix = tmp * tmp.t();
+	*this->matrix = tmp * tmp.t();
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
 }
@@ -131,10 +125,10 @@ double CovMat::Norm()
 	if (this->b_norm)
 		return this->norm;
 
-	this->norm = arma::norm(this->matrix, "fro");
+	this->norm = arma::norm(*this->matrix, "fro");
 	this->b_norm = true; 
 
-	return this->b_norm;
+	return this->norm;
 }
 
 double CovMat::Determinant()
@@ -142,7 +136,7 @@ double CovMat::Determinant()
 	if (this->b_determinant)
 		return this->determinant;
 
-	this->determinant = det(this->matrix);
+	this->determinant = det(*this->matrix);
 	this->b_determinant = true;
 
 	return this->determinant;
@@ -155,58 +149,58 @@ CovMat& CovMat::Transpose()
 
 CovMat& CovMat::Inverse()
 {
-	if (this->inverse != NULL)
+	if (this->inverse != nullptr)
 		return *(this->inverse);
 
-	this->inverse = new CovMat(inv_sympd(this->matrix));
+	this->inverse = shared_ptr<CovMat> (new CovMat(inv_sympd(*this->matrix)));
 
 	return *(this->inverse);
 }
 
 CovMat& CovMat::Sqrtm()
 {
-	if (this->sqrtm != NULL)
+	if (this->sqrtm != nullptr)
 		return *(this->sqrtm);
 
 	this->ComputeEigen();
 	
-	this->sqrtm = new CovMat(this->eigenVectors * diagmat(sqrt(this->eigenValues)) * this->eigenVectorsTranspose);
+	this->sqrtm = shared_ptr<CovMat> (new CovMat(*this->eigenVectors * diagmat(sqrt(*this->eigenValues)) * *this->eigenVectorsTranspose));
 
 	return *(this->sqrtm);
 }
 
 CovMat& CovMat::Invsqrtm()
 {
-	if (this->invsqrtm != NULL)
+	if (this->invsqrtm != nullptr)
 		return *(this->invsqrtm);
 
 	this->ComputeEigen();
 
-	this->invsqrtm = new CovMat(this->eigenVectors * diagmat(pow(this->eigenValues, -0.5)) * this->eigenVectorsTranspose);
+	this->invsqrtm = shared_ptr<CovMat> (new CovMat(*this->eigenVectors * diagmat(pow(*this->eigenValues, -0.5)) * *this->eigenVectorsTranspose));
 
 	return *(this->invsqrtm);
 }
 
 CovMat& CovMat::Expm()
 {
-	if (this->expm != NULL)
+	if (this->expm != nullptr)
 		return *(this->expm);
 
 	this->ComputeEigen();
 
-	this->expm = new CovMat(this->eigenVectors * diagmat(exp(this->eigenValues)) * this->eigenVectorsTranspose);
+	this->expm = shared_ptr<CovMat> (new CovMat(*this->eigenVectors * diagmat(exp(*this->eigenValues)) * *this->eigenVectorsTranspose));
 
 	return *(this->expm);
 }
 
 CovMat& CovMat::Logm()
 {
-	if (this->logm != NULL)
+	if (this->logm != nullptr)
 		return *(this->logm);
 
 	this->ComputeEigen();
 
-	this->logm = new CovMat(this->eigenVectors * diagmat(log(this->eigenValues)) * this->eigenVectorsTranspose);
+	this->logm = shared_ptr<CovMat> (new CovMat(*this->eigenVectors * diagmat(log(*this->eigenValues)) * *this->eigenVectorsTranspose));
 
 	return *(this->logm);
 }
@@ -219,11 +213,9 @@ CovMat& CovMat::Powm(const double power)
 	if (power == this->currentPower)
 		return *(this->powm);
 
-	delete this->powm;
-
 	this->ComputeEigen();
 
-	this->powm = new CovMat(this->eigenVectors * diagmat(pow(this->eigenValues, power)) * this->eigenVectorsTranspose);
+	this->powm = shared_ptr<CovMat> (new CovMat(*this->eigenVectors * diagmat(pow(*this->eigenValues, power)) * *this->eigenVectorsTranspose));
 	this->currentPower = power;
 
 	return *(this->powm);
@@ -231,13 +223,13 @@ CovMat& CovMat::Powm(const double power)
 
 ostream& operator << (ostream &output, const CovMat& covMat)
 { 
-    output << covMat.matrix;
+    output << *covMat.matrix;
     return output;            
 }
 
 double CovMat::operator () (const int nCol, const int nRow)
 {
-	return this->matrix(nCol, nRow);
+	return (*this->matrix)(nCol, nRow);
 }
 
 CovMat& CovMat::operator = (const CovMat& covMat)
@@ -250,37 +242,37 @@ CovMat& CovMat::operator = (const CovMat& covMat)
 
 CovMat operator + (const CovMat& covMat1, const CovMat& covMat2)
 {
-	return CovMat(covMat1.matrix + covMat2.matrix);
+	return CovMat(*covMat1.matrix + *covMat2.matrix);
 }
 
 CovMat operator - (const CovMat& covMat1, const CovMat& covMat2)
 {
-	return CovMat(covMat1.matrix - covMat2.matrix);
+	return CovMat(*covMat1.matrix - *covMat2.matrix);
 }
 
 CovMat operator * (const double mul, const CovMat& covMat)
 {
-	return CovMat(mul * covMat.matrix);
+	return CovMat(mul * *covMat.matrix);
 }
 
 CovMat operator * (const CovMat& covMat, const double mul)
 {
-	return CovMat(mul * covMat.matrix);
+	return CovMat(mul * *covMat.matrix);
 }
 
 CovMat operator * (const CovMat& covMat1, const CovMat& covMat2)
 {
-	return CovMat(covMat1.matrix * covMat2.matrix);
+	return CovMat(*covMat1.matrix * *covMat2.matrix);
 }
 
 CovMat operator / (const CovMat& covMat, const double div)
 {
-	return CovMat(covMat.matrix / div);
+	return CovMat(*covMat.matrix / div);
 }
 
 CovMat& CovMat::operator += (const CovMat& covMat)
 {
-	this->matrix += covMat.matrix;
+	*this->matrix += *covMat.matrix;
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
@@ -290,7 +282,7 @@ CovMat& CovMat::operator += (const CovMat& covMat)
 
 CovMat& CovMat::operator -= (const CovMat& covMat)
 {
-	this->matrix -= covMat.matrix;
+	*this->matrix -= *covMat.matrix;
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
@@ -300,7 +292,7 @@ CovMat& CovMat::operator -= (const CovMat& covMat)
 
 CovMat& CovMat::operator *= (const double mul)
 {
-	this->matrix *= mul;
+	*this->matrix *= mul;
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
@@ -310,7 +302,7 @@ CovMat& CovMat::operator *= (const double mul)
 
 CovMat& CovMat::operator *= (const CovMat& covMat)
 {
-	this->matrix *= covMat.matrix;
+	*this->matrix *= *covMat.matrix;
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
@@ -320,7 +312,7 @@ CovMat& CovMat::operator *= (const CovMat& covMat)
 
 CovMat& CovMat::operator /= (const double mul)
 {
-	this->matrix /= mul;
+	*this->matrix /= mul;
 
 	this->DeleteAllocatedVar();
 	this->ConstructorInitialize();
