@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Install librairies
-sudo apt-get install cmake
 sudo apt-get remove libopenblas*
 sudo apt-get remove liblapack*
 sudo rm -rf /usr/include/armadillo*
@@ -26,10 +25,9 @@ rm -rf lapack-3.5.0
 wget http://www.netlib.org/lapack/lapack-3.5.0.tgz
 tar -xvf lapack-3.5.0.tgz
 cd lapack-3.5.0
-tar -xvf lapack-3.5.0.tar
-cd lapack-3.5.0
-cmake .
-make make install PREFIX=../../LAPACK
+make 
+make install PREFIX=../LAPACK
+cd ..
 rm -rf lapack-3.5.0
 
 #Build and install Armadillo
@@ -37,7 +35,7 @@ wget http://sourceforge.net/projects/arma/files/armadillo-5.600.2.tar.gz
 tar -xvf armadillo-5.600.2.tar.gz
 rm armadillo-5.600.2.tar.gz
 cd armadillo-5.600.2
-cmake .
+./configure
 make
 sudo make install
 cd ..
