@@ -1,37 +1,12 @@
 #!/bin/bash
 
 #Install librairies
-#sudo apt-get remove libopenblas*
-#sudo apt-get remove liblapack*
 sudo apt-get install libopenblas-dev
 sudo apt-get install liblapack-dev
 sudo rm -rf /usr/include/armadillo*
 sudo rm -rf /usr/local/include/armadillo*
 sudo rm -rf /usr/lib/libarmadillo.so*
 sudo rm -rf /usr/local/lib/libarmadillo.so*
-
-#Build and install OpenBLAS
-#rm -rf OpenBLAS
-#rm -rf tmp
-#git clone git://github.com/xianyi/OpenBLAS
-#mv OpenBLAS tmp
-#cd tmp
-#make
-#make install PREFIX=../OpenBLAS
-#cd ..
-#rm -rf tmp
-
-#Build and install LAPACK
-#rm -rf LAPACK
-#rm -rf lapack-3.5.0
-#wget http://www.netlib.org/lapack/lapack-3.5.0.tgz
-#tar -xvf lapack-3.5.0.tgz
-#cd lapack-3.5.0
-#mv make.inc.example make.inc
-#make 
-#make install PREFIX=../LAPACK
-#cd ..
-#rm -rf lapack-3.5.0
 
 #Build and install Armadillo
 wget http://sourceforge.net/projects/arma/files/armadillo-5.600.2.tar.gz
