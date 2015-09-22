@@ -25,6 +25,7 @@ rm -rf lapack-3.5.0
 wget http://www.netlib.org/lapack/lapack-3.5.0.tgz
 tar -xvf lapack-3.5.0.tgz
 cd lapack-3.5.0
+mv make.inc.example make.inc
 make 
 make install PREFIX=../LAPACK
 cd ..
