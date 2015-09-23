@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #Install librairies
+sudo apt-get install g++-4.9
+sudo apt-get install cmake
 sudo apt-get install libopenblas-dev
 sudo apt-get install liblapack-dev
 sudo rm -rf /usr/include/armadillo*

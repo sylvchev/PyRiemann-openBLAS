@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <ctime>
 #include "../../SourceCode/CovMat.hpp"
 
 #define NBREPET 20
@@ -10,6 +9,7 @@ using namespace std;
 int main()
 {
 	//Variable initialization
+	wall_clock timer;
 	unsigned int v[9] = {10, 25, 50, 75, 100, 250, 500, 750, 1000};
 	double time[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	vector<CovMat> covMats;
@@ -50,9 +50,9 @@ int main()
 
 			covMats[i].DeleteAllocatedVar();
 			covMats[i].ConstructorInitialize();
-			double start = clock();
+			timer.tic();
 			covMats[i].Sqrtm();
-			time[i] += clock() - start;
+			time[i] += timer.toc();
 		}
 	}
 	completionText += "Benchmarking sqrtm : 100%\n\n";
@@ -63,9 +63,6 @@ int main()
 
 	for (unsigned int i = 0; i < 9; i++)
 	{
-		time[i] /= NBREPET;
-		time[i] /= CLOCKS_PER_SEC;
-
-		cout << "Matrix type : " << v[i] << "x" << v[i] << "	time : " << time[i] << " sec" << endl;
+		cout << "Matrix type : " << v[i] << "x" << v[i] << "	time : " << time[i]/NBREPET << " sec" << endl;
 	}
 } 
