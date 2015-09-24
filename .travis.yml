@@ -1,13 +1,8 @@
-language: cpp
+sudo : required
+language : python
+python : "3.4"
 
-sudo: required
-
-compiler: g++
-
-script:
-  - cd C++
+script :
+  - cd Python
   - chmod 777 Install.sh
-  - chmod 777 Compile.sh
-  - ./Install.sh
-  - cd SourceCode
-  - ./TestSourceCode
+  - python Test.py
