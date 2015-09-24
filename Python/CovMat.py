@@ -148,6 +148,33 @@ class CovMat :
 
 
 
+	def GetEigenValues(self) :
+		if (self.eigenValues is not None) :
+			return self.eigenValues
+			
+		self.ComputeEigen(true)
+		return self.eigenValues
+
+
+
+	def GetEigenVectors(self) :
+		if (self.eigenVectors is not None) :
+			return self.eigenVectors
+			
+		self.ComputeEigen()
+		return self.eigenVectors
+
+
+
+	def GetEigenVectorsTranspose(self) :
+		if (self.eigenVectorsTranspose is not None) :
+			return self.eigenVectorsTranspose
+			
+		self.ComputeEigen()
+		return self.eigenVectorsTranspose
+		
+		
+		
 	def Norm(self) :
 		if (self.norm is not None) :
 			return self.norm
