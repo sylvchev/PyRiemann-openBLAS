@@ -4,10 +4,6 @@ import numpy
 from CovMat import CovMat
 
 class Distance :
-  def __init__(self) :
-  
-  
-  
   @staticmethod
   def Euclidean(covMat1, covMat2) :
     return (covMat1 - covMat2).Norm()
