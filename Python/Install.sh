@@ -10,6 +10,3 @@ sudo apt-get install python3-scipy
 #Build and install Armadillo
 echo -e "" >> ~/.bashrc
 echo -e "alias python=\"python3.4\"" >> ~/.bashrc
-
-#Test
-python Test.py
