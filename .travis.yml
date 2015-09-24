@@ -5,4 +5,5 @@ python : "3.4"
 script :
   - cd Python
   - chmod 777 Install.sh
+  - ./Install.sh
   - python Test.py
