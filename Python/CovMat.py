@@ -8,7 +8,7 @@ class CovMat :
 			self.matrix = numpy.array((arg, arg))
 			self.matrixOrder = arg
 			self.FieldsInitialization()
-		else :										#arg is the matrix
+		elif (isinstance(arg, numpy.ndarray)) :										#arg is the matrix
 			self.matrix = arg
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()		
@@ -60,10 +60,10 @@ class CovMat :
 
 
 	def __mul__(self, arg) :
-		if (isinstance(arg, int)) :
-			return CovMat(self.matrix * arg)
-		else :
+		if (isinstance(arg, CovMat)) :
 			return CovMat(numpy.dot(self.matrix, arg.matrix))
+		else :
+			return CovMat(self.matrix * arg)
 
 
 
@@ -73,10 +73,10 @@ class CovMat :
 
 
 	def __imul__(self, arg) :
-		if (isinstance(arg, int)) :
-			self.matrix *= arg
-		else :
+		if (isinstance(arg, CovMat)) :
 			self.matrix = numpy.dot(self.matrix, arg.matrix)
+		else :
+			self.matrix *= arg		
 
 		self.FieldsInitialization()
 		return self

@@ -2,26 +2,29 @@
 
 from CovMat import CovMat
 from Distance import Distance
+from Geodesic import Geodesic
 
-covMat = CovMat(5)
+covMat1 = CovMat(5)
 covMat2 = CovMat(5)
-covMat.Randomize()
+covMat1.Randomize()
 covMat2.Randomize()
 
-print("covMat :\n" + str(covMat) + "\n")
-B = covMat
-B **= 2
-print("covMat**=2 :\n" + str(B) + "\n")
+print("covMat1 :\n" + str(covMat1) + "\n")
+print("covMat1 :\n" + str(covMat2) + "\n")
 
-print("covMat.Norm() :\n" + str(covMat.Norm()) + "\n")
-print("covMat.Determinant() :\n" + str(covMat.Determinant()) + "\n")
-print("covMat.Sqrtm() :\n" + str(covMat.Sqrtm()) + "\n")
-print("covMat.Invsqrtm() :\n" + str(covMat.Invsqrtm()) + "\n")
-print("covMat.Expm() :\n" + str(covMat.Expm()) + "\n")
-print("covMat.Logm() :\n" + str(covMat.Logm()) + "\n")
-print("covMat.Powm(2) :\n" + str(covMat.Powm(2)) + "\n")
+print("covMat1.Norm() :\n" + str(covMat1.Norm()) + "\n")
+print("covMat1.Determinant() :\n" + str(covMat1.Determinant()) + "\n")
+print("covMat1.Sqrtm() :\n" + str(covMat1.Sqrtm()) + "\n")
+print("covMat1.Invsqrtm() :\n" + str(covMat1.Invsqrtm()) + "\n")
+print("covMat1.Expm() :\n" + str(covMat1.Expm()) + "\n")
+print("covMat1.Logm() :\n" + str(covMat1.Logm()) + "\n")
+print("covMat1.Powm(2) :\n" + str(covMat1.Powm(2)) + "\n")
 
-print("Distance.Euclidean(covMat, covMat2) :\n" + str(Distance.Euclidean(covMat, covMat2)) + "\n")
-print("Distance.LogEuclidean(covMat, covMat2) :\n" + str(Distance.LogEuclidean(covMat, covMat2)) + "\n")
-print("Distance.LogDeterminant(covMat, covMat2) :\n" + str(Distance.LogDeterminant(covMat, covMat2)) + "\n")
-print("Distance.Riemannian(covMat, covMat2) :\n" + str(Distance.Riemannian(covMat, covMat2)) + "\n")
+print("Distance.Euclidean(covMat1, covMat2) :\n" + str(Distance.Euclidean(covMat1, covMat2)) + "\n")
+print("Distance.LogEuclidean(covMat1, covMat2) :\n" + str(Distance.LogEuclidean(covMat1, covMat2)) + "\n")
+print("Distance.LogDeterminant(covMat1, covMat2) :\n" + str(Distance.LogDeterminant(covMat1, covMat2)) + "\n")
+print("Distance.Riemannian(covMat1, covMat2) :\n" + str(Distance.Riemannian(covMat1, covMat2)) + "\n")
+
+print("Geodesic.Euclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.Euclidean(covMat1, covMat2, 0.5)) + "\n")
+print("Geodesic.LogEuclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.LogEuclidean(covMat1, covMat2, 0.5)) + "\n")
+print("Geodesic.Riemannian(covMat1, covMat2, 0.5) :\n" + str(Geodesic.Riemannian(covMat1, covMat2, 0.5)) + "\n")
