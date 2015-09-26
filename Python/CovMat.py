@@ -25,82 +25,98 @@ class CovMat :
 
 
 
-	def __add__(self, arg):
-		return CovMat(self.matrix + arg)
+	def __add__(self, arg) :
+		return CovMat(self.matrix + arg.matrix)
 
 
 
-	def __radd__(self, arg):
-		return self.__add__(arg)
+	def __radd__(self, arg) :
+		return self.__add__(arg.matrix)
 
 
 
-	def __iadd__(self, arg):
+	def __iadd__(self, arg) :
 		self.matrix += arg.matrix
 		self.FieldsInitialization()
 		return self
 
 
 
-	def __sub__(self, arg):
-		return CovMat(self.matrix - arg)
+	def __sub__(self, arg) :
+		return CovMat(self.matrix - arg.matrix)
 
 
 
-	def __rsub__(self, arg):
-		return CovMat(-1 * self.matrix + arg)
+	def __rsub__(self, arg) :
+		return CovMat(-1 * self.matrix + arg.matrix)
 
 
 
-	def __isub__(self, arg):
+	def __isub__(self, arg) :
 		self.matrix -= arg.matrix
 		self.FieldsInitialization()
 		return self
 
 
 
-	def __mul__(self, arg):
+	def __mul__(self, arg) :
 		if (isinstance(arg, int)) :
 			return CovMat(self.matrix * arg)
 		else :
-			return CovMat(numpy.dot(self.matrix, arg))
+			return CovMat(numpy.dot(self.matrix, arg.matrix))
 
 
 
-	def __rmul__(self, arg):
+	def __rmul__(self, arg) :
 		return self.__mul__(arg)
 
 
 
-	def __imul__(self, arg):
+	def __imul__(self, arg) :
 		if (isinstance(arg, int)) :
 			self.matrix *= arg
 		else :
-			self.matrix = numpy.dot(self.matrix, arg)
+			self.matrix = numpy.dot(self.matrix, arg.matrix)
 
 		self.FieldsInitialization()
 		return self
 
 
 
-	def __div__(self, arg):
+	def __truediv__(self, arg) :
 		return CovMat(self.matrix / arg)
 
 
 
-	def __idiv__(self, arg):
+	def __rtruediv__(self, arg) :
+		return CovMat(arg / self.matrix)
+
+
+
+	def __itruediv__(self, arg) :
 		self.matrix /= arg
 		self.FieldsInitialization()
 		return self
 
 
 
-	def GetNumpyMatrix(self):
+	def __pow__(self, arg) :
+		return self.Powm(arg)
+
+
+
+	def __ipow__(self, arg) :
+		self = self.Powm(arg)
+		return self
+
+
+
+	def NumpyMatrix(self) :
 		return self.matrix
 
 
 
-	def GetMatrixOrder(self):
+	def MatrixOrder(self) :
 		return self.matrixOrder
 
 
