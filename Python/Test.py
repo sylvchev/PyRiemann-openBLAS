@@ -10,7 +10,7 @@ covMat1.Randomize()
 covMat2.Randomize()
 
 print("covMat1 :\n" + str(covMat1) + "\n")
-print("covMat1 :\n" + str(covMat2) + "\n")
+print("covMat2 :\n" + str(covMat2) + "\n")
 
 print("covMat1.Norm() :\n" + str(covMat1.Norm()) + "\n")
 print("covMat1.Determinant() :\n" + str(covMat1.Determinant()) + "\n")
