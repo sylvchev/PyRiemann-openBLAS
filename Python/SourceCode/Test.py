@@ -1,5 +1,6 @@
 #!/usr/bin/python 
 
+import Environment
 from CovMat import CovMat
 from Distance import Distance
 from Geodesic import Geodesic

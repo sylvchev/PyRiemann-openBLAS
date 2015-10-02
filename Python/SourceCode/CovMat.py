@@ -1,8 +1,8 @@
 #!/usr/bin/python
  
+import Environment
 import numpy
 import scipy.linalg
-import Environment
 
 class CovMat :
 	# ----------------------------------------------------------------------------------- #

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import Environment
 import numpy
 from CovMat import CovMat
 

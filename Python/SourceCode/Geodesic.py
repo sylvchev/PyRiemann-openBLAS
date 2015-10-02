@@ -1,7 +1,8 @@
 #!/usr/bin/python
-
+ 
+import Environment
 import numpy
-from CovMat import CovMat 
+from CovMat import CovMat
 
 class Geodesic :
 	@staticmethod
