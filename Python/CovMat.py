@@ -1,6 +1,7 @@
 #!/usr/bin/python
  
 import numpy
+import scipy.linalg
 import Environment
 
 class CovMat :
@@ -48,7 +49,7 @@ class CovMat :
 
 
 	def GetMatrix(self) :
-		return self.matrix
+		return self.matrix.copy()
 
 
 
@@ -62,7 +63,7 @@ class CovMat :
 			return self.eigenValues
 			
 		self.ComputeEigen(true)
-		return self.eigenValues
+		return self.eigenValues.copy()
 
 
 
@@ -71,7 +72,7 @@ class CovMat :
 			return self.eigenVectors
 			
 		self.ComputeEigen()
-		return self.eigenVectors
+		return self.eigenVectors.copy()
 
 
 
@@ -80,7 +81,7 @@ class CovMat :
 			return self.eigenVectorsTranspose
 			
 		self.ComputeEigen()
-		return self.eigenVectorsTranspose
+		return self.eigenVectorsTranspose.copy()
 
 
 
@@ -210,7 +211,13 @@ class CovMat :
 		self.ComputeEigen()
 		self.powm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(self.eigenValues**power)) * self.eigenVectorsTranspose)
 		self.power = power
-		return self.powm		
+		return self.powm
+
+
+
+	@staticmethod
+	def SolveProblem(covMat1, covMat2) :
+		return scipy.linalg.eigvalsh(covMat1.matrix, covMat2.matrix)
 
 
 
@@ -279,6 +286,12 @@ class CovMat :
 
 		self.FieldsInitialization()
 		return self
+
+
+
+	@staticmethod
+	def ElementWiseProduct (covMat1, covMat2) :
+		return self.MatrixFromArray(numpy.multiply(covMat1, covMat2))
 
 
 
