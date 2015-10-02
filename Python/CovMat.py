@@ -1,75 +1,59 @@
 #!/usr/bin/python
  
 import numpy
+import Environment
 
 class CovMat :
 	def __init__(self, arg) :
-		if (isinstance(arg, int)) : 														#arg is an int
-			self.matrix = numpy.matrix(numpy.array((arg, arg)), numpy.dtype('d'), False)
-			self.matrixOrder = arg
+		if (isinstance(arg, int)) :																	#arg is an it
+			self.matrixOrder = arg																	#alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
+			self.matrix = numpy.matrix((arg, arg))
 			self.FieldsInitialization()
-		elif (isinstance(arg, numpy.ndarray)) :												#arg is an ndarray
-			self.matrix = numpy.matrix(arg, numpy.dtype('d'), False)
+		elif (isinstance(arg, numpy.ndarray)) :														#arg is an ndarray
+			self.matrix = self.MatrixFromArray(arg, Environment.copyArrayMemoryCovMatConstructor)	#map an ndarray into a matrix array
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
-		elif (isinstance(arg, numpy.matrix)) :												#arg is a matrix
-			self.matrix = arg
+		elif (isinstance(arg, numpy.matrix)) :														#arg is a matrix
+			self.matrix = self.MatrixFromArray(arg, Environment.copyArrayMemoryCovMatConstructor)
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
 
 
 
-	def NumpyMatrix(self) :
+	@staticmethod
+	def MatrixFromArray(numpyArray, copyArrayMemory = False) :
+		return numpy.matrix(numpyArray, Environment.dataType, copyArrayMemory)
+
+
+
+	@staticmethod
+	def Zeros(matrixOrder) :
+		return self.MatrixFromArray(numpy.zeros((matrixOrder, matrixOrder)))
+
+
+
+	@staticmethod
+	def Identity(matrixOrder) :
+		return self.MatrixFromArray(numpy.eye(matrixOrder))
+
+
+
+	@staticmethod
+	def Random(matrixOrder) :
+		covMat = CovMat(matrixOrder)
+		covMat.Randomize()
+
+		return covMat
+
+
+
+	def GetMatrix(self) :
 		return self.matrix
 
 
 
-	def MatrixOrder(self) :
+	def GetMatrixOrder(self) :
 		return self.matrixOrder
-
-
-
-	def FieldsInitialization(self) :
-		self.eigenValues = None
-		self.eigenVectors = None
-		self.norm = None
-		self.determinant = None
-		self.inverse = None
-		self.sqrtm = None
-		self.invsqrtm = None
-		self.expm = None
-		self.logm = None
-		self.powm = None
-		self.power = 1
-
-
-
-	def SetToZero(self) :
-		self.matrix = numpy.matrix(numpy.zeros(self.matrixOrder, self.matrixOrder), numpy.dtype('d'), False)
-		self.FieldsInitialization()
-
-
-
-	def Randomize(self) :
-		tmp = numpy.random.rand(self.matrixOrder, self.matrixOrder)
-		self.matrix = numpy.matrix(numpy.dot(tmp, numpy.transpose(tmp))/100, numpy.dtype('d'), False)
-		self.FieldsInitialization()
-
-
-
-	def ComputeEigen(self, eigenValuesOnly = False) :
-		if ((self.eigenValues is not None)&(self.eigenVectors is not None)) :
-			return
-		
-		if (eigenValuesOnly) :
-			if (self.eigenValues is not None) :
-				return
-
-			self.eigenValues = numpy.linalg.eigvalsh(self.matrix)
-		else :
-			self.eigenValues, self.eigenVectors = numpy.linalg.eigh(self.matrix)
-			self.eigenVectors = numpy.matrix(self.eigenVectors, numpy.dtype('d'), False)
-			self.eigenVectorsTranspose = self.eigenVectors.transpose()
 
 
 
@@ -97,9 +81,53 @@ class CovMat :
 			
 		self.ComputeEigen()
 		return self.eigenVectorsTranspose
+
+
+
+	def FieldsInitialization(self) :
+		self.eigenValues = None
+		self.eigenVectors = None
+		self.norm = None
+		self.determinant = None
+		self.inverse = None
+		self.sqrtm = None
+		self.invsqrtm = None
+		self.expm = None
+		self.logm = None
+		self.powm = None
+		self.power = 1
+
+
+
+	def Fill(self, value) :
+		self.matrix.fill(value)
+		self.FieldsInitialization()
+
+
+
+	def Randomize(self) :
+		tmp = numpy.random.rand(self.matrixOrder, self.matrixOrder)
+		self.matrix = self.MatrixFromArray(numpy.dot(tmp, numpy.transpose(tmp))/100)
+		self.FieldsInitialization()
+
+
+
+	def ComputeEigen(self, eigenValuesOnly = False) :
+		if ((self.eigenValues is not None)&(self.eigenVectors is not None)) :
+			return
 		
-		
-		
+		if (eigenValuesOnly) :
+			if (self.eigenValues is not None) :
+				return
+
+			self.eigenValues = numpy.linalg.eigvalsh(self.matrix)
+		else :
+			self.eigenValues, self.eigenVectors = numpy.linalg.eigh(self.matrix)
+			self.eigenVectors = self.MatrixFromArray(self.eigenVectors)
+			self.eigenVectorsTranspose = self.eigenVectors.transpose()
+
+
+
 	def Norm(self) :
 		if (self.norm is not None) :
 			return self.norm
@@ -127,7 +155,7 @@ class CovMat :
 		if (self.inverse is not None) :
 			return self.inverse
 
-		self.inverse = numpy.matrix(numpy.linalg.inv(self.matrix), numpy.dtype('d'), False)
+		self.inverse = self.MatrixFromArray(numpy.linalg.inv(self.matrix))
 		return self.inverse
 
 
@@ -137,7 +165,7 @@ class CovMat :
 			return self.sqrtm
 
 		self.ComputeEigen()
-		self.sqrtm = CovMat(self.eigenVectors * numpy.matrix(numpy.diag(numpy.sqrt(self.eigenValues)), numpy.dtype('d'), False) * self.eigenVectorsTranspose)
+		self.sqrtm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(numpy.sqrt(self.eigenValues))) * self.eigenVectorsTranspose)
 		return self.sqrtm
 
 
@@ -147,7 +175,7 @@ class CovMat :
 			return self.invsqrtm
 
 		self.ComputeEigen()
-		self.invsqrtm = CovMat(self.eigenVectors * numpy.matrix(numpy.diag(1.0/numpy.sqrt(self.eigenValues)), numpy.dtype('d'), False) * self.eigenVectorsTranspose)
+		self.invsqrtm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(1.0/numpy.sqrt(self.eigenValues))) * self.eigenVectorsTranspose)
 		return self.invsqrtm
 
 
@@ -157,7 +185,7 @@ class CovMat :
 			return self.expm
 
 		self.ComputeEigen()
-		self.expm = CovMat(self.eigenVectors * numpy.matrix(numpy.diag(numpy.exp(self.eigenValues)), numpy.dtype('d'), False) * self.eigenVectorsTranspose)
+		self.expm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(numpy.exp(self.eigenValues))) * self.eigenVectorsTranspose)
 		return self.expm
 
 
@@ -167,7 +195,7 @@ class CovMat :
 			return self.logm
 
 		self.ComputeEigen()
-		self.logm = CovMat(self.eigenVectors * numpy.matrix(numpy.diag(numpy.log(self.eigenValues)), numpy.dtype('d'), False) * self.eigenVectorsTranspose)
+		self.logm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(numpy.log(self.eigenValues))) * self.eigenVectorsTranspose)
 		return self.logm
 
 
@@ -180,7 +208,7 @@ class CovMat :
 			return self.powm
 
 		self.ComputeEigen()
-		self.powm = CovMat(self.eigenVectors * numpy.matrix(numpy.diag(self.eigenValues)**power, numpy.dtype('d'), False) * self.eigenVectorsTranspose)
+		self.powm = CovMat(self.eigenVectors * self.MatrixFromArray(numpy.diag(self.eigenValues**power)) * self.eigenVectorsTranspose)
 		self.power = power
 		return self.powm		
 

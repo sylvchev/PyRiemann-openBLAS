@@ -25,4 +25,4 @@ class Distance :
 
 	@staticmethod
 	def Riemannian(covMat1, covMat2) :
-		return numpy.sqrt((numpy.log(scipy.linalg.eigvalsh(covMat1.NumpyMatrix(), covMat2.NumpyMatrix()))**2).sum())
+		return numpy.sqrt((numpy.log(scipy.linalg.eigvalsh(covMat1.GetMatrix(), covMat2.GetMatrix()))**2).sum())

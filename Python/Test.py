@@ -9,11 +9,20 @@ covMat2 = CovMat(5)
 covMat1.Randomize()
 covMat2.Randomize()
 
+covMats = []
+for i in range(0, 20) :
+	tmp = CovMat.Random(200)
+	covMats.append(tmp)
+#covMats.append()
+#len(covMats)
+
 print("covMat1 :\n" + str(covMat1) + "\n")
 print("covMat2 :\n" + str(covMat2) + "\n")
 
 print("covMat1.Norm() :\n" + str(covMat1.Norm()) + "\n")
 print("covMat1.Determinant() :\n" + str(covMat1.Determinant()) + "\n")
+print("covMat1.Inverse() :\n" + str(covMat1.Inverse()) + "\n")
+print("covMat1.Transpose() :\n" + str(covMat1.Transpose()) + "\n")
 print("covMat1.Sqrtm() :\n" + str(covMat1.Sqrtm()) + "\n")
 print("covMat1.Invsqrtm() :\n" + str(covMat1.Invsqrtm()) + "\n")
 print("covMat1.Expm() :\n" + str(covMat1.Expm()) + "\n")
