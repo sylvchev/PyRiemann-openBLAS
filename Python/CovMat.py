@@ -5,17 +5,21 @@ import scipy.linalg
 import Environment
 
 class CovMat :
-	def __init__(self, arg) :
+	# ----------------------------------------------------------------------------------- #
+	# ------------------------------- COVMAT CONSTRUCTORS ------------------------------- #
+	# ----------------------------------------------------------------------------------- #
+
+	def __init__(self, arg, copyArrayMemory = Environment.copyArrayMemoryCovMatConstructor) :
 		if (isinstance(arg, int)) :																	#arg is an it
 			self.matrixOrder = arg																	#alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
-			self.matrix = numpy.matrix((arg, arg))
+			self.matrix = self.MatrixFromArray(numpy.zeros((arg, arg)))
 			self.FieldsInitialization()
 		elif (isinstance(arg, numpy.ndarray)) :														#arg is an ndarray
-			self.matrix = self.MatrixFromArray(arg, Environment.copyArrayMemoryCovMatConstructor)	#map an ndarray into a matrix array
+			self.matrix = self.MatrixFromArray(arg, copyArrayMemory)										#map an ndarray into a matrix array
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
 		elif (isinstance(arg, numpy.matrix)) :														#arg is a matrix
-			self.matrix = self.MatrixFromArray(arg, Environment.copyArrayMemoryCovMatConstructor)
+			self.matrix = self.MatrixFromArray(arg, copyArrayMemory)
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
 
@@ -28,14 +32,14 @@ class CovMat :
 
 
 	@staticmethod
-	def Zeros(matrixOrder) :
-		return self.MatrixFromArray(numpy.zeros((matrixOrder, matrixOrder)))
+	def Zero(matrixOrder) :
+		return CovMat(numpy.zeros((matrixOrder, matrixOrder)), False)
 
 
 
 	@staticmethod
 	def Identity(matrixOrder) :
-		return self.MatrixFromArray(numpy.eye(matrixOrder))
+		return CovMat(numpy.eye(matrixOrder), False)
 
 
 
@@ -47,6 +51,25 @@ class CovMat :
 		return covMat
 
 
+
+	def FieldsInitialization(self) :
+		self.eigenValues = None
+		self.eigenVectors = None
+		self.norm = None
+		self.determinant = None
+		self.inverse = None
+		self.sqrtm = None
+		self.invsqrtm = None
+		self.expm = None
+		self.logm = None
+		self.powm = None
+		self.power = 1
+
+
+
+	# ----------------------------------------------------------------------- #
+	# ------------------------------- GETTERS ------------------------------- #
+	# ----------------------------------------------------------------------- #
 
 	def GetMatrix(self) :
 		return self.matrix.copy()
@@ -85,20 +108,9 @@ class CovMat :
 
 
 
-	def FieldsInitialization(self) :
-		self.eigenValues = None
-		self.eigenVectors = None
-		self.norm = None
-		self.determinant = None
-		self.inverse = None
-		self.sqrtm = None
-		self.invsqrtm = None
-		self.expm = None
-		self.logm = None
-		self.powm = None
-		self.power = 1
-
-
+	# ------------------------------------------------------------------------------ #
+	# ------------------------------- USUAL FUNCTION ------------------------------- #
+	# ------------------------------------------------------------------------------ #
 
 	def Fill(self, value) :
 		self.matrix.fill(value)
@@ -110,22 +122,6 @@ class CovMat :
 		tmp = numpy.random.rand(self.matrixOrder, self.matrixOrder)
 		self.matrix = self.MatrixFromArray(numpy.dot(tmp, numpy.transpose(tmp))/100)
 		self.FieldsInitialization()
-
-
-
-	def ComputeEigen(self, eigenValuesOnly = False) :
-		if ((self.eigenValues is not None)&(self.eigenVectors is not None)) :
-			return
-		
-		if (eigenValuesOnly) :
-			if (self.eigenValues is not None) :
-				return
-
-			self.eigenValues = numpy.linalg.eigvalsh(self.matrix)
-		else :
-			self.eigenValues, self.eigenVectors = numpy.linalg.eigh(self.matrix)
-			self.eigenVectors = self.MatrixFromArray(self.eigenVectors)
-			self.eigenVectorsTranspose = self.eigenVectors.transpose()
 
 
 
@@ -156,8 +152,24 @@ class CovMat :
 		if (self.inverse is not None) :
 			return self.inverse
 
-		self.inverse = self.MatrixFromArray(numpy.linalg.inv(self.matrix))
+		self.inverse = CovMat(numpy.linalg.inv(self.matrix))
 		return self.inverse
+
+
+
+	def ComputeEigen(self, eigenValuesOnly = False) :
+		if ((self.eigenValues is not None)&(self.eigenVectors is not None)) :
+			return
+		
+		if (eigenValuesOnly) :
+			if (self.eigenValues is not None) :
+				return
+
+			self.eigenValues = numpy.linalg.eigvalsh(self.matrix)
+		else :
+			self.eigenValues, self.eigenVectors = numpy.linalg.eigh(self.matrix)
+			self.eigenVectors = self.MatrixFromArray(self.eigenVectors)
+			self.eigenVectorsTranspose = self.eigenVectors.transpose()
 
 
 
@@ -221,6 +233,10 @@ class CovMat :
 
 
 
+	# ------------------------------------------------------------------------- #
+	# ------------------------------- OPERATORS ------------------------------- #
+	# ------------------------------------------------------------------------- #
+
 	def __str__(self) :
 		return str(self.matrix)
 
@@ -232,24 +248,34 @@ class CovMat :
 
 
 	def __add__(self, arg) :
-		return CovMat(self.matrix + arg.matrix)
+		if (isinstance(arg, CovMat)) :
+			return CovMat(self.matrix + arg.matrix)
+		else :
+			return CovMat(self.matrix + arg)
 
 
 
 	def __radd__(self, arg) :
-		return self.__add__(arg.matrix)
+		return self.__add__(arg)
 
 
 
 	def __iadd__(self, arg) :
-		self.matrix += arg.matrix
+		if (isinstance(arg, CovMat)) :
+			self.matrix += arg.matrix
+		else :
+			self.matrix += arg
+
 		self.FieldsInitialization()
 		return self
 
 
 
 	def __sub__(self, arg) :
-		return CovMat(self.matrix - arg.matrix)
+		if (isinstance(arg, CovMat)) :
+			return CovMat(self.matrix - arg.matrix)
+		else :
+			return CovMat(self.matrix - arg)
 
 
 
@@ -259,7 +285,11 @@ class CovMat :
 
 
 	def __isub__(self, arg) :
-		self.matrix -= arg.matrix
+		if (isinstance(arg, CovMat)) :
+			self.matrix -= arg.matrix
+		else :
+			self.matrix -= arg
+
 		self.FieldsInitialization()
 		return self
 

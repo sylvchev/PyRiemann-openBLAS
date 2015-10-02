@@ -3,21 +3,22 @@
 from CovMat import CovMat
 from Distance import Distance
 from Geodesic import Geodesic
+from Mean import Mean
 
-covMat1 = CovMat(5)
-covMat2 = CovMat(5)
-covMat1.Randomize()
-covMat2.Randomize()
+covMat1 = CovMat.Random(5)
+covMat2 = CovMat.Random(5)
 
 covMats = []
 for i in range(0, 20) :
 	tmp = CovMat.Random(200)
 	covMats.append(tmp)
-#covMats.append()
-#len(covMats)
 
 print("covMat1 :\n" + str(covMat1) + "\n")
 print("covMat2 :\n" + str(covMat2) + "\n")
+
+print("CovMat.Zero(10) :\n" + str(CovMat.Zero(10)) + "\n")
+print("CovMat.Identity(10) :\n" + str(CovMat.Identity(10)) + "\n")
+print("CovMat.Random(10) :\n" + str(CovMat.Random(10)) + "\n")
 
 print("covMat1.Norm() :\n" + str(covMat1.Norm()) + "\n")
 print("covMat1.Determinant() :\n" + str(covMat1.Determinant()) + "\n")
@@ -37,3 +38,9 @@ print("Distance.Riemannian(covMat1, covMat2) :\n" + str(Distance.Riemannian(covM
 print("Geodesic.Euclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.Euclidean(covMat1, covMat2, 0.5)) + "\n")
 print("Geodesic.LogEuclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.LogEuclidean(covMat1, covMat2, 0.5)) + "\n")
 print("Geodesic.Riemannian(covMat1, covMat2, 0.5) :\n" + str(Geodesic.Riemannian(covMat1, covMat2, 0.5)) + "\n")
+
+print("Mean.Identity(covMats) :\n" + str(Mean.Identity(covMats)) + "\n")
+print("Mean.Euclidean(covMats) :\n" + str(Mean.Euclidean(covMats)) + "\n")
+print("Mean.LogEuclidean(covMats) :\n" + str(Mean.LogEuclidean(covMats)) + "\n")
+print("Mean.LogDeterminant(covMats) :\n" + str(Mean.LogDeterminant(covMats)) + "\n")
+print("Mean.Riemannian(covMats) :\n" + str(Mean.Riemannian(covMats)) + "\n")

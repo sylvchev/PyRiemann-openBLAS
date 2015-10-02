@@ -2,6 +2,7 @@
 
 import numpy
 from CovMat import CovMat
+import Environment
 
 class Mean :
 	@staticmethod
@@ -16,7 +17,7 @@ class Mean :
 		nbCovMats = len(covMats)
 		matrixOrder = covMats[0].GetMatrixOrder()
 
-		output = CovMat.Zeros(matrixOrder)
+		output = CovMat.Zero(matrixOrder)
 
 		for covMat in covMats :
 			output += covMat
@@ -33,7 +34,7 @@ class Mean :
 		nbCovMats = len(covMats)
 		matrixOrder = covMats[0].GetMatrixOrder()
 
-		output = CovMat.Zeros(matrixOrder)
+		output = CovMat.Zero(matrixOrder)
 
 		for covMat in covMats :
 			output += covMat.Logm()
@@ -51,7 +52,7 @@ class Mean :
 		matrixOrder = covMats[0].GetMatrixOrder()
 
 		if (init is None) :
-			output = self.Euclidean(covMats)
+			output = Mean.Euclidean(covMats)
 		else :
 			output = init
 
@@ -72,7 +73,7 @@ class Mean :
 			output = newOutput
 
 		if (k == maxIter) :
-    		print("Max iter reach")
+			print("Max iter reach")
 
 		return output
 
@@ -80,12 +81,12 @@ class Mean :
 
 
 	@staticmethod
-	def Riemann (covMats, tol=10e-9, maxIter=50, init=None) :
+	def Riemannian (covMats, tol=10e-9, maxIter=50, init=None) :
 		nbCovMats = len(covMats)
 		matrixOrder = covMats[0].GetMatrixOrder()
 
 		if (init is None) :
-			output = self.Euclidean(covMats)
+			output = Mean.Euclidean(covMats)
 		else :
 			output = init
 
@@ -114,7 +115,7 @@ class Mean :
 			else:
 				nu = 0.5 * nu
 
-			if (k == maxIter) :
-    			print("Max iter reach")
+		if (k == maxIter) :
+ 			print("Max iter reach")
 
-		return C
+		return output
