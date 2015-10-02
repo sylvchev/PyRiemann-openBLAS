@@ -5,7 +5,7 @@ import OpenBLAS
 
 #Used to set data type of matrix. Use only :
 #	- 'd' for double precision
-#	- 'f' for single precision, algorithme should be a little faster
+#	- 'f' for single precision, algorithms should be a little faster
 dataType = numpy.dtype('d')
 
 #Used to determine if data is copied when the CovMat class is created from an array or an existing matrix, or if the data is shared
