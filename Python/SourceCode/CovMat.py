@@ -125,6 +125,51 @@ class CovMat :
 
 
 
+	def Diagonal(self, offset = 0) :
+		return self.matrix.diagonal(offset)
+
+
+
+	def Column(self, i) :
+		return self.matrix[:, i]
+
+
+
+	def Row(self, i) :
+		return self.matrix[i, :]
+
+
+
+	def Maximum(self, axis = None) :
+		return self.matrix.max(axis)
+
+
+
+	def Minimum(self, axis = None) :
+		return self.matrix.min(axis)
+
+
+
+	def Mean(self, axis = None) :
+		return self.matrix.mean(axis)
+
+
+
+	def Variance(self, axis = None) :
+		return self.matrix.var(axis)
+
+
+
+	def Sum(self, axis = None) :
+		return self.matrix.sum(axis)
+
+
+
+	def Product(self, axis = None) :
+		return self.matrix.prod(axis)
+
+
+
 	def Norm(self) :
 		if (self.norm is not None) :
 			return self.norm
