@@ -14,14 +14,14 @@ for i in range(0, 9) :
 	#WARMUP
 	for j in range(0, 10) :
 		C = CovMat.Random(500)
-		C.Sqrtm()
+		C.Invsqrtm()
 
 	for j in range(0, 10) :
 		covMat = CovMat.Random(size[i])
 
 		start = time.time()
-		covMat.Sqrtm()
+		covMat.Invsqrtm()
 		tpsCovMat[i] += time.time() - start
 
 	tpsCovMat[i] /= 10
-	print("CovMat size : " + str(size[i]) + "x" + str(size[i]) + "	time : " + str(tpsCovMat[i]) + " sec")
+	print("CovMat size : " + str(size[i]) + "x" + str(size[i]) + "	speed up : " + str(tpsCovMat[i]) + " sec") 

@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 import time
 from CovMat import CovMat
+from Geodesic import Geodesic
 
 size = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
 tpsCovMat = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -14,14 +15,15 @@ for i in range(0, 9) :
 	#WARMUP
 	for j in range(0, 10) :
 		C = CovMat.Random(500)
-		C.Sqrtm()
+		C.Invsqrtm()
 
 	for j in range(0, 10) :
-		covMat = CovMat.Random(size[i])
+		covMat1 = CovMat.Random(size[i])
+		covMat2 = CovMat.Random(size[i])
 
 		start = time.time()
-		covMat.Sqrtm()
+		Geodesic.Riemannian(covMat1, covMat2, 0.5)
 		tpsCovMat[i] += time.time() - start
 
 	tpsCovMat[i] /= 10
-	print("CovMat size : " + str(size[i]) + "x" + str(size[i]) + "	time : " + str(tpsCovMat[i]) + " sec")
+	print("CovMat size : " + str(size[i]) + "x" + str(size[i]) + "	speed up : " + str(tpsCovMat[i]) + " sec") 

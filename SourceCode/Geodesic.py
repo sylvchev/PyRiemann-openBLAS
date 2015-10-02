@@ -7,13 +7,13 @@ from CovMat import CovMat
 class Geodesic :
 	@staticmethod
 	def Euclidean(covMat1, covMat2, alpha) :
-		return (1 - alpha) * covMat1 +  alpha * covMat2
+		return covMat1 + alpha * (covMat2 - covMat1)
 
 
 
 	@staticmethod
 	def LogEuclidean(covMat1, covMat2, alpha) :
-		return ((1 - alpha) * covMat1.Logm() +  alpha * covMat2.Logm()).Expm()
+		return (covMat1.Logm() + alpha * (covMat2.Logm() - covMat1.Logm())).Expm()
 
 
 
