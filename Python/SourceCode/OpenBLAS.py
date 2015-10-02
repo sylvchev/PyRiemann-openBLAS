@@ -4,6 +4,9 @@
 # ------------------------------- DO NOT TOUCH ------------------------------- #
 # ---------------------------------------------------------------------------- #
 
+#solution find here : http://stackoverflow.com/questions/29559338/set-max-number-of-threads-at-runtime-on-numpy-openblas
+#Thanks to : ali_m
+
 import ctypes
 from ctypes.util import find_library
 
@@ -37,12 +40,12 @@ def NbThreads(n):
 
 
 class ThreadContext(object):
-	def __init__(self, num_threads):
-		self._old_num_threads = GetNbThreads()
-		self.num_threads = num_threads
+	def __init__(self, NbThreads):
+		self.oldNbThreads = GetNbThreads()
+		self.NbThreads = NbThreads
 
 	def __enter__(self):
-		SetNbThreads(self.num_threads)
+		SetNbThreads(self.NbThreads)
 
-	def __exit__(self, *args):
-		SetNbThreads(self._old_num_threads)
+	def __exit__(self):
+		SetNbThreads(self.oldNbThreads)
