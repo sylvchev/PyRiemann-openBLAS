@@ -6,7 +6,7 @@ echo -e "Installing prerequisites for OpenBLAS : gcc & gfortran"
 sudo apt-get -y install gcc gfortran 2>&1 >/dev/null
 
 echo -e "Downloading OpenBLAS : cloning from Github"
-git clone git://github.com/xianyi/OpenBLAS 2>&1 >/dev/null
+git clone -q git://github.com/xianyi/OpenBLAS
 
 echo -e "Building OpenBLAS, please wait (this can take several minutes)"
 cd OpenBLAS
