@@ -6,8 +6,7 @@ sudo apt-get install gcc g++ gfortran
 git clone git://github.com/xianyi/OpenBLAS
 cd OpenBLAS
 echo -e "Building OpenBLAS, please wait (this can take several minutes)"
-make FC=gfortran > tmp
-rm -rf tmp
+make -s FC=gfortran
 sudo make install PREFIX=/usr/local
 cd ..
 sudo rm -rf OpenBLAS
