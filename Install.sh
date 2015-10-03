@@ -30,7 +30,7 @@ echo -e "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc
 
 
 #install and remove package
-sudo apt-get remove libopenblas* liblapack*
-sudo apt-get install python3 python3-dev python3-pip
-yes | sudo pip3 uninstall -q numpy scipy
-yes | sudo pip3 install -q numpy scipy
+sudo apt-get -y remove libopenblas* liblapack* 2>&1 >/dev/null
+sudo apt-get -y install python3 python3-dev python3-pip 2>&1 >/dev/null
+yes | sudo pip3 uninstall -q numpy scipy 2>&1 >/dev/null
+yes | sudo pip3 install -q numpy scipy 2>&1 >/dev/null
