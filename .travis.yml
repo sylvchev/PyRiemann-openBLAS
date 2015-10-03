@@ -3,8 +3,6 @@ language : python
 python : "3.4"
 
 script :
-  - cd Python
   - chmod 777 Install.sh
   - ./Install.sh
-  - python --version
-  - python Test.py
+  - python SourCode/Test.py
