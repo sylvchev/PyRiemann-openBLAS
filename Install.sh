@@ -2,12 +2,20 @@
 
 
 #install OpenBLAS
-sudo apt-get install gcc g++ gfortran
-git clone git://github.com/xianyi/OpenBLAS
-cd OpenBLAS
+echo -e "Installing prerequisites for OpenBLAS : gcc & gfortran"
+sudo apt-get -y install gcc gfortran 2>&1 >/dev/null
+
+echo -e "Downloading OpenBLAS : cloning from Github"
+git clone git://github.com/xianyi/OpenBLAS 2>&1 >/dev/null
+
 echo -e "Building OpenBLAS, please wait (this can take several minutes)"
-make -s FC=gfortran
-sudo make install PREFIX=/usr/local
+cd OpenBLAS
+make -s FC=gfortran 2>&1 >/dev/null
+
+echo -e "Installing OpenBLAS at /usr/local"
+sudo make install PREFIX=/usr/local 2>&1 >/dev/null
+
+echo -e "Cleaning"
 cd ..
 sudo rm -rf OpenBLAS
 
@@ -24,5 +32,5 @@ echo -e "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc
 #install and remove package
 sudo apt-get remove libopenblas* liblapack*
 sudo apt-get install python3 python3-dev python3-pip
-sudo pip3 uninstall numpy scipy
-sudo pip3 install numpy scipy
+yes | sudo pip3 uninstall -q numpy scipy
+yes | sudo pip3 install -q numpy scipy
