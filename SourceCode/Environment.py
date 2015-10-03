@@ -17,7 +17,7 @@ copyArrayMemoryCovMatConstructor = False
 #nbThreads = X
 #where X is the number of threads you want to use, or None if you want to use all disponible threads
 #avoid hyperthreading, most of the time, alorithms are slower with it
-nbThreads = 2
+nbThreads = None
 
 
 
@@ -27,3 +27,5 @@ nbThreads = 2
 
 if (nbThreads is not None) :
 	OpenBLAS.SetNbThreads(nbThreads)
+else :
+	OpenBLAS.SetNbThreads(OpenBLAS.GetNbProc())

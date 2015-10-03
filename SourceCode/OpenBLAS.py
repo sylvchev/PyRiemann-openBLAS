@@ -48,10 +48,11 @@ def NbThreads(n):
 
 class ThreadContext(object):
 	def __init__(self, nbThreads):
+		self.oldNbTreads = GetNbThreads()
 		self.nbThreads = nbThreads
 
 	def __enter__(self):
 		SetNbThreads(self.nbThreads)
 
 	def __exit__(self, *args):
-		SetNbThreads(Environment.nbThreads)
+		SetNbThreads(self.oldNbTreads)
