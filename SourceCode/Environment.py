@@ -5,7 +5,7 @@ import OpenBLAS
 
 #Used to set data type of matrix. Use only :
 #	- 'd' for double precision
-#	- 'f' for single precision, algorithms should be a little faster
+#	- 'f' for single precision, algorithms should be a little faster (≈ 10%)
 dataType = numpy.dtype('d')
 
 #Used to determine if data is copied when the CovMat class is created from an array or an existing matrix, or if the data is shared
@@ -17,7 +17,7 @@ copyArrayMemoryCovMatConstructor = False
 #nbThreads = X
 #where X is the number of threads you want to use, or None if you want to use all disponible threads
 #avoid hyperthreading, most of the time, alorithms are slower with it
-nbThreads = None
+nbThreads = 2
 
 
 
