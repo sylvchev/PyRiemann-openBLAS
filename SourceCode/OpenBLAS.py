@@ -21,7 +21,7 @@ def GetNbThreads():
 
 
 def SetNbThreads(n):
-	openblas_lib.openblas_set_num_threads(int(n))
+	openblas_lib.openblas_set_num_threads(n)
 
 
 
