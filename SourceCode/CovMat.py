@@ -9,41 +9,41 @@ class CovMat :
 	# ------------------------------- COVMAT CONSTRUCTORS ------------------------------- #
 	# ----------------------------------------------------------------------------------- #
 
-	def __init__(self, arg, copyArrayMemory = Environment.copyArrayMemoryCovMatConstructor) :
+	def __init__(self, arg, memorySafeState = Environment.memorySafeState) :
 		if (isinstance(arg, int)) :																	#arg is an it
 			self.matrixOrder = arg																	#alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
-			self.matrix = self.MatrixFromArray(numpy.zeros((arg, arg)))
+			self.matrix = self.MatrixFromArray(numpy.array((arg, arg)))
 			self.FieldsInitialization()
 		elif (isinstance(arg, numpy.ndarray)) :														#arg is an ndarray
-			self.matrix = self.MatrixFromArray(arg, copyArrayMemory)										#map an ndarray into a matrix array
+			self.matrix = self.MatrixFromArray(arg, memorySafeState)										#map an ndarray into a matrix array
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
 		elif (isinstance(arg, numpy.matrix)) :														#arg is a matrix
-			self.matrix = self.MatrixFromArray(arg, copyArrayMemory)
+			self.matrix = self.MatrixFromArray(arg, memorySafeState)
 			self.matrixOrder = arg.shape[0]
 			self.FieldsInitialization()
 
 
 
 	@staticmethod
-	def MatrixFromArray(numpyArray, copyArrayMemory = False) :
-		return numpy.matrix(numpyArray, Environment.dataType, copyArrayMemory)
+	def MatrixFromArray(numpyArray, memorySafeState = False) :
+		return numpy.matrix(numpyArray, Environment.dataType, memorySafeState)
 
 
 
-	@staticmethod
+	@classmethod
 	def Zero(matrixOrder) :
 		return CovMat(numpy.zeros((matrixOrder, matrixOrder)), False)
 
 
 
-	@staticmethod
+	@classmethod
 	def Identity(matrixOrder) :
 		return CovMat(numpy.eye(matrixOrder), False)
 
 
 
-	@staticmethod
+	@classmethod
 	def Random(matrixOrder) :
 		covMat = CovMat(matrixOrder)
 		covMat.Randomize()
@@ -72,7 +72,7 @@ class CovMat :
 	# ----------------------------------------------------------------------- #
 
 	def GetMatrix(self) :
-		return self.matrix.copy()
+		return self.matrix
 
 
 
@@ -86,7 +86,7 @@ class CovMat :
 			return self.eigenValues
 			
 		self.ComputeEigen(true)
-		return self.eigenValues.copy()
+		return self.eigenValues
 
 
 
@@ -95,7 +95,7 @@ class CovMat :
 			return self.eigenVectors
 			
 		self.ComputeEigen()
-		return self.eigenVectors.copy()
+		return self.eigenVectors
 
 
 
@@ -104,7 +104,7 @@ class CovMat :
 			return self.eigenVectorsTranspose
 			
 		self.ComputeEigen()
-		return self.eigenVectorsTranspose.copy()
+		return self.eigenVectorsTranspose
 
 
 

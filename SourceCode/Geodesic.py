@@ -1,9 +1,5 @@
 #!/usr/bin/python
  
-import Environment
-import numpy
-from CovMat import CovMat
-
 class Geodesic :
 	@staticmethod
 	def Euclidean(covMat1, covMat2, alpha) :

@@ -10,7 +10,7 @@ dataType = numpy.dtype('d')
 
 #Used to determine if data is copied when the CovMat class is created from an array or an existing matrix, or if the data is shared
 #Used to avoid the memory allocation, and copy cost
-copyArrayMemoryCovMatConstructor = False
+memorySafeState = False
 
 #Number of thread used by those algorithm
 #change by : 
