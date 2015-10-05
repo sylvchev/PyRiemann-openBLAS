@@ -1,8 +1,18 @@
 sudo : required
+
 language : python
+
 python : "3.4"
 
-script :
-  - chmod 777 Install.sh
-  - ./Install.sh
-  - python3 SourceCode/Test.py
+services:
+  - docker
+
+before_install:
+  - docker build -t sylvchev/pyriem .
+  - docker run sylvchev/pyriem /bin/sh -c "cd /root/pyriem; python3 SourceCode/Test.py"
+  
+
+# script :
+#   - chmod 777 Install.sh
+#   - ./Install.sh
+#   - python3 SourceCode/Test.py
