@@ -31,19 +31,19 @@ class CovMat :
 
 
 
-	@staticmethod
+	@classmethod
 	def Zero(matrixOrder) :
 		return CovMat(numpy.zeros((matrixOrder, matrixOrder)), False)
 
 
 
-	@staticmethod
+	@classmethod
 	def Identity(matrixOrder) :
 		return CovMat(numpy.eye(matrixOrder), False)
 
 
 
-	@staticmethod
+	@classmethod
 	def Random(matrixOrder) :
 		covMat = CovMat(matrixOrder)
 		covMat.Randomize()
