@@ -5,7 +5,7 @@ MAINTAINER sylvchev "https://github.com/sylvchev"
 # Install packages for building OpenBLAS
 RUN apt-get update
 RUN apt-get remove -y libopenblas* liblapack*
-RUN apt-get install -y --force-yes gcc gfortran
+RUN apt-get install -y --force-yes gcc gfortran git
 RUN apt-get clean
 # RUN export CC="gcc -w"
 # RUN export FC="gfortran -w"
