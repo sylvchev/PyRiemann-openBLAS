@@ -27,12 +27,9 @@ sudo rm -rf OpenBLAS
 
 
 #export and permanant export
-export BLAS=/usr/local/lib/libopenblas.a
-export LAPACK=/usr/local/lib/libopenblas.a
+export BLAS=/usr/local/lib/libopenblas.so
+export LAPACK=/usr/local/lib/libopenblas.so
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-echo -e "export BLAS=/usr/local/lib/libopenblas.a" >> ~/.bashrc
-echo -e "export LAPACK=/usr/local/lib/libopenblas.a" >> ~/.bashrc
-echo -e "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc
 
 
 
@@ -49,4 +46,4 @@ echo -e "Downloading, compiling and installing numpy package (this can take seve
 yes | sudo pip3 install -q numpy 2>&1 >/dev/null
 
 echo -e "Downloading, compiling and installing scipy package (this can take several minutes)"
-yes | sudo pip3 install -q scipy 2>&1 >/dev/null
+yes | sudo BLAS=$BLAS LAPACK=$LAPACK LD_LIBRARY_PATH=$LD_LIBRARY_PATH pip3 install -q scipy 2>&1 >/dev/null

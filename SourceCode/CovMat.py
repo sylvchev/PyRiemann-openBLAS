@@ -12,7 +12,7 @@ class CovMat :
 	def __init__(self, arg, memorySafeState = Environment.memorySafeState) :
 		if (isinstance(arg, int)) :																	#arg is an it
 			self.matrixOrder = arg																	#alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
-			self.matrix = self.MatrixFromArray(numpy.array((arg, arg)))
+			self.matrix = self.MatrixFromArray(numpy.zeros((arg, arg)))
 			self.FieldsInitialization()
 		elif (isinstance(arg, numpy.ndarray)) :														#arg is an ndarray
 			self.matrix = self.MatrixFromArray(arg, memorySafeState)										#map an ndarray into a matrix array
@@ -31,19 +31,19 @@ class CovMat :
 
 
 
-	@classmethod
+	@staticmethod
 	def Zero(matrixOrder) :
 		return CovMat(numpy.zeros((matrixOrder, matrixOrder)), False)
 
 
 
-	@classmethod
+	@staticmethod
 	def Identity(matrixOrder) :
 		return CovMat(numpy.eye(matrixOrder), False)
 
 
 
-	@classmethod
+	@staticmethod
 	def Random(matrixOrder) :
 		covMat = CovMat(matrixOrder)
 		covMat.Randomize()
