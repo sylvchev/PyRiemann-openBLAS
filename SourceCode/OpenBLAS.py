@@ -11,7 +11,7 @@ import Environment
 import ctypes
 from ctypes.util import find_library
 
-openblas_lib = ctypes.cdll.LoadLibrary('/usr/lib/libopenblas.so')
+openblas_lib = ctypes.cdll.LoadLibrary('/usr/local/lib/libopenblas.so')
 
 
 
