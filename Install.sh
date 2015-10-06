@@ -13,7 +13,7 @@ export FC="gfortran -w"
 echo -e "Downloading OpenBLAS : cloning from Github"
 git clone -q git://github.com/xianyi/OpenBLAS
 
-echo -e "Building OpenBLAS, please wait (this can take several minutes)"
+echo -e "Building OpenBLAS (this can take several minutes)"
 cd OpenBLAS
 make -s 2>&1 >/dev/null
 
