@@ -7,7 +7,6 @@
 #solution find here : http://stackoverflow.com/questions/29559338/set-max-number-of-threads-at-runtime-on-numpy-openblas
 #Thanks to : ali_m
 
-import Environment
 import ctypes
 from ctypes.util import find_library
 
