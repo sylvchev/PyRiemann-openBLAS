@@ -25,6 +25,17 @@ cd ..
 sudo rm -rf OpenBLAS
 
 
+
+#export and permanant export
+export BLAS=/usr/local/lib/libopenblas.so
+export LAPACK=/usr/local/lib/libopenblas.so
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+echo -e "export BLAS=/usr/local/lib/libopenblas.so" >> ~/.bashrc
+echo -e "export LAPACK=/usr/local/lib/libopenblas.so" >> ~/.bashrc
+echo -e "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc
+
+
+
 #install python numpy and scipy
 echo -e "Installing python prerequisite packages : python3 python3-dev python3-pip g++"
 sudo apt-get -y install python3 python3-dev python3-pip g++ 2>&1 >/dev/null
