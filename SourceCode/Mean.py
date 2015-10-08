@@ -30,18 +30,12 @@ class Mean :
 	def Euclidean (covMats, sampleWeight = None) :
 		nbCovMats = len(covMats)
 		matrixOrder = covMats[0].MatrixOrder()
-
-		if (sampleWeight is None) :
-			A = numpy.ones(nbCovMats)
-		else :
-			A = sampleWeight
+		sampleWeight = Mean.SampleWeight(sampleWeight, covMats)
 
 		output = CovMat.Zero(matrixOrder)
 
 		for i in range(nbCovMats) :
-			output += A[i] * covMats[i]
-
-		output /= numpy.sum(A)
+			output += sampleWeight[i] * covMats[i]
 
 		return output
 
