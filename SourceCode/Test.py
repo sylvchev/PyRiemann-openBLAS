@@ -50,6 +50,9 @@ print("Distance.Euclidean(covMat1, covMat2) :\n" + str(Distance.Euclidean(covMat
 print("Distance.LogEuclidean(covMat1, covMat2) :\n" + str(Distance.LogEuclidean(covMat1, covMat2)) + "\n")
 print("Distance.LogDeterminant(covMat1, covMat2) :\n" + str(Distance.LogDeterminant(covMat1, covMat2)) + "\n")
 print("Distance.Riemannian(covMat1, covMat2) :\n" + str(Distance.Riemannian(covMat1, covMat2)) + "\n")
+print("Distance.Kullback(covMat1, covMat2) :\n" + str(Distance.Kullback(covMat1, covMat2)) + "\n")
+print("Distance.KullbackRight(covMat1, covMat2) :\n" + str(Distance.KullbackRight(covMat1, covMat2)) + "\n")
+print("Distance.KullbackSym(covMat1, covMat2) :\n" + str(Distance.KullbackSym(covMat1, covMat2)) + "\n")
 
 print("Geodesic.Euclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.Euclidean(covMat1, covMat2, 0.5)) + "\n")
 print("Geodesic.LogEuclidean(covMat1, covMat2, 0.5) :\n" + str(Geodesic.LogEuclidean(covMat1, covMat2, 0.5)) + "\n")

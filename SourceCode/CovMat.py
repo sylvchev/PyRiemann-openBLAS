@@ -71,17 +71,17 @@ class CovMat :
 	# ------------------------------- GETTERS ------------------------------- #
 	# ----------------------------------------------------------------------- #
 
-	def GetMatrix(self) :
+	def Matrix(self) :
 		return self.matrix
 
 
 
-	def GetMatrixOrder(self) :
+	def MatrixOrder(self) :
 		return self.matrixOrder
 
 
 
-	def GetEigenValues(self) :
+	def EigenValues(self) :
 		if (self.eigenValues is not None) :
 			return self.eigenValues
 			
@@ -90,7 +90,7 @@ class CovMat :
 
 
 
-	def GetEigenVectors(self) :
+	def EigenVectors(self) :
 		if (self.eigenVectors is not None) :
 			return self.eigenVectors
 			
@@ -99,7 +99,7 @@ class CovMat :
 
 
 
-	def GetEigenVectorsTranspose(self) :
+	def EigenVectorsTranspose(self) :
 		if (self.eigenVectorsTranspose is not None) :
 			return self.eigenVectorsTranspose
 			
@@ -122,6 +122,11 @@ class CovMat :
 		tmp = numpy.random.rand(self.matrixOrder, self.matrixOrder)
 		self.matrix = self.MatrixFromArray(numpy.dot(tmp, numpy.transpose(tmp))/100)
 		self.FieldsInitialization()
+
+
+
+	def Trace(self, offset = 0) :
+		return self.matrix.trace(offset)
 
 
 
@@ -197,7 +202,7 @@ class CovMat :
 		if (self.inverse is not None) :
 			return self.inverse
 
-		self.inverse = CovMat(numpy.linalg.inv(self.matrix))
+		self.inverse = CovMat(self.matrix.getI())
 		return self.inverse
 
 

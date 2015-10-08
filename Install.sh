@@ -30,6 +30,10 @@ sudo rm -rf OpenBLAS
 export BLAS=/usr/local/lib/libopenblas.so
 export LAPACK=/usr/local/lib/libopenblas.so
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+echo -e "" >> ~/.bashrc
+echo -e "export BLAS=/usr/local/lib/libopenblas.so" >> ~/.bashrc
+echo -e "export LAPACK=/usr/local/lib/libopenblas.so" >> ~/.bashrc
+echo -e "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc
 
 
 
