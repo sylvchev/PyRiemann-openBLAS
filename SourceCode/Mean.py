@@ -53,9 +53,7 @@ class Mean :
 		for i in range(nbCovMats) :
 			output += sampleWeight[i] * covMats[i].Logm()
 
-		output = output.Expm()
-
-		return output
+		return output.Expm()
 
 
 
