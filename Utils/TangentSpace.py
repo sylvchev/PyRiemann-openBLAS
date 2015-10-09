@@ -20,7 +20,7 @@ class TangentSpace(object):
 
         return output
 
-    @staticmethod
+    @staticmethod 
     def untangent(t, covmat):
         nt, nd = t.shape
         ne = int((numpy.sqrt(1 + 8 * nd) - 1) / 2)
