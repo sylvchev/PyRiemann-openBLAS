@@ -46,6 +46,8 @@ print("covmat1.expm() :\n" + str(covmat1.expm) + "\n")
 print("covmat1.logm() :\n" + str(covmat1.logm) + "\n")
 print("covmat1.powm(2) :\n" + str(covmat1.powm(2)) + "\n")
 
+print("CovMat.elements_wise_product(covmat1, covmat2) :\n" + str(CovMat.elements_wise_product(covmat1, covmat2)) + "\n")
+
 print("Distance.euclidean(covmat1, covmat2) :\n" + str(Distance.euclidean(covmat1, covmat2)) + "\n")
 print("Distance.log_euclidean(covmat1, covmat2) :\n" + str(Distance.log_euclidean(covmat1, covmat2)) + "\n")
 print("Distance.log_determinant(covmat1, covmat2) :\n" + str(Distance.log_determinant(covmat1, covmat2)) + "\n")

@@ -285,8 +285,8 @@ class CovMat(object):
         return self._powm
 
     @staticmethod
-    def elements_wise_prodcut(self, covmat1, covmat2):
-        return self._MatrixFromArray(numpy.multiply(covmat1, covmat2))
+    def elements_wise_product(covmat1, covmat2):
+        return matrix_from_array(numpy.multiply(covmat1.matrix, covmat2.matrix))
 
     @staticmethod
     def solve_problem(covmat1, covmat2):
