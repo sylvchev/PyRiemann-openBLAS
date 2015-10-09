@@ -367,12 +367,13 @@ class CovMat(object):
         self.fields_initialization()
         return self
 
-#    def __pow__(self, arg):
-#        return self._powm(arg)
+    def __pow__(self, arg):
+        return self.powm(arg)
 
-#    def __ipow__(self, arg):
-#        self = self._powm(arg).matrix
-#        return self
+    def __ipow__(self, arg):
+        self.matrix = self.powm(arg).matrix
+        self.fields_initialization()
+        return self
 
 
 def matrix_from_array(numpy_array, memory_safe_state=False):

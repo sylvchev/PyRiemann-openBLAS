@@ -69,7 +69,7 @@ class Mean(object):
             tmp.fill(0)
 
             for i in range(nb_covmats):
-                tmp += sample_weight[i] * (0.5 * (covmats[i] + output)).inverse 
+                tmp += sample_weight[i] * (0.5 * (covmats[i] + output)).inverse
 
             new_output = tmp.inverse
             crit = (new_output - output).norm
