@@ -1,9 +1,8 @@
 sudo : required
 language : python
 python : "3.4"
-services : docker
 
 script :
-  - docker chmod 777 Install.sh
-  - docker ./Install.sh
-  - docker python3 SourceCode/Test.py
+  - chmod 777 Install.sh
+  - ./Install.sh
+  - python3 SourceCode/Test.py
