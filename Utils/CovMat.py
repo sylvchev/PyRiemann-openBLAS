@@ -71,28 +71,17 @@ class CovMat(object):
     def matrix(self):
         return self._matrix
 
-    @matrix.setter
-    def matrix(self, value):
-        self._matrix = value
-
     @property
     def matrix_order(self):
         return self._matrix_order
-
-    @matrix_order.setter
-    def matrix_order(self, value):
-        self._matrix_order = value
 
     @property
     def eigen_values(self):
         if self._eigen_values is not None:
             return self._eigen_values
+            
         self.compute_eigen(True)
         return self._eigen_values
-
-    @eigen_values.setter
-    def eigen_values(self, value):
-        self._eigen_values = value
 
     @property
     def eigen_vectors(self):
@@ -101,10 +90,6 @@ class CovMat(object):
 
         self.compute_eigen()
         return self._eigen_vectors
-    
-    @eigen_vectors.setter
-    def eigen_vectors(self, value):
-        self._eigen_values = value
 
     @property
     def eigen_vectors_transpose(self):
@@ -114,10 +99,6 @@ class CovMat(object):
         self.compute_eigen()
         return self._eigen_vectors_transpose
 
-    @eigen_vectors_transpose.setter
-    def eigen_vectors_transpose(self, value):
-        self._eigen_vectors_transpose = value
-
     @property
     def norm(self):
         if self._norm is not None:
@@ -126,10 +107,6 @@ class CovMat(object):
         self._norm = numpy.linalg.norm(self._matrix)
         return self._norm
 
-    @norm.setter
-    def norm(self, value):
-        self._norm = value
-
     @property
     def determinant(self):
         if self._determinant is not None:
@@ -137,10 +114,6 @@ class CovMat(object):
 
         self._determinant = numpy.linalg.det(self._matrix)
         return self._determinant
-
-    @determinant.setter
-    def determinant(self, value):
-        self._determinant = value
 
     @property
     def transpose(self):
@@ -154,10 +127,6 @@ class CovMat(object):
         self._inverse = CovMat(self._matrix.getI())
         return self._inverse
 
-    @inverse.setter
-    def inverse(self, value):
-        self._inverse = value
-
     @property
     def sqrtm(self):
         if self._sqrtm is not None:
@@ -167,10 +136,6 @@ class CovMat(object):
         self._sqrtm = CovMat(self._eigen_vectors * matrix_from_array(
             numpy.diag(numpy.sqrt(self._eigen_values))) * self._eigen_vectors_transpose)
         return self._sqrtm
-
-    @sqrtm.setter
-    def sqrtm(self, value):
-        self._sqrtm = value
 
     @property
     def invsqrtm(self):
@@ -182,10 +147,6 @@ class CovMat(object):
             numpy.diag(1.0 / numpy.sqrt(self._eigen_values))) * self._eigen_vectors_transpose)
         return self._invsqrtm
 
-    @invsqrtm.setter
-    def invsqrtm(self, value):
-        self._invsqrtm = value
-
     @property
     def expm(self):
         if self._expm is not None:
@@ -196,10 +157,6 @@ class CovMat(object):
             numpy.diag(numpy.exp(self._eigen_values))) * self._eigen_vectors_transpose)
         return self._expm
 
-    @expm.setter
-    def expm(self, value):
-        self._expm = value
-
     @property
     def logm(self):
         if self._logm is not None:
@@ -209,10 +166,6 @@ class CovMat(object):
         self._logm = CovMat(self._eigen_vectors * matrix_from_array(
             numpy.diag(numpy.log(self._eigen_values))) * self._eigen_vectors_transpose)
         return self._logm
-
-    @logm.setter
-    def logm(self, value):
-        self._logm = value
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
