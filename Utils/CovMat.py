@@ -252,7 +252,7 @@ class CovMat(object):
     def __str__(self):
         return str(self._matrix)
 
-    def __call__(self, x, y):
+    def def __getitem__(self, x, y):
         return self._matrix[x, y]
 
     def __add__(self, arg):
