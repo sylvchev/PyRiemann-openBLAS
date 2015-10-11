@@ -47,7 +47,7 @@ yes | sudo pip3 uninstall -q numpy 2>&1 >/dev/null
 yes | sudo pip3 uninstall -q scipy 2>&1 >/dev/null
 
 echo -e "Downloading, compiling and installing numpy package (this can take several minutes)"
-yes | sudo pip3 install -q numpy 2>&1 >/dev/null
+yes | sudo BLAS=$BLAS LAPACK=$LAPACK LD_LIBRARY_PATH=$LD_LIBRARY_PATH pip3 install -q numpy 2>&1 >/dev/null
 
 echo -e "Downloading, compiling and installing scipy package (this can take several minutes)"
 yes | sudo BLAS=$BLAS LAPACK=$LAPACK LD_LIBRARY_PATH=$LD_LIBRARY_PATH pip3 install -q scipy 2>&1 >/dev/null

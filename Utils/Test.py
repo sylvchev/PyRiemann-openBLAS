@@ -2,6 +2,7 @@
 
 import Utils.Environment as Environment
 from Utils.CovMat import CovMat
+from Utils.CovMats import CovMats
 from Utils.Distance import Distance
 from Utils.Geodesic import Geodesic
 from Utils.Mean import Mean
@@ -14,8 +15,12 @@ for i in range(0, 20):
     tmp = CovMat.random(200)
     covmats.append(tmp)
 
+A = CovMats(covmats)
+
 print("covmat1 :\n" + str(covmat1) + "\n")
 print("covmat2 :\n" + str(covmat2) + "\n")
+print("covmat1[1, 1] :\n" + str(covmat1[1, 1]) + "\n")
+print("covmat1[1, :] :\n" + str(covmat1[1, :]) + "\n")
 
 print("CovMat.zero(10) :\n" + str(CovMat.zero(10)) + "\n")
 print("CovMat.identity(10) :\n" + str(CovMat.identity(10)) + "\n")

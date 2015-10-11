@@ -252,8 +252,8 @@ class CovMat(object):
     def __str__(self):
         return str(self._matrix)
 
-    def __getitem__(self, x, y):
-        return self._matrix[x, y]
+    def __getitem__(self, slice):
+        return self._matrix[slice]
 
     def __add__(self, arg):
         if isinstance(arg, CovMat):
@@ -280,7 +280,7 @@ class CovMat(object):
             return CovMat(self._matrix - arg)
 
     def __rsub__(self, arg):
-        return CovMat(-1 * self._matrix + arg.matrix)
+        return CovMat(-1 * self._matrix + arg)
 
     def __isub__(self, arg):
         if isinstance(arg, CovMat):
@@ -324,7 +324,7 @@ class CovMat(object):
         return self.powm(arg)
 
     def __ipow__(self, arg):
-        self.matrix = self.powm(arg).matrix
+        self._matrix = self.powm(arg).matrix
         self.fields_initialization()
         return self
 
