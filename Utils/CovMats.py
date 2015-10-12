@@ -88,3 +88,10 @@ class CovMats(object):
 
     def __iter__(self):
         return iter(self._covmats)
+
+    def __add__(self, other):
+        return (CovMats(self._covmats + other._covmats))
+
+    def __iadd__(self, other):
+        self.append(other)
+        return self
