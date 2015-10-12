@@ -239,11 +239,11 @@ class CovMat(object):
 
     @staticmethod
     def elements_wise_product(covmat1, covmat2):
-        return matrix_from_array(numpy.multiply(covmat1.matrix, covmat2.matrix))
+        return matrix_from_array(numpy.multiply(covmat1._matrix, covmat2._matrix))
 
     @staticmethod
     def solve_problem(covmat1, covmat2):
-        return scipy.linalg.eigvalsh(covmat1.matrix, covmat2.matrix)
+        return scipy.linalg.eigvalsh(covmat1._matrix, covmat2._matrix)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #
@@ -257,7 +257,7 @@ class CovMat(object):
 
     def __add__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix + arg.matrix)
+            return CovMat(self._matrix + arg._matrix)
         else:
             return CovMat(self._matrix + arg)
 
@@ -266,7 +266,7 @@ class CovMat(object):
 
     def __iadd__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix += arg.matrix
+            self._matrix += arg._matrix
         else:
             self._matrix += arg
 
@@ -275,7 +275,7 @@ class CovMat(object):
 
     def __sub__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix - arg.matrix)
+            return CovMat(self._matrix - arg._matrix)
         else:
             return CovMat(self._matrix - arg)
 
@@ -284,7 +284,7 @@ class CovMat(object):
 
     def __isub__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix -= arg.matrix
+            self._matrix -= arg._matrix
         else:
             self._matrix -= arg
 
@@ -293,7 +293,7 @@ class CovMat(object):
 
     def __mul__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix * arg.matrix)
+            return CovMat(self._matrix * arg._matrix)
         else:
             return CovMat(self._matrix * arg)
 
@@ -302,7 +302,7 @@ class CovMat(object):
 
     def __imul__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix = self._matrix * arg.matrix
+            self._matrix = self._matrix * arg._matrix
         else:
             self._matrix = self._matrix * arg
 
@@ -324,7 +324,7 @@ class CovMat(object):
         return self.powm(arg)
 
     def __ipow__(self, arg):
-        self._matrix = self.powm(arg).matrix
+        self._matrix = self.powm(arg)._matrix
         self.fields_initialization()
         return self
 

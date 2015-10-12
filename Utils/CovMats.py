@@ -93,5 +93,5 @@ class CovMats(object):
         return (CovMats(self._covmats + other._covmats))
 
     def __iadd__(self, other):
-        self.append(other)
+        self.append(other._covmats)
         return self
