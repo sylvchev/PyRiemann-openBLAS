@@ -10,12 +10,10 @@ from Utils.Mean import Mean
 covmat1 = CovMat.random(5)
 covmat2 = CovMat.random(5)
 
-covmats = []
-for i in range(0, 20):
-    tmp = CovMat.random(200)
-    covmats.append(tmp)
-
-A = CovMats(covmats)
+covmats = CovMats()
+for i in range(0, 2):
+    covmats.append(CovMat.random(5))
+print(covmats)
 
 print("covmat1 :\n" + str(covmat1) + "\n")
 print("covmat2 :\n" + str(covmat2) + "\n")
