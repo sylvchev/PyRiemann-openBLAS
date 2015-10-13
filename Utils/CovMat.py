@@ -239,11 +239,11 @@ class CovMat(object):
 
     @staticmethod
     def elements_wise_product(covmat1, covmat2):
-        return matrix_from_array(numpy.multiply(covmat1._matrix, covmat2._matrix))
+        return matrix_from_array(numpy.multiply(covmat1.matrix, covmat2.matrix))
 
     @staticmethod
     def solve_problem(covmat1, covmat2):
-        return scipy.linalg.eigvalsh(covmat1._matrix, covmat2._matrix)
+        return scipy.linalg.eigvalsh(covmat1.matrix, covmat2.matrix)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

@@ -6,14 +6,16 @@ from Utils.CovMats import CovMats
 from Utils.Distance import Distance
 from Utils.Geodesic import Geodesic
 from Utils.Mean import Mean
+from Utils.TangentSpace import TangentSpace
 
-covmat1 = CovMat.random(5)
-covmat2 = CovMat.random(5)
+covmat1 = CovMat.random(100)
+covmat2 = CovMat.random(100)
 
 covmats = CovMats()
 for i in range(0, 20):
-    covmats.append(CovMat.random(5))
+    covmats.append(CovMat.random(100))
 
+print("covmats :\n" + str(covmats) + "\n")
 print("covmat1 :\n" + str(covmat1) + "\n")
 print("covmat2 :\n" + str(covmat2) + "\n")
 print("covmat1[1, 1] :\n" + str(covmat1[1, 1]) + "\n")
@@ -67,3 +69,7 @@ print("Mean.euclidean(covmats) :\n" + str(Mean.euclidean(covmats)) + "\n")
 print("Mean.log_euclidean(covmats) :\n" + str(Mean.log_euclidean(covmats)) + "\n")
 print("Mean.log_determinant(covmats) :\n" + str(Mean.log_determinant(covmats)) + "\n")
 print("Mean.riemannian(covmats) :\n" + str(Mean.riemannian(covmats)) + "\n")
+
+tangent = TangentSpace.tangent(covmats, covmat1)
+print("TangentSpace.tangent(covmats, covmat1) :\n" + str(tangent) + "\n")
+print("TangentSpace.untangent(tangent, covmat1) :\n" + str(TangentSpace.untangent(tangent, covmat1)) + "\n")

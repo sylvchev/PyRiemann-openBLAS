@@ -2,6 +2,7 @@
 
 import numpy
 from Utils.CovMat import CovMat
+from Utils.CovMats import CovMats
 
 
 class TangentSpace(object):
@@ -25,13 +26,13 @@ class TangentSpace(object):
         ne = int((numpy.sqrt(1 + 8 * nd) - 1) / 2)
 
         idx = numpy.triu_indices_from(covmat.matrix)
-        covmats = numpy.empty((nt, ne, ne))
-        covmats[:, idx[0], idx[1]] = tangent
+        numpy_array = numpy.empty((nt, ne, ne))
+        covmats = CovMats()
+        
+        numpy_array[:, idx[0], idx[1]] = tangent
         for i in range(nt):
-            numpy_matrix = covmats[i].matrix
-            tmp = numpy.diag(numpy.diag(numpy_matrix)) + numpy.triu(
-                numpy_matrix, 1) / numpy.sqrt(2) + numpy.triu(numpy_matrix, 1).T / numpy.sqrt(2)
-            tmp2 = CovMat(tmp, False)
-            covmats[i] = covmat.sqrtm * tmp2.expm * covmat.sqrtm
+            tmp = numpy.diag(numpy.diag(numpy_array[i])) + numpy.triu(
+                numpy_array[i], 1) / numpy.sqrt(2) + numpy.triu(numpy_array[i], 1).T / numpy.sqrt(2)
+            covmats.append(covmat.sqrtm * CovMat(tmp, False).expm * covmat.sqrtm)
 
-        return covmats
+        return CovMats(numpy_array)

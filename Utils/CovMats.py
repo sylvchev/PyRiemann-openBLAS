@@ -48,7 +48,9 @@ class CovMats(object):
     def numpy_array(self):
         if self._modif:
             self._modif = False
-            self._numpy_array = numpy.array([numpy.array(covmat.matrix, dtype=Environment.data_type, copy=False) for covmat in self._covmats], dtype=Environment.data_type, copy=False)
+            self._numpy_array = numpy.array(
+                [numpy.array(covmat.matrix, dtype=Environment.data_type, copy=False) for covmat in self._covmats],
+                dtype=Environment.data_type, copy=False)
             return self._numpy_array
         else:
             return self._numpy_array
@@ -56,6 +58,9 @@ class CovMats(object):
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
+
+    def to_list(self):
+        return self._covmats
 
     def append(self, arg):
         if isinstance(arg, CovMat):
@@ -79,7 +84,7 @@ class CovMats(object):
 
     def __getitem__(self, slice):
         if isinstance(slice, int):
-            return  self._covmats[slice]
+            return self._covmats[slice]
         else:
             return self.numpy_array[slice]
 
@@ -90,8 +95,17 @@ class CovMats(object):
         return iter(self._covmats)
 
     def __add__(self, other):
-        return (CovMats(self._covmats + other._covmats))
+        return CovMats(self._covmats + other.to_list())
 
     def __iadd__(self, other):
-        self.append(other._covmats)
+        self._covmats += other.to_list()
+        self._modif = True
+        return self
+
+    def __sub__(self, other):
+        return CovMats([covmat for covmat in self._covmats if covmat not in other.to_list()])
+
+    def __isub__(self, other):
+        self._covmats -= other.to_list()
+        self._modif = True
         return self
