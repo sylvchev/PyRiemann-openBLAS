@@ -25,7 +25,7 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 # WARMUP
 print("Warm up...")
 warm_up_covmat = CovMat.random(2500)
-warm_up_covmat.sqrtm
+warm_up_covmat.powm(2)
 
 print_progress(0)
 
@@ -33,7 +33,7 @@ for i in range(0, len(size)):
     for j in range(0, nb_repet):
         covmat = CovMat.random(size[i])
         start = time.time()
-        covmat.sqrtm
+        covmat.powm(2)
         tps[i] += time.time() - start
         print_progress(round((i * nb_repet + j) * 100 / (nb_repet * len(size)), 2))
 
