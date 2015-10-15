@@ -8,12 +8,12 @@ from Utils.Geodesic import Geodesic
 from Utils.Mean import Mean
 from Utils.TangentSpace import TangentSpace
 
-covmat1 = CovMat.random(100)
-covmat2 = CovMat.random(100)
+covmat1 = CovMat.random(5)
+covmat2 = CovMat.random(5)
 
 covmats = CovMats()
-for i in range(0, 20):
-    covmats.append(CovMat.random(100))
+for i in range(0, 3):
+    covmats.append(CovMat.random(5))
 
 print("covmats :\n" + str(covmats) + "\n")
 print("covmat1 :\n" + str(covmat1) + "\n")
