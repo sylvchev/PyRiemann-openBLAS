@@ -9,7 +9,7 @@ services:
 
 before_install:
   - docker build -t sylvchev/pyriem .
-  - docker run sylvchev/pyriem /bin/sh -c "cd /root/pyriem; python3 SourceCode/Test.py"
+  - docker run sylvchev/pyriem /bin/sh -c "cd /root/pyriem; python3 Utils/Test.py"
   
 
 # script :
