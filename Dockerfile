@@ -7,9 +7,9 @@ RUN apt-get update
 # RUN apt-get remove -y libopenblas* liblapack*
 RUN apt-get install -y --force-yes gcc gfortran git build-essential
 RUN apt-get clean
-# RUN export CC="gcc -w"
-# RUN export FC="gfortran -w"
-# RUN git clone -q git://github.com/xianyi/OpenBLAS
+RUN export CC="gcc -w"
+RUN export FC="gfortran -w"
+RUN alias make='make -s'
 RUN git clone git://github.com/xianyi/OpenBLAS /root/OpenBLAS
 RUN cd /root/OpenBLAS; make; make install PREFIX=/usr/local
 RUN rm -rf /root/OpenBLAS
