@@ -4,8 +4,9 @@ MAINTAINER sylvchev "https://github.com/sylvchev"
 
 # Install packages for building OpenBLAS
 RUN apt-get update &> /dev/null
-# RUN apt-get remove -y libopenblas* liblapack* 
-RUN apt-get install -y --force-yes gcc gfortran git build-essential &> /dev/null
+RUN apt-get remove -y libopenblas* liblapack* 
+RUN apt-get install -y --force-yes gcc gfortran git build-essential
+# &> /dev/null
 RUN apt-get clean 
 RUN git clone git://github.com/xianyi/OpenBLAS /root/OpenBLAS
 RUN cd /root/OpenBLAS; make -s &> /dev/null; make install PREFIX=/usr/local
