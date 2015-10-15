@@ -16,14 +16,14 @@ class CovMat(object):
 
     def __init__(self, arg, memory_safe_state=Environment.memory_safe_state):
         if isinstance(arg, int):  # arg is an it
-            self.___matrix_order = arg  # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
+            self.__matrix_order = arg  # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
             self.__matrix = self.__matrix_from_array(numpy.empty((arg, arg)))
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
             self.__matrix = self.__matrix_from_array(arg, memory_safe_state)  # map an ndarray into a matrix array
-            self.___matrix_order = arg.shape[0]
+            self.__matrix_order = arg.shape[0]
         elif isinstance(arg, numpy.matrix):  # arg is a matrix
             self.__matrix = self.__matrix_from_array(arg, memory_safe_state)
-            self.___matrix_order = arg.shape[0]
+            self.__matrix_order = arg.shape[0]
             
         self.__eigen_values = None
         self.__eigen_vectors = None
@@ -77,7 +77,7 @@ class CovMat(object):
 
     @property
     def matrix_order(self):
-        return self.___matrix_order
+        return self.__matrix_order
 
     @property
     def eigen_values(self):
@@ -180,7 +180,7 @@ class CovMat(object):
         self.__fields_initialization()
 
     def randomize(self):
-        tmp = numpy.random.rand(self.___matrix_order, 2*self.___matrix_order)
+        tmp = numpy.random.rand(self.__matrix_order, 2*self.__matrix_order)
         self.__matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 100)
         self.__fields_initialization()
 
