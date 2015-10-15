@@ -17,12 +17,12 @@ class CovMat(object):
     def __init__(self, arg, memory_safe_state=Environment.memory_safe_state):
         if isinstance(arg, int):  # arg is an it
             self.___matrix_order = arg  # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
-            self._matrix = self.__matrix_from_array(numpy.empty((arg, arg)))
+            self.__matrix = self.__matrix_from_array(numpy.empty((arg, arg)))
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
-            self._matrix = self.__matrix_from_array(arg, memory_safe_state)  # map an ndarray into a matrix array
+            self.__matrix = self.__matrix_from_array(arg, memory_safe_state)  # map an ndarray into a matrix array
             self.___matrix_order = arg.shape[0]
         elif isinstance(arg, numpy.matrix):  # arg is a matrix
-            self._matrix = self.__matrix_from_array(arg, memory_safe_state)
+            self.__matrix = self.__matrix_from_array(arg, memory_safe_state)
             self.___matrix_order = arg.shape[0]
             
         self.__eigen_values = None
@@ -73,7 +73,7 @@ class CovMat(object):
 
     @property
     def matrix(self):
-        return self._matrix
+        return self.__matrix
 
     @property
     def matrix_order(self):
@@ -108,7 +108,7 @@ class CovMat(object):
         if self.__norm is not None:
             return self.__norm
 
-        self.__norm = numpy.linalg.norm(self._matrix)
+        self.__norm = numpy.linalg.norm(self.__matrix)
         return self.__norm
 
     @property
@@ -116,7 +116,7 @@ class CovMat(object):
         if self.__determinant is not None:
             return self.__determinant
 
-        self.__determinant = numpy.linalg.det(self._matrix)
+        self.__determinant = numpy.linalg.det(self.__matrix)
         return self.__determinant
 
     @property
@@ -128,7 +128,7 @@ class CovMat(object):
         if self.__inverse is not None:
             return self.__inverse
 
-        self.__inverse = CovMat(self._matrix.getI())
+        self.__inverse = CovMat(self.__matrix.getI())
         return self.__inverse
 
     @property
@@ -181,38 +181,38 @@ class CovMat(object):
 
     def randomize(self):
         tmp = numpy.random.rand(self.___matrix_order, 2*self.___matrix_order)
-        self._matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 100)
+        self.__matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 100)
         self.__fields_initialization()
 
     def trace(self, offset=0):
-        return self._matrix.trace(offset)
+        return self.__matrix.trace(offset)
 
     def diagonal(self, offset=0):
-        return self._matrix.diagonal(offset)
+        return self.__matrix.diagonal(offset)
 
     def column(self, i):
-        return self._matrix[:, i]
+        return self.__matrix[:, i]
 
     def row(self, i):
-        return self._matrix[i, :]
+        return self.__matrix[i, :]
 
     def maximum(self, axis=None):
-        return self._matrix.max(axis)
+        return self.__matrix.max(axis)
 
     def minimum(self, axis=None):
-        return self._matrix.min(axis)
+        return self.__matrix.min(axis)
 
     def mean(self, axis=None):
-        return self._matrix.mean(axis)
+        return self.__matrix.mean(axis)
 
     def variance(self, axis=None):
-        return self._matrix.var(axis)
+        return self.__matrix.var(axis)
 
     def sum(self, axis=None):
-        return self._matrix.sum(axis)
+        return self.__matrix.sum(axis)
 
     def product(self, axis=None):
-        return self._matrix.prod(axis)
+        return self.__matrix.prod(axis)
 
     def __compute_eigen(self, eigen_values_only=False):
         if self.__eigen_values is not None and self.__eigen_vectors is not None:
@@ -222,9 +222,9 @@ class CovMat(object):
             if self.__eigen_values is not None:
                 return
 
-            self.__eigen_values = numpy.linalg.eigvalsh(self._matrix)
+            self.__eigen_values = numpy.linalg.eigvalsh(self.__matrix)
         else:
-            self.__eigen_values, self.__eigen_vectors = numpy.linalg.eigh(self._matrix)
+            self.__eigen_values, self.__eigen_vectors = numpy.linalg.eigh(self.__matrix)
             self.__eigen_vectors = self.__matrix_from_array(self.__eigen_vectors)
             self.__eigen_vectors_transpose = self.__eigen_vectors.getT()
 
@@ -254,73 +254,73 @@ class CovMat(object):
     # ------------------------------------------------------------------------- #
 
     def __str__(self):
-        return str(self._matrix)
+        return str(self.__matrix)
 
     def __getitem__(self, slice):
-        return self._matrix[slice]
+        return self.__matrix[slice]
 
     def __add__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix + arg._matrix)
+            return CovMat(self.__matrix + arg.matrix)
         else:
-            return CovMat(self._matrix + arg)
+            return CovMat(self.__matrix + arg)
 
     def __radd__(self, arg):
         return self.__add__(arg)
 
     def __iadd__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix += arg._matrix
+            self.__matrix += arg.matrix
         else:
-            self._matrix += arg
+            self.__matrix += arg
 
         self.__fields_initialization()
         return self
 
     def __sub__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix - arg._matrix)
+            return CovMat(self.__matrix - arg.matrix)
         else:
-            return CovMat(self._matrix - arg)
+            return CovMat(self.__matrix - arg)
 
     def __rsub__(self, arg):
-        return CovMat(-1 * self._matrix + arg)
+        return CovMat(-1 * self.__matrix + arg)
 
     def __isub__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix -= arg._matrix
+            self.__matrix -= arg.matrix
         else:
-            self._matrix -= arg
+            self.__matrix -= arg
 
         self.__fields_initialization()
         return self
 
     def __mul__(self, arg):
         if isinstance(arg, CovMat):
-            return CovMat(self._matrix * arg._matrix)
+            return CovMat(self.__matrix * arg.matrix)
         else:
-            return CovMat(self._matrix * arg)
+            return CovMat(self.__matrix * arg)
 
     def __rmul__(self, arg):
         return self.__mul__(arg)
 
     def __imul__(self, arg):
         if isinstance(arg, CovMat):
-            self._matrix = self._matrix * arg._matrix
+            self.__matrix *= arg.matrix
         else:
-            self._matrix = self._matrix * arg
+            self.__matrix *= arg
 
         self.__fields_initialization()
         return self
 
     def __truediv__(self, arg):
-        return CovMat(self._matrix / arg)
+        return CovMat(self.__matrix / arg)
 
     def __rtruediv__(self, arg):
-        return CovMat(arg / self._matrix)
+        return CovMat(arg / self.__matrix)
 
     def __itruediv__(self, arg):
-        self._matrix /= arg
+        self.__matrix /= arg
         self.__fields_initialization()
         return self
 
@@ -328,6 +328,6 @@ class CovMat(object):
         return self.powm(arg)
 
     def __ipow__(self, arg):
-        self._matrix = self.powm(arg)._matrix
+        self.__matrix = self.powm(arg).matrix
         self.__fields_initialization()
         return self
