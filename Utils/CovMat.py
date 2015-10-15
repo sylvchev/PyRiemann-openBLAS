@@ -53,7 +53,7 @@ class CovMat(object):
 
         return covmat
 
-    def fields_initialization(self):
+    def __fields_initialization(self):
         self.__eigen_values = None
         self.__eigen_vectors = None
         self.__eigen_vectors_transpose = None
@@ -84,7 +84,7 @@ class CovMat(object):
         if self.__eigen_values is not None:
             return self.__eigen_values
             
-        self.compute_eigen(True)
+        self.__compute_eigen(True)
         return self.__eigen_values
 
     @property
@@ -92,7 +92,7 @@ class CovMat(object):
         if self.__eigen_vectors is not None:
             return self.__eigen_vectors
 
-        self.compute_eigen()
+        self.__compute_eigen()
         return self.__eigen_vectors
 
     @property
@@ -100,7 +100,7 @@ class CovMat(object):
         if self.__eigen_vectors_transpose is not None:
             return self.__eigen_vectors_transpose
 
-        self.compute_eigen()
+        self.__compute_eigen()
         return self.__eigen_vectors_transpose
 
     @property
@@ -136,7 +136,7 @@ class CovMat(object):
         if self.__sqrtm is not None:
             return self.__sqrtm
 
-        self.compute_eigen()
+        self.__compute_eigen()
         self.__sqrtm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(numpy.sqrt(self.__eigen_values))) * self.__eigen_vectors_transpose)
         return self.__sqrtm
@@ -146,7 +146,7 @@ class CovMat(object):
         if self.__sqrtm is not None:
             return self.__sqrtm
 
-        self.compute_eigen()
+        self.__compute_eigen()
         self.__sqrtm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(1.0 / numpy.sqrt(self.__eigen_values))) * self.__eigen_vectors_transpose)
         return self.__sqrtm
@@ -156,7 +156,7 @@ class CovMat(object):
         if self.__expm is not None:
             return self.__expm
 
-        self.compute_eigen()
+        self.__compute_eigen()
         self.__expm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(numpy.exp(self.__eigen_values))) * self.__eigen_vectors_transpose)
         return self.__expm
@@ -166,7 +166,7 @@ class CovMat(object):
         if self.__logm is not None:
             return self.__logm
 
-        self.compute_eigen()
+        self.__compute_eigen()
         self.__logm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(numpy.log(self.__eigen_values))) * self.__eigen_vectors_transpose)
         return self.__logm
@@ -177,12 +177,12 @@ class CovMat(object):
 
     def fill(self, value):
         self._matrix.fill(value)
-        self.fields_initialization()
+        self.__fields_initialization()
 
     def randomize(self):
         tmp = numpy.random.rand(self.___matrix_order, 2*self.___matrix_order)
         self._matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 100)
-        self.fields_initialization()
+        self.__fields_initialization()
 
     def trace(self, offset=0):
         return self._matrix.trace(offset)
@@ -214,7 +214,7 @@ class CovMat(object):
     def product(self, axis=None):
         return self._matrix.prod(axis)
 
-    def compute_eigen(self, eigen_values_only=False):
+    def __compute_eigen(self, eigen_values_only=False):
         if self.__eigen_values is not None and self.__eigen_vectors is not None:
             return
 
@@ -235,7 +235,7 @@ class CovMat(object):
         if self.__power == power:
             return self.__powm
 
-        self.compute_eigen()
+        self.__compute_eigen()
         self.__powm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(self.__eigen_values ** power)) * self.__eigen_vectors_transpose)
         self.__power = power
@@ -274,7 +274,7 @@ class CovMat(object):
         else:
             self._matrix += arg
 
-        self.fields_initialization()
+        self.__fields_initialization()
         return self
 
     def __sub__(self, arg):
@@ -292,7 +292,7 @@ class CovMat(object):
         else:
             self._matrix -= arg
 
-        self.fields_initialization()
+        self.__fields_initialization()
         return self
 
     def __mul__(self, arg):
@@ -310,7 +310,7 @@ class CovMat(object):
         else:
             self._matrix = self._matrix * arg
 
-        self.fields_initialization()
+        self.__fields_initialization()
         return self
 
     def __truediv__(self, arg):
@@ -321,7 +321,7 @@ class CovMat(object):
 
     def __itruediv__(self, arg):
         self._matrix /= arg
-        self.fields_initialization()
+        self.__fields_initialization()
         return self
 
     def __pow__(self, arg):
@@ -329,5 +329,5 @@ class CovMat(object):
 
     def __ipow__(self, arg):
         self._matrix = self.powm(arg)._matrix
-        self.fields_initialization()
+        self.__fields_initialization()
         return self

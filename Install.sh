@@ -6,7 +6,7 @@ echo -e "Removing current libopenblas and liblapack packages"
 sudo apt-get -y remove libopenblas* liblapack* 2>&1 >/dev/null
 
 echo -e "Installing prerequisite packages for OpenBLAS : gcc & gfortran"
-sudo apt-get -y install gcc gfortran 2>&1 >/dev/null
+sudo apt-get -y install gcc gfortran git 2>&1 >/dev/null
 export CC="gcc -w"
 export FC="gfortran -w"
 
