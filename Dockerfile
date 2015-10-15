@@ -3,15 +3,12 @@ FROM ubuntu:14.04
 MAINTAINER sylvchev "https://github.com/sylvchev"
 
 # Install packages for building OpenBLAS
-RUN apt-get update
-# RUN apt-get remove -y libopenblas* liblapack*
-RUN apt-get install -y --force-yes gcc gfortran git build-essential
-RUN apt-get clean
-RUN export CC="gcc -w"
-RUN export FC="gfortran -w"
-RUN alias make='make -s'
+RUN apt-get update &> /dev/null
+# RUN apt-get remove -y libopenblas* liblapack* 
+RUN apt-get install -y --force-yes gcc gfortran git build-essential &> /dev/null
+RUN apt-get clean 
 RUN git clone git://github.com/xianyi/OpenBLAS /root/OpenBLAS
-RUN cd /root/OpenBLAS; make; make install PREFIX=/usr/local
+RUN cd /root/OpenBLAS; make -s &> /dev/null; make install PREFIX=/usr/local
 RUN rm -rf /root/OpenBLAS
 # Install Python, numpy and scipy
 RUN apt-get -y --force-yes install python3 python3-dev python3-pip g++
