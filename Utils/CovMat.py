@@ -181,7 +181,7 @@ class CovMat(object):
 
     def randomize(self):
         tmp = numpy.random.rand(self.__matrix_order, 2*self.__matrix_order)
-        self.__matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 100)
+        self.__matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 1000)
         self.__fields_initialization()
 
     def trace(self, offset=0):

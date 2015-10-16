@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/usr/bin/python
 
 import Utils.Environment as Environment
 from Utils.CovMat import CovMat
