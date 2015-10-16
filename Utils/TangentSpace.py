@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
+import sys
+import os
 import numpy
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+
 from Utils.CovMat import CovMat
 from Utils.CovMats import CovMats
 

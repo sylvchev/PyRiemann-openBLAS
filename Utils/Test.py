@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+
 import Utils.Environment as Environment
 from Utils.CovMat import CovMat
 from Utils.CovMats import CovMats
@@ -11,9 +16,7 @@ from Utils.TangentSpace import TangentSpace
 covmat1 = CovMat.random(5)
 covmat2 = CovMat.random(5)
 
-covmats = CovMats()
-for i in range(0, 3):
-    covmats.append(CovMat.random(5))
+covmats = CovMats.random(5, 3)
 
 print("covmats :\n" + str(covmats) + "\n")
 print("covmat1 :\n" + str(covmat1) + "\n")

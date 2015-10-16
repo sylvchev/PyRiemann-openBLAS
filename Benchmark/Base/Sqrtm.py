@@ -1,7 +1,11 @@
 #!/usr/bin/python
 
-import time
 import sys
+import os
+import time
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "PyRiemann")))
+
 from Utils.CovMat import CovMat
 
 
@@ -24,9 +28,10 @@ warm_up_covmat = CovMat.random(2500)
 warm_up_covmat.sqrtm
 
 for i in range(0, len(size)):
+    covmat = CovMat.random(size[i])
     for j in range(0, nb_repet):
         print_progress(round((i * nb_repet + j) * 100 / (nb_repet * len(size)), 2))
-        covmat = CovMat.random(size[i])
+        covmat.reset_fields()
         start = time.time()
         covmat.sqrtm
         tps[i] += time.time() - start

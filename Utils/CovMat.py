@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
-import Utils.Environment as Environment
+import sys
+import os
 import numpy
-import scipy.linalg
+from scipy.linalg import eigvalsh
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+
+import Utils.Environment as Environment
 
 
 class CovMat(object):
@@ -175,6 +180,9 @@ class CovMat(object):
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
 
+    def reset_fields(self):
+        self.__fields_initialization()
+
     def fill(self, value):
         self.__matrix.fill(value)
         self.__fields_initialization()
@@ -247,7 +255,7 @@ class CovMat(object):
 
     @staticmethod
     def solve_problem(covmat1, covmat2):
-        return scipy.linalg.eigvalsh(covmat1.matrix, covmat2.matrix)
+        return eigvalsh(covmat1.matrix, covmat2.matrix)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

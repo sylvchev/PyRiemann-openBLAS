@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
+import sys
+import os
 import numpy
-from Utils.CovMat import CovMat
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+
 import Utils.Environment as Environment
+from Utils.CovMat import CovMat
 
 
 class CovMats(object):
@@ -28,6 +33,13 @@ class CovMats(object):
             else:
                 self.__numpy_array = arg.view(Environment.data_type, numpy.ndarray)
             self.__modif = False
+
+    @staticmethod
+    def random(matrices_order, size):
+        covmats = CovMats()
+        covmats.randomize(matrices_order, size)
+
+        return covmats
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -77,6 +89,16 @@ class CovMats(object):
             self.__covmats.remove(arg)
 
         self.__modif = True
+
+    def randomize(self, matrices_order, size):
+        self.__modif = True
+        self.__covmats = []
+        for i in range(size):
+            self.__covmats.append(CovMat.random(matrices_order))
+
+    def reset_matrices_fields(self):
+        for covmat in self.__covmats:
+            covmat.reset_fields()
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

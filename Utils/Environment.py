@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
+import sys
+import os
 import numpy
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+
 import Utils.OpenBLAS as OpenBLAS
 
 # Used to set data type of matrix. Use only :
