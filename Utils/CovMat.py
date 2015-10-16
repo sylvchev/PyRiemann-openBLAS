@@ -176,7 +176,7 @@ class CovMat(object):
     # ------------------------------------------------------------------------------ #
 
     def fill(self, value):
-        self._matrix.fill(value)
+        self.__matrix.fill(value)
         self.__fields_initialization()
 
     def randomize(self):
