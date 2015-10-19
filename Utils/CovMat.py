@@ -251,7 +251,7 @@ class CovMat(object):
 
     @staticmethod
     def elements_wise_product(covmat1, covmat2):
-        return CovMat.__matrix_from_array(numpy.multiply(covmat1.matrix, covmat2.matrix))
+        return CovMat(CovMat.__matrix_from_array(numpy.multiply(covmat1.matrix, covmat2.matrix)))
 
     @staticmethod
     def solve_problem(covmat1, covmat2):
