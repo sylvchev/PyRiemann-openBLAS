@@ -21,10 +21,8 @@ with open("../config.cfg") as file:
     for line in file.readlines():
         if line[0] != '#':
             words = re.split(r'[=\n ]+', line)
-            print(words)
 
             if words[0] == "data_type":
-                print(words[1])
                 if words[1] == "double":
                     data_type = numpy.dtype('d')
                 elif words[1] == "float":
@@ -36,7 +34,6 @@ with open("../config.cfg") as file:
                     data_type = numpy.dtype('d')
 
             if words[0] == "memory_safe_state":
-                print(words[1])
                 if words[1] == "True" or words[1] == "true":
                     memory_safe_state = True
                 elif words[1] == "False" or words[1] == "false":
@@ -46,7 +43,6 @@ with open("../config.cfg") as file:
                     memory_safe_state = True
 
             if words[0] == "nb_threads":
-                print(words[1])
                 try:
                     nb_threads = int(words[1])
                 except ValueError:
