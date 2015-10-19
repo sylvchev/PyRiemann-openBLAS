@@ -3,6 +3,7 @@
 import sys
 import os
 import numpy
+import re
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
 
@@ -18,29 +19,34 @@ nb_threads = None
 
 with open("../config.cfg") as file:
     for line in file.readlines():
-            words = line.split('=')
+        if line[0] != '#':
+            words = re.split(r'[=\n ]+', line)
+            print(words)
 
             if words[0] == "data_type":
-                if words[1] == "double\n":
+                print(words[1])
+                if words[1] == "double":
                     data_type = numpy.dtype('d')
-                elif words[1] == "float\n":
+                elif words[1] == "float":
                     data_type = numpy.dtype('f')
-                elif words[1] == "integer\n":
+                elif words[1] == "integer":
                     data_type = numpy.dtype('i')
                 else:
                     print("Error in data type while parsing config.cfg. Data type automatically set to double precision")
                     data_type = numpy.dtype('d')
 
             if words[0] == "memory_safe_state":
-                if words[1] == "True\n" or words[1] == "true\n":
+                print(words[1])
+                if words[1] == "True" or words[1] == "true":
                     memory_safe_state = True
-                elif words[1] == "False\n" or words[1] == "false\n":
+                elif words[1] == "False" or words[1] == "false":
                     memory_safe_state = True
                 else:
                     print("Error in memory safe state while parsing config.cfg. memory safe state automatically set to True")
                     memory_safe_state = True
 
             if words[0] == "nb_threads":
+                print(words[1])
                 try:
                     nb_threads = int(words[1])
                 except ValueError:
