@@ -4,7 +4,7 @@ import sys
 import os
 import numpy
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import Utils.Environment as Environment
 from Utils.CovMat import CovMat

@@ -4,7 +4,7 @@ import sys
 import os
 import time
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "PyRiemann")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from Utils.CovMat import CovMat
 from Utils.Distance import Distance

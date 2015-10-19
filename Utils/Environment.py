@@ -5,7 +5,7 @@ import os
 import numpy
 import re
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import Utils.OpenBLAS as OpenBLAS
 
@@ -17,7 +17,7 @@ data_type = None
 memory_safe_state = None
 nb_threads = None
 
-with open("../config.cfg") as file:
+with open(os.path.join(os.path.dirname(__file__), "..", "..", "PyRiemann", "config.cfg")) as file:
     for line in file.readlines():
         if line[0] != '#':
             words = re.split(r'[=\n ]+', line)
