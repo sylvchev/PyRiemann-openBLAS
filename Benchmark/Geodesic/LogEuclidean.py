@@ -36,7 +36,7 @@ for i in range(0, len(size)):
         covmat1.reset_fields()
         covmat2.reset_fields()
         start = time.time()
-        Geodesic.log_euclidean(covmat1, covmat2)
+        Geodesic.log_euclidean(covmat1, covmat2, 0.5)
         tps[i] += time.time() - start
 
 print_progress(100)
