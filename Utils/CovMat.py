@@ -77,6 +77,10 @@ class CovMat(object):
     # ----------------------------------------------------------------------- #
 
     @property
+    def shape(self):
+        return self.__matrix.shape;
+
+    @property
     def matrix(self):
         return self.__matrix
 
