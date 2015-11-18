@@ -37,7 +37,7 @@ class CovMat(object):
         self.__determinant = None
         self.__inverse = None
         self.__sqrtm = None
-        self.__sqrtm = None
+        self.__invsqrtm = None
         self.__expm = None
         self.__logm = None
         self.__powm = None
@@ -66,7 +66,7 @@ class CovMat(object):
         self.__determinant = None
         self.__inverse = None
         self.__sqrtm = None
-        self.__sqrtm = None
+        self.__invsqrtm = None
         self.__expm = None
         self.__logm = None
         self.__powm = None
@@ -152,13 +152,13 @@ class CovMat(object):
 
     @property
     def invsqrtm(self):
-        if self.__sqrtm is not None:
-            return self.__sqrtm
+        if self.__invsqrtm is not None:
+            return self.__invsqrtm
 
         self.__compute_eigen()
-        self.__sqrtm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
+        self.__invsqrtm = CovMat(self.__eigen_vectors * self.__matrix_from_array(
             numpy.diag(1.0 / numpy.sqrt(self.__eigen_values))) * self.__eigen_vectors_transpose)
-        return self.__sqrtm
+        return self.__invsqrtm
 
     @property
     def expm(self):

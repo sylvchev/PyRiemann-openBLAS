@@ -24,7 +24,7 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-warm_up_covmat = CovMat.random(2500)
+warm_up_covmat = CovMat.random(250)
 warm_up_covmat.sqrtm
 
 for i in range(0, len(size)):
