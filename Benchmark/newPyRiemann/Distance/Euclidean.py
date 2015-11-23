@@ -4,10 +4,10 @@ import sys
 import os
 import time
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from Utils.CovMat import CovMat
-from Utils.Geodesic import Geodesic
+from Utils.Distance import Distance
 
 
 def print_progress(i):
@@ -25,8 +25,9 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-warm_up_covmat = CovMat.random(2500)
-warm_up_covmat.sqrtm
+for i in range(0, 10) :
+    warm_up_covmat = CovMat.random(1000)
+    warm_up_covmat.sqrtm
 
 for i in range(0, len(size)):
     covmat1 = CovMat.random(size[i])
@@ -36,7 +37,7 @@ for i in range(0, len(size)):
         covmat1.reset_fields()
         covmat2.reset_fields()
         start = time.time()
-        Geodesic.log_euclidean(covmat1, covmat2, 0.5)
+        Distance.euclidean(covmat1, covmat2)
         tps[i] += time.time() - start
 
 print_progress(100)

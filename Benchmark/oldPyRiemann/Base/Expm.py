@@ -3,12 +3,11 @@
 import sys
 import os
 import time
+import numpy
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
-from Utils.CovMat import CovMat
-from Utils.Distance import Distance
-
+from oldPyRiemann.base import expm
 
 def print_progress(i):
     text = "Progress : " + str(i) + "%"
@@ -25,18 +24,18 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-warm_up_covmat = CovMat.random(2500)
-warm_up_covmat.sqrtm
+for i in range(0, 10) :
+    A = numpy.random.rand(1000, 2000)
+    warm_up_covmat = numpy.dot(A, numpy.transpose(A))/1000
+    expm(warm_up_covmat)
 
 for i in range(0, len(size)):
-    covmat1 = CovMat.random(size[i])
-    covmat2 = CovMat.random(size[i])
+    A = numpy.random.rand(size[i], 2*size[i])/1000
+    covmat = numpy.dot(A, numpy.transpose(A))
     for j in range(0, nb_repet):
         print_progress(round((i * nb_repet + j) * 100 / (nb_repet * len(size)), 2))
-        covmat1.reset_fields()
-        covmat2.reset_fields()
         start = time.time()
-        Distance.log_determinant(covmat1, covmat2)
+        expm(covmat)
         tps[i] += time.time() - start
 
 print_progress(100)

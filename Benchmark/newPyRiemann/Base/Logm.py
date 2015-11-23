@@ -4,7 +4,7 @@ import sys
 import os
 import time
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from Utils.CovMat import CovMat
 
@@ -24,8 +24,9 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-warm_up_covmat = CovMat.random(250)
-warm_up_covmat.sqrtm
+for i in range(0, 10) :
+    warm_up_covmat = CovMat.random(1000)
+    warm_up_covmat.sqrtm
 
 for i in range(0, len(size)):
     covmat = CovMat.random(size[i])
@@ -33,7 +34,7 @@ for i in range(0, len(size)):
         print_progress(round((i * nb_repet + j) * 100 / (nb_repet * len(size)), 2))
         covmat.reset_fields()
         start = time.time()
-        covmat.expm
+        covmat.logm
         tps[i] += time.time() - start
 
 print_progress(100)
