@@ -51,8 +51,3 @@ yes | sudo BLAS=$BLAS LAPACK=$LAPACK LD_LIBRARY_PATH=$LD_LIBRARY_PATH pip3 insta
 
 echo -e "Downloading, compiling and installing scipy package (this can take several minutes)"
 yes | sudo BLAS=$BLAS LAPACK=$LAPACK LD_LIBRARY_PATH=$LD_LIBRARY_PATH pip3 install -q scipy 2>&1 >/dev/null
-
-
-
-# set the core number as thread in config file : config.cfg
-echo -e `cat /proc/cpuinfo | grep "cpu cores" | sed '1!d' | tail -c 2` >> config.cfg

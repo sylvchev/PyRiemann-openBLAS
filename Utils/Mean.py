@@ -5,7 +5,6 @@ import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import Utils.Environment as Environment
 from Utils.CovMat import CovMat
 
 
@@ -58,7 +57,7 @@ class Mean(object):
             output = init
 
         k = 0
-        crit = numpy.finfo(Environment.data_type).max
+        crit = numpy.finfo(numpy.double).max
         tmp = CovMat(covmats.matrices_order)
 
         while crit > tol and k < max_iter:
@@ -88,8 +87,8 @@ class Mean(object):
 
         k = 0
         nu = 1.0
-        tau = numpy.finfo(Environment.data_type).max
-        crit = numpy.finfo(Environment.data_type).max
+        tau = numpy.finfo(numpy.double).max
+        crit = numpy.finfo(numpy.double).max
         tmp = CovMat(covmats.matrices_order)
 
         while crit > tol and k < max_iter and nu > tol:

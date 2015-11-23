@@ -7,6 +7,7 @@
 # Thanks to : ali_m
 
 import ctypes
+import os
 
 openblas_lib = ctypes.cdll.LoadLibrary('/usr/local/lib/libopenblas.so')
 
@@ -33,3 +34,6 @@ class NbThreads(object):
 
     def __exit__(self, *args):
         set_nb_threads(self.old_nb_threads)
+
+
+set_nb_threads(int(os.popen("cat /proc/cpuinfo | grep \"cpu cores\" | sed '1!d' | tail -c 2", "r").readline()))

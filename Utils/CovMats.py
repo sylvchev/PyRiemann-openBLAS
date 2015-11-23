@@ -5,7 +5,6 @@ import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import Utils.Environment as Environment
 from Utils.CovMat import CovMat
 
 
@@ -14,7 +13,7 @@ class CovMats(object):
     # ------------------------------- COVMATS CONSTRUCTORS ------------------------------ #
     # ----------------------------------------------------------------------------------- #
 
-    def __init__(self, arg=None, memory_safe_state=Environment.memory_safe_state):
+    def __init__(self, arg=None, data_type=numpy.double, memory_safe_state=True):
         if arg is None:
             self.__covmats = []
             self.__numpy_array = None
@@ -26,11 +25,11 @@ class CovMats(object):
         elif isinstance(arg, numpy.ndarray):
             self.__covmats = []
             for i in range(arg.shape[0]):
-                self.__covmats.append(CovMat(arg[i, :, :], memory_safe_state))
+                self.__covmats.append(CovMat(arg[i, :, :], memory_safe_state=memory_safe_state))
             if memory_safe_state:
-                self.__numpy_array = arg.copy().view(Environment.data_type, numpy.ndarray)
+                self.__numpy_array = arg.copy().view(data_type, numpy.ndarray)
             else:
-                self.__numpy_array = arg.view(Environment.data_type, numpy.ndarray)
+                self.__numpy_array = arg.view(data_type, numpy.ndarray)
             self.__modif = False
 
     @staticmethod

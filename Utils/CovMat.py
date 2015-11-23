@@ -6,8 +6,6 @@ from scipy.linalg import eigvalsh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import Utils.Environment as Environment
-
 
 class CovMat(object):
     # ----------------------------------------------------------------------------------- #
@@ -15,18 +13,19 @@ class CovMat(object):
     # ----------------------------------------------------------------------------------- #
 
     @staticmethod
-    def __matrix_from_array(numpy_array, memory_safe_state=False):
-        return numpy.matrix(numpy_array, Environment.data_type, memory_safe_state)
+    def __matrix_from_array(numpy_array, data_type=numpy.double, memory_safe_state=True):
+        return numpy.matrix(numpy_array, data_type, memory_safe_state)
 
-    def __init__(self, arg, memory_safe_state=Environment.memory_safe_state):
+    def __init__(self, arg, memory_safe_state=True):
         if isinstance(arg, int):  # arg is an it
             self.__matrix_order = arg  # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
             self.__matrix = self.__matrix_from_array(numpy.empty((arg, arg)))
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
-            self.__matrix = self.__matrix_from_array(arg, memory_safe_state)  # map an ndarray into a matrix array
+            self.__matrix = self.__matrix_from_array(arg,
+                                                     memory_safe_state=memory_safe_state)  # map an ndarray into a matrix array
             self.__matrix_order = arg.shape[0]
         elif isinstance(arg, numpy.matrix):  # arg is a matrix
-            self.__matrix = self.__matrix_from_array(arg, memory_safe_state)
+            self.__matrix = self.__matrix_from_array(arg, memory_safe_state=memory_safe_state)
             self.__matrix_order = arg.shape[0]
             
         self.__eigen_values = None
