@@ -18,16 +18,17 @@ class CovMat(object):
 
     def __init__(self, arg, memory_safe_state=True):
         if isinstance(arg, int):  # arg is an it
-            self.__matrix_order = arg  # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
+            # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
+            self.__matrix_order = arg
             self.__matrix = self.__matrix_from_array(numpy.empty((arg, arg)))
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
-            self.__matrix = self.__matrix_from_array(arg,
-                                                     memory_safe_state=memory_safe_state)  # map an ndarray into a matrix array
+            # map an ndarray into a matrix array
+            self.__matrix = self.__matrix_from_array(arg, memory_safe_state=memory_safe_state)
             self.__matrix_order = arg.shape[0]
         elif isinstance(arg, numpy.matrix):  # arg is a matrix
             self.__matrix = self.__matrix_from_array(arg, memory_safe_state=memory_safe_state)
             self.__matrix_order = arg.shape[0]
-            
+
         self.__eigen_values = None
         self.__eigen_vectors = None
         self.__eigen_vectors_transpose = None
@@ -51,7 +52,7 @@ class CovMat(object):
 
     @staticmethod
     def random(matrix_order):
-        covmat = CovMat(matrix_order)
+        covmat = CovMat(matrix_order, False)
         covmat.randomize()
 
         return covmat
@@ -76,7 +77,7 @@ class CovMat(object):
 
     @property
     def shape(self):
-        return self.__matrix.shape;
+        return self.__matrix.shape
 
     @property
     def matrix(self):
@@ -90,7 +91,7 @@ class CovMat(object):
     def eigen_values(self):
         if self.__eigen_values is not None:
             return self.__eigen_values
-            
+
         self.__compute_eigen(True)
         return self.__eigen_values
 
@@ -190,7 +191,7 @@ class CovMat(object):
         self.__fields_initialization()
 
     def randomize(self):
-        tmp = numpy.random.rand(self.__matrix_order, 2*self.__matrix_order)
+        tmp = numpy.random.rand(self.__matrix_order, 2 * self.__matrix_order)
         self.__matrix = self.__matrix_from_array(numpy.dot(tmp, numpy.transpose(tmp)) / 1000)
         self.__fields_initialization()
 
