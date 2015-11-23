@@ -1,6 +1,3 @@
-#!/usr/bin/pythona
-
-
 class Geodesic(object):
     @staticmethod
     def euclidean(covmat1, covmat2, alpha):

@@ -1,7 +1,5 @@
-#!/usr/bin/python
-
-import sys
 import os
+import sys
 import time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
@@ -25,7 +23,7 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-for i in range(0, 10) :
+for i in range(0, 10):
     warm_up_covmat = CovMat.random(1000)
     warm_up_covmat.sqrtm
 

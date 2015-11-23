@@ -1,8 +1,7 @@
-#!/usr/bin/python
-
-import sys
 import os
+import sys
 import time
+
 import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
@@ -24,13 +23,13 @@ tps = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # WARMUP
 print("Warm up...")
-for i in range(0, 10) :
+for i in range(0, 10):
     A = numpy.random.rand(1000, 2000)
-    warm_up_covmat = numpy.dot(A, numpy.transpose(A))/1000
+    warm_up_covmat = numpy.dot(A, numpy.transpose(A)) / 1000
     expm(warm_up_covmat)
 
 for i in range(0, len(size)):
-    A = numpy.random.rand(size[i], 2*size[i])/1000
+    A = numpy.random.rand(size[i], 2 * size[i]) / 1000
     covmat = numpy.dot(A, numpy.transpose(A))
     for j in range(0, nb_repet):
         print_progress(round((i * nb_repet + j) * 100 / (nb_repet * len(size)), 2))

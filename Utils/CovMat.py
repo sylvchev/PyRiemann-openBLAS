@@ -1,7 +1,6 @@
-#!/usr/bin/python
-
-import sys
 import os
+import sys
+
 import numpy
 from scipy.linalg import eigvalsh
 
