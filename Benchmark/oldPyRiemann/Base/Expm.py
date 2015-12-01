@@ -7,6 +7,8 @@ import numpy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from oldPyRiemann.base import expm
+import Utils.OpenBLAS
+
 
 def print_progress(i):
     text = "Progress : " + str(i) + "%"
