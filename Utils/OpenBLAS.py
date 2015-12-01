@@ -8,8 +8,9 @@
 
 import ctypes
 import os
+from ctypes.util import find_library
 
-openblas_lib = ctypes.cdll.LoadLibrary('/usr/local/lib/libopenblas.so')
+openblas_lib = ctypes.cdll.LoadLibrary(find_library('openblas'))
 
 
 def get_nb_threads():
