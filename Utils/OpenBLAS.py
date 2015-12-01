@@ -37,4 +37,4 @@ class NbThreads(object):
         set_nb_threads(self.old_nb_threads)
 
 
-set_nb_threads(int(os.popen("cat /proc/cpuinfo | grep \"cpu cores\" | sed '1!d' | tail -c 2", "r").readline()))
+set_nb_threads(1)
