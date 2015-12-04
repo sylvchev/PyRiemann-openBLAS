@@ -38,5 +38,5 @@ try:
             set_nb_threads(self.old_nb_threads)
 
         set_nb_threads(int(os.popen("cat /proc/cpuinfo | grep \"cpu cores\" | sed '1!d' | tail -c 2", "r").readline()))
-except FileNotFoundError:
+except:
     print("Something went wrond while loading functions in libopenblas.so...")
