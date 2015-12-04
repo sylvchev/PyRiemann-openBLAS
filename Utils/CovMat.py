@@ -1,6 +1,5 @@
 import os
 import sys
-from enum import Enum
 import numpy
 from scipy.linalg import eigvalsh
 
@@ -14,7 +13,7 @@ class CovMat(object):
     # ------------------------------- DATA TYPE ------------------------------- #
     # ------------------------------------------------------------------------- #
 
-    class DataType(Enum):
+    class DataType(object):
         float32 = numpy.float32
         float64 = numpy.float64
         float = numpy.float32
@@ -28,9 +27,9 @@ class CovMat(object):
         if isinstance(arg, int):  # arg is an it
             # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
             self.__matrix_order = arg
-            self.__matrix_array = numpy.empty((arg, arg)).astype(data_type.value, copy=False)
+            self.__matrix_array = numpy.empty((arg, arg)).astype(data_type, copy=False)
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
-            self.__matrix_array = numpy.array(arg, copy=copy).astype(data_type.value, copy=False)
+            self.__matrix_array = numpy.array(arg, copy=copy).astype(data_type, copy=False)
             self.__matrix_order = arg.shape[0]
 
         self.__eigen_values = None
@@ -188,7 +187,7 @@ class CovMat(object):
     # ------------------------------------------------------------------------------ #
 
     def to_type(self, data_type):
-        self.__matrix_array.astype(data_type.value, copy=False)
+        self.__matrix_array.astype(data_type, copy=False)
 
     def reset_fields(self):
         self.__fields_initialization()
@@ -199,7 +198,7 @@ class CovMat(object):
 
     def randomize(self, data_type=DataType.double):
         tmp = numpy.random.rand(self.__matrix_order, 2 * self.__matrix_order)
-        self.__matrix_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type.value, copy=False)
+        self.__matrix_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type, copy=False)
         self.__fields_initialization()
 
     def trace(self, offset=0):
