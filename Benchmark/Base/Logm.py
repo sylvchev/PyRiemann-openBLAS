@@ -20,11 +20,11 @@ for i in range(0, len(size)):
     covmat = numpy.dot(A, A.T) / 1000
     t = timeit.Timer("logm(covmat)",
                      setup="from __main__ import covmat; from oldPyRiemann.base import logm; import Utils.OpenBLAS")
-    old_time = t.timeit(number=int(1e8 / size[i] ** 2)) / int(1e8 / size[i] ** 2)
+    old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
     covmat = CovMat.random(size[i])
     t = timeit.Timer("covmat.reset_fields(); covmat.logm", setup="from __main__ import covmat")
-    new_time = t.timeit(number=int(1e8 / size[i] ** 2)) / int(1e8 / size[i] ** 2)
+    new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
     print("matrix size : " + str(size[i]) + "x" + str(size[i]) + "\t\told time : " + str(
         old_time) + " sec\t\t" + "new time : " + str(new_time) + " sec\t\t" + "speed up : " + str(
