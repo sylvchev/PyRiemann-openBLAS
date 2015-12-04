@@ -39,4 +39,4 @@ try:
 
         set_nb_threads(int(os.popen("cat /proc/cpuinfo | grep \"cpu cores\" | sed '1!d' | tail -c 2", "r").readline()))
 except:
-    print("Something went wrond while loading functions in libopenblas.so...")
+    print("Something went wrong while loading functions in libopenblas.so...")
