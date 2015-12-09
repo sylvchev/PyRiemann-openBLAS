@@ -300,7 +300,7 @@ class CovMat(object):
             return CovMat(self.__matrix_array - arg, False)
 
     def __rsub__(self, arg):
-        return CovMat(-1 * self.__matrix_array + arg)
+        return CovMat(-1 * self.__matrix_array + arg, False)
 
     def __isub__(self, arg):
         if isinstance(arg, CovMat):

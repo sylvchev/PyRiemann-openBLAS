@@ -1,16 +1,11 @@
+"""Distance utils."""
 import numpy
 from scipy.linalg import eigvalsh
+from .base import logm, sqrtm
 
-from .base import logm
-
-
-###############################################################
-# distances
-###############################################################
 
 def distance_kullback(A, B):
-    """Return the Kullback leibler divergence between
-    two covariance matrices A and B :
+    """Kullback leibler divergence between two covariance matrices A and B.
 
     :param A: First covariance matrix
     :param B: Second covariance matrix
@@ -34,8 +29,10 @@ def distance_kullback_sym(A, B):
 
 
 def distance_euclid(A, B):
-    """Return the Euclidean distance (Froebenius norm) between
-    two covariance matrices A and B :
+    """Euclidean distance between two covariance matrices A and B.
+
+    The Euclidean distance is defined by the Froebenius norm between the two
+    matrices.
 
     .. math::
             d = \Vert \mathbf{A} - \mathbf{B} \Vert_F
@@ -49,8 +46,7 @@ def distance_euclid(A, B):
 
 
 def distance_logeuclid(A, B):
-    """Return the Log Euclidean distance between
-    two covariance matrices A and B :
+    """Log Euclidean distance between two covariance matrices A and B.
 
     .. math::
             d = \Vert \log(\mathbf{A}) - \log(\mathbf{B}) \Vert_F
@@ -64,8 +60,7 @@ def distance_logeuclid(A, B):
 
 
 def distance_riemann(A, B):
-    """Return the Riemannian distance between
-    two covariance matrices A and B :
+    """Riemannian distance between two covariance matrices A and B.
 
     .. math::
             d = {\left( \sum_i \log(\lambda_i)^2 \\right)}^{-1/2}
@@ -81,12 +76,10 @@ def distance_riemann(A, B):
 
 
 def distance_logdet(A, B):
-    """Return the Log-det distance between
-    two covariance matrices A and B :
+    """Log-det distance between two covariance matrices A and B.
 
     .. math::
-            d = \sqrt{\log(\det(\\frac{\mathbf{A}+\mathbf{B}}{2}))} - 0.5 \\times \log(\det(\mathbf{A} \\times \mathbf{B}))
-
+            d = \sqrt{\left(\log(\det(\\frac{\mathbf{A}+\mathbf{B}}{2})) - 0.5 \\times \log(\det(\mathbf{A}) \det(\mathbf{B}))\\right)}
 
     :param A: First covariance matrix
     :param B: Second covariance matrix
@@ -94,13 +87,27 @@ def distance_logdet(A, B):
 
     """
     return numpy.sqrt(numpy.log(numpy.linalg.det(
-        (A + B) / 2)) - 0.5 * numpy.log(numpy.linalg.det(numpy.dot(A, B))))
+        (A + B) / 2.0)) - 0.5 * numpy.log(numpy.linalg.det(A) * numpy.linalg.det(B)))
+
+
+def distance_wasserstein(A, B):
+    """Wasserstein distance between two covariances matrices.
+
+    .. math::
+        d = \left( {tr(A + B - 2(A^{1/2}BA^{1/2})^{1/2})}\\right )^{1/2}
+
+    :param A: First covariance matrix
+    :param B: Second covariance matrix
+    :returns: Wasserstein distance between A and B
+
+    """
+    B12 = sqrtm(B)
+    C = sqrtm(numpy.dot(numpy.dot(B12, A), B12))
+    return numpy.sqrt(numpy.trace(A + B - 2 * C))
 
 
 def distance(A, B, metric='riemann'):
-    """Return the distance between
-    two covariance matrices A and B according to the metric :
-
+    """Distance between two covariance matrices A and B according to the metric.
 
     :param A: First covariance matrix
     :param B: Second covariance matrix
@@ -116,7 +123,8 @@ def distance(A, B, metric='riemann'):
                         'logdet': distance_logdet,
                         'kullback': distance_kullback,
                         'kullback_right': distance_kullback_right,
-                        'kullback_sym': distance_kullback_sym}
+                        'kullback_sym': distance_kullback_sym,
+                        'wasserstein': distance_wasserstein}
     if len(A.shape) == 3:
         d = numpy.empty((len(A), 1))
         for i in range(len(A)):

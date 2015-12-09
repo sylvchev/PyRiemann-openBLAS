@@ -1,7 +1,5 @@
 import numpy
-
 from .base import sqrtm, invsqrtm, logm, expm
-
 
 ###############################################################
 # Tangent Space

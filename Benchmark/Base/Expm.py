@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 from Utils.CovMat import CovMat
 
-size = [10, 25, 50, 75, 100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000]
+size = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
 
 # WARMUP
 print("Warm up...")

@@ -38,3 +38,5 @@ class Distance(object):
     @staticmethod
     def kullback_sym(covmat1, covmat2):
         return Distance.kullback(covmat1, covmat2) + Distance.kullback_right(covmat1, covmat2)
+
+        # TODO Wasserstein distance
