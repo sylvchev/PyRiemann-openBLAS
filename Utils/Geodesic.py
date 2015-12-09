@@ -1,11 +1,11 @@
 class Geodesic(object):
     @staticmethod
     def euclidean(covmat1, covmat2, alpha):
-        return covmat1 + alpha * (covmat2 - covmat1)
+        return (1 - alpha) * covmat1 + alpha * covmat2
 
     @staticmethod
     def log_euclidean(covmat1, covmat2, alpha):
-        return (covmat1.logm + alpha * (covmat2.logm - covmat1.logm)).expm
+        return ((1 - alpha) * covmat1.logm + alpha * covmat2.logm).expm
 
     @staticmethod
     def riemannian(covmat1, covmat2, alpha):
