@@ -20,7 +20,8 @@ class Distance(object):
     @staticmethod
     def log_determinant(covmat1, covmat2):
         return numpy.sqrt(
-            numpy.log(((covmat1 + covmat2) / 2).determinant) - 0.5 * numpy.log((covmat1 * covmat2).determinant))
+            numpy.log(((covmat1 + covmat2) / 2.0).determinant) - 0.5 * numpy.log(
+                covmat1.determinant * covmat2.determinant))
 
     @staticmethod
     def riemannian(covmat1, covmat2):
