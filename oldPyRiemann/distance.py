@@ -1,6 +1,7 @@
 """Distance utils."""
 import numpy
 from scipy.linalg import eigvalsh
+
 from .base import logm, sqrtm
 
 

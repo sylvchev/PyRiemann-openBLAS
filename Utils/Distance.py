@@ -40,4 +40,6 @@ class Distance(object):
     def kullback_sym(covmat1, covmat2):
         return Distance.kullback(covmat1, covmat2) + Distance.kullback_right(covmat1, covmat2)
 
-        # TODO Wasserstein distance
+    @staticmethod
+    def wasserstein(covmat1, covmat2):
+        return numpy.sqrt((covmat1 + covmat2 - 2 * (covmat2.sqrtm * covmat1 * covmat2.sqrtm).sqrtm).trace())
