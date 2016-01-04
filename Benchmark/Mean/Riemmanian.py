@@ -23,7 +23,7 @@ for i in range(0, len(size)):
                      setup="from __main__ import covmats; from oldPyRiemann.mean import mean_riemann; import Utils.OpenBLAS")
     old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
-    t = timeit.Timer("covmats.reset_matrices_fields(); Mean.riemannian(covmats)",
+    t = timeit.Timer("covmats.reset_fields(); Mean.riemannian(covmats)",
                      setup="from Utils.Mean import Mean; from __main__ import covmats")
     new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 

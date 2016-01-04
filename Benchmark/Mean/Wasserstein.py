@@ -19,11 +19,11 @@ for i in range(0, 10):
 for i in range(0, len(size)):
     covmats = CovMats.random(size[i], 10)
 
-    t = timeit.Timer("mean_logeuclid(covmats.numpy_array)",
-                     setup="from __main__ import covmats; from oldPyRiemann.mean import mean_logeuclid; import Utils.OpenBLAS")
+    t = timeit.Timer("mean_wasserstein(covmats.numpy_array)",
+                     setup="from __main__ import covmats; from oldPyRiemann.mean import mean_wasserstein; import Utils.OpenBLAS")
     old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
-    t = timeit.Timer("covmats.reset_fields(); Mean.log_euclidean(covmats)",
+    t = timeit.Timer("covmats.reset_fields(); Mean.wasserstein(covmats)",
                      setup="from Utils.Mean import Mean; from __main__ import covmats")
     new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 

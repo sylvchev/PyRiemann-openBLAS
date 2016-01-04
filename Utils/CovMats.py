@@ -14,8 +14,7 @@ class CovMats(object):
 
     def __init__(self, arg):
         self.__covmats = arg
-        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in arg], copy=False)
-        self.__mean = None
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
 
     @staticmethod
     def random(matrices_order, size, data_type=CovMat.DataType.double):
@@ -46,18 +45,32 @@ class CovMats(object):
     def randomize(self):
         for covmat in self.__covmats:
             covmat.randomize()
-        self.__numpy_array = numpy.dstack(covmat.numpy_array for covmat in self.__covmats)
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
 
-    def reset_matrices_fields(self):
+    def reset_fields(self):
         for covmat in self.__covmats:
             covmat.reset_fields()
 
-    @property
-    def mean(self):
-        if self.__mean is None:
-            self.__mean = numpy.mean(self.__numpy_array, axis=0)
+    def append(self, arg):
+        if isinstance(arg, list):
+            self.__covmats += list
+        else:
+            self.__covmats.append(arg)
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
 
-        return self.__mean
+    def remove(self, arg):
+        self.__covmats.remove(arg)
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
+
+    def pop(self, arg):
+        self.__covmats.pop(arg)
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
+
+    def mean(self, axis=None):
+        if axis == 0:
+            return CovMat(numpy.mean(self.__numpy_array, axis=axis))
+        else:
+            return numpy.mean(self.__numpy_array, axis=axis)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

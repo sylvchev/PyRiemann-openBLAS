@@ -45,7 +45,7 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = covmats.mean
+            output = covmats.mean(0)
         else:
             output = init
 
@@ -74,7 +74,7 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = covmats.mean
+            output = covmats.mean(0)
         else:
             output = init
 
@@ -106,3 +106,32 @@ class Mean(object):
             print("Max iter reach")
 
         return output
+
+    @staticmethod
+    def wasserstein(covmats, tol=10e-4, max_iter=50, init=None, sample_weight=None):
+        sample_weight = Mean.get_sample_weight(sample_weight, covmats)
+
+        if init is None:
+            output = covmats.mean(0)
+        else:
+            output = init
+
+        k = 0
+        crit = numpy.finfo(numpy.double).max
+        tmp = CovMat(covmats.shape[1])
+
+        while (crit > tol) and (k < max_iter):
+            k += 1
+            tmp.fill(0)
+
+            for i in range(covmats.shape[0]):
+                tmp += sample_weight[i] * (output.sqrtm * covmats[i] * output.sqrtm).sqrtm
+
+            new_output = tmp.sqrtm
+            crit = (new_output - output).norm
+            output = new_output
+
+        if k == max_iter:
+            print("Max iter reach")
+
+        return output * output
