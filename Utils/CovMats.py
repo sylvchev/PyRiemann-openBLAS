@@ -14,7 +14,8 @@ class CovMats(object):
 
     def __init__(self, arg):
         self.__covmats = arg
-        self.__numpy_array = numpy.dstack(covmat.numpy_array for covmat in self.__covmats)
+        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in arg], copy=False)
+        self.__mean = None
 
     @staticmethod
     def random(matrices_order, size, data_type=CovMat.DataType.double):
@@ -50,6 +51,13 @@ class CovMats(object):
     def reset_matrices_fields(self):
         for covmat in self.__covmats:
             covmat.reset_fields()
+
+    @property
+    def mean(self):
+        if self.__mean is None:
+            self.__mean = numpy.mean(self.__numpy_array, axis=0)
+
+        return self.__mean
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

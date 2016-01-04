@@ -12,9 +12,9 @@ class Mean(object):
     @staticmethod
     def get_sample_weight(sample_weight, covmats):
         if sample_weight is None:
-            sample_weight = numpy.ones(covmats.size)
+            sample_weight = numpy.ones(covmats.shape[0])
 
-        if covmats.size != len(sample_weight):
+        if covmats.shape[0] != len(sample_weight):
             raise ValueError("len of sample_weight must be equal to len of data.")
 
         sample_weight /= numpy.sum(sample_weight)
@@ -23,26 +23,19 @@ class Mean(object):
 
     @staticmethod
     def identity(covmats):
-        return CovMat.identity(covmats.matrices_order)
+        return CovMat.identity(covmats.shape[1])
 
     @staticmethod
     def euclidean(covmats, sample_weight=None):
-        sample_weight = Mean.get_sample_weight(sample_weight, covmats)
-
-        output = CovMat.zero(covmats.matrices_order)
-
-        for i in range(covmats.size):
-            output += sample_weight[i] * covmats[i]
-
-        return output
+        return CovMat(numpy.average(covmats.numpy_array, axis=0, weights=sample_weight))
 
     @staticmethod
     def log_euclidean(covmats, sample_weight=None):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
-        output = CovMat.zero(covmats.matrices_order)
+        output = CovMat.zero(covmats.shape[1])
 
-        for i in range(covmats.size):
+        for i in range(covmats.shape[0]):
             output += sample_weight[i] * covmats[i].logm
 
         return output.expm
@@ -52,19 +45,19 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = Mean.euclidean(covmats)
+            output = covmats.mean
         else:
             output = init
 
         k = 0
         crit = numpy.finfo(numpy.double).max
-        tmp = CovMat(covmats.matrices_order)
+        tmp = CovMat(covmats.shape[1])
 
         while crit > tol and k < max_iter:
             k += 1
             tmp.fill(0)
 
-            for i in range(covmats.size):
+            for i in range(covmats.shape[0]):
                 tmp += sample_weight[i] * (0.5 * (covmats[i] + output)).inverse
 
             new_output = tmp.inverse
@@ -81,7 +74,7 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = Mean.euclidean(covmats)
+            output = covmats.mean
         else:
             output = init
 
@@ -89,13 +82,13 @@ class Mean(object):
         nu = 1.0
         tau = numpy.finfo(numpy.double).max
         crit = numpy.finfo(numpy.double).max
-        tmp = CovMat(covmats.matrices_order)
+        tmp = CovMat(covmats.shape[1])
 
         while crit > tol and k < max_iter and nu > tol:
             k += 1
             tmp.fill(0)
 
-            for i in range(covmats.size):
+            for i in range(covmats.shape[0]):
                 tmp += sample_weight[i] * (output.invsqrtm * covmats[i] * output.invsqrtm).logm
 
             crit = tmp.norm
