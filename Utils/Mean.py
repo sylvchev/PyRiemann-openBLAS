@@ -13,13 +13,10 @@ class Mean(object):
     def get_sample_weight(sample_weight, covmats):
         if sample_weight is None:
             sample_weight = numpy.ones(covmats.shape[0])
-
-        if covmats.shape[0] != len(sample_weight):
+        elif covmats.shape[0] != len(sample_weight):
             raise ValueError("len of sample_weight must be equal to len of data.")
 
-        sample_weight /= numpy.sum(sample_weight)
-
-        return sample_weight
+        return sample_weight / numpy.sum(sample_weight)
 
     @staticmethod
     def identity(covmats):
@@ -61,7 +58,7 @@ class Mean(object):
                 tmp += sample_weight[i] * (0.5 * (covmats[i] + output)).inverse
 
             new_output = tmp.inverse
-            crit = (new_output - output).norm
+            crit = (new_output - output).norm(ord='fro')
             output = new_output
 
         if k == max_iter:
@@ -91,7 +88,7 @@ class Mean(object):
             for i in range(covmats.shape[0]):
                 tmp += sample_weight[i] * (output.invsqrtm * covmats[i] * output.invsqrtm).logm
 
-            crit = tmp.norm
+            crit = tmp.norm(ord='fro')
             h = nu * crit
 
             output = output.sqrtm * (nu * tmp).expm * output.sqrtm
@@ -128,7 +125,7 @@ class Mean(object):
                 tmp += sample_weight[i] * (output.sqrtm * covmats[i] * output.sqrtm).sqrtm
 
             new_output = tmp.sqrtm
-            crit = (new_output - output).norm
+            crit = (new_output - output).norm(ord='fro')
             output = new_output
 
         if k == max_iter:

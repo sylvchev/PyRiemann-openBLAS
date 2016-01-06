@@ -16,13 +16,12 @@ for i in range(0, 10):
     warm_up_covmat.expm
 
 for i in range(0, len(size)):
-    A = numpy.random.rand(size[i], 2 * size[i])
-    covmat = numpy.dot(A, A.T) / 1000
-    t = timeit.Timer("expm(covmat)",
+    covmat = CovMat.random(size[i])
+
+    t = timeit.Timer("expm(covmat.numpy_array)",
                      setup="from __main__ import covmat; from oldPyRiemann.base import expm; import Utils.OpenBLAS")
     old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
-    covmat = CovMat.random(size[i])
     t = timeit.Timer("covmat.reset_fields(); covmat.expm", setup="from __main__ import covmat")
     new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 

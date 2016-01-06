@@ -1,7 +1,7 @@
 import os
 import sys
 import numpy
-from scipy.linalg import eigvalsh, eigh
+from scipy.linalg import inv, eigvalsh, eigh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -27,15 +27,14 @@ class CovMat(object):
         if isinstance(arg, int):  # arg is an it
             # alloc memory only. matrix isn't sym def pos (use randomise() function fot it)
             self.__matrix_order = arg
-            self.__numpy_array = numpy.empty((arg, arg)).astype(data_type, copy=False)
+            self.__numpy_array = numpy.empty((arg, arg), dtype=data_type)
         elif isinstance(arg, numpy.ndarray):  # arg is an ndarray
-            self.__numpy_array = numpy.array(arg, copy=copy).astype(data_type, copy=False)
+            self.__numpy_array = numpy.array(arg, dtype=data_type, copy=copy)
             self.__matrix_order = arg.shape[0]
 
         self.__eigen_values = None
         self.__eigen_vectors = None
         self.__eigen_vectors_transpose = None
-        self.__norm = None
         self.__determinant = None
         self.__inverse = None
         self.__sqrtm = None
@@ -90,6 +89,14 @@ class CovMat(object):
         return self.__matrix_order
 
     @property
+    def inverse(self):
+        if self.__inverse is not None:
+            return self.__inverse
+
+        self.__inverse = CovMat(inv(self.__numpy_array, False, False), False)
+        return self.__inverse
+
+    @property
     def eigen_values(self):
         if self.__eigen_values is not None:
             return self.__eigen_values
@@ -114,14 +121,6 @@ class CovMat(object):
         return self.__eigen_vectors_transpose
 
     @property
-    def norm(self):
-        if self.__norm is not None:
-            return self.__norm
-
-        self.__norm = numpy.linalg.norm(self.__numpy_array)
-        return self.__norm
-
-    @property
     def determinant(self):
         if self.__determinant is not None:
             return self.__determinant
@@ -132,14 +131,6 @@ class CovMat(object):
     @property
     def transpose(self):
         return self
-
-    @property
-    def inverse(self):
-        if self.__inverse is not None:
-            return self.__inverse
-
-        self.__inverse = CovMat(numpy.linalg.inv(self.__numpy_array), False)
-        return self.__inverse
 
     @property
     def sqrtm(self):
@@ -178,7 +169,7 @@ class CovMat(object):
             return self.__logm
 
         self.__compute_eigen()
-        self.__logm = CovMat(numpy.dot(numpy.dot(self.__eigen_vectors, numpy.diag(numpy.log(self.__eigen_values))),
+        self.__logm = CovMat(numpy.dot(numpy.multiply(self.__eigen_vectors, numpy.log(self.__eigen_values)),
                                        self.__eigen_vectors_transpose), False)
         return self.__logm
 
@@ -200,6 +191,9 @@ class CovMat(object):
         tmp = numpy.random.rand(self.__matrix_order, 2 * self.__matrix_order)
         self.__numpy_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type, copy=False)
         self.__fields_initialization()
+
+    def norm(self, ord=None, axis=None, keepdims=False):
+        return numpy.linalg.norm(self.__numpy_array, ord, axis, keepdims)
 
     def trace(self, offset=0):
         return self.__numpy_array.trace(offset)
@@ -242,7 +236,7 @@ class CovMat(object):
             self.__eigen_values = eigvalsh(self.__numpy_array)
         else:
             self.__eigen_values, self.__eigen_vectors = eigh(self.__numpy_array)
-            self.__eigen_vectors_transpose = numpy.transpose(self.__eigen_vectors)
+            self.__eigen_vectors_transpose = self.__eigen_vectors.T
 
     def powm(self, power):
         if power == 1:
@@ -258,12 +252,8 @@ class CovMat(object):
         return self.__powm
 
     @staticmethod
-    def elements_wise_product(covmat1, covmat2):
+    def multiply(covmat1, covmat2):
         return CovMat(covmat1.numpy_array * covmat2.numpy_array, False)
-
-    @staticmethod
-    def solve_problem(covmat1, covmat2):
-        return eigvalsh(covmat1.numpy_array, covmat2.numpy_array)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #

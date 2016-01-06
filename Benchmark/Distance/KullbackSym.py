@@ -16,12 +16,10 @@ for i in range(0, 10):
     warm_up_covmat.expm
 
 for i in range(0, len(size)):
-    A = numpy.random.rand(size[i], 2 * size[i])
-    B = numpy.random.rand(size[i], 2 * size[i])
-    covmat1 = numpy.dot(A, A.T) / 1000
-    covmat2 = numpy.dot(B, B.T) / 1000
+    covmat1 = CovMat.random(size[i])
+    covmat2 = CovMat.random(size[i])
 
-    t = timeit.Timer("distance_kullback_sym(covmat1, covmat2)",
+    t = timeit.Timer("distance_kullback_sym(covmat1.numpy_array, covmat2.numpy_array)",
                      setup="from __main__ import covmat1; from __main__ import covmat2; from oldPyRiemann.distance import distance_kullback_sym; import Utils.OpenBLAS")
     old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 

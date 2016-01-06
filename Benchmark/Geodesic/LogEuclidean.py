@@ -16,18 +16,14 @@ for i in range(0, 10):
     warm_up_covmat.expm
 
 for i in range(0, len(size)):
-    A = numpy.random.rand(size[i], 2 * size[i])
-    B = numpy.random.rand(size[i], 2 * size[i])
-    covmat1 = numpy.dot(A, A.T) / 1000
-    covmat2 = numpy.dot(B, B.T) / 1000
+    covmat1 = CovMat.random(size[i])
+    covmat2 = CovMat.random(size[i])
 
-    t = timeit.Timer("geodesic_logeuclid(covmat1, covmat2, 0.5)",
+    t = timeit.Timer("geodesic_logeuclid(covmat1.numpy_array, covmat2.numpy_array)",
                      setup="from __main__ import covmat1; from __main__ import covmat2; from oldPyRiemann.geodesic import geodesic_logeuclid; import Utils.OpenBLAS")
     old_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
-    covmat1 = CovMat.random(size[i])
-    covmat2 = CovMat.random(size[i])
-    t = timeit.Timer("covmat1.reset_fields(); covmat2.reset_fields(); Geodesic.log_euclidean(covmat1, covmat2, 0.5)",
+    t = timeit.Timer("covmat1.reset_fields(); covmat2.reset_fields(); Geodesic.log_euclidean(covmat1, covmat2)",
                      setup="from Utils.Geodesic import Geodesic; from __main__ import covmat1; from __main__ import covmat2")
     new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 

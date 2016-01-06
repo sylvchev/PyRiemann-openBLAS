@@ -2,6 +2,7 @@ import os
 import sys
 
 import numpy
+from scipy.linalg import eigvalsh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -11,11 +12,11 @@ from Utils.CovMat import CovMat
 class Distance(object):
     @staticmethod
     def euclidean(covmat1, covmat2):
-        return (covmat1 - covmat2).norm
+        return (covmat1 - covmat2).norm(ord='fro')
 
     @staticmethod
     def log_euclidean(covmat1, covmat2):
-        return (covmat1.logm - covmat2.logm).norm
+        return (covmat1.logm - covmat2.logm).norm(ord='fro')
 
     @staticmethod
     def log_determinant(covmat1, covmat2):
@@ -25,7 +26,7 @@ class Distance(object):
 
     @staticmethod
     def riemannian(covmat1, covmat2):
-        return numpy.sqrt((numpy.log(CovMat.solve_problem(covmat1, covmat2)) ** 2).sum())
+        return numpy.sqrt((numpy.log(eigvalsh(covmat1.numpy_array, covmat2.numpy_array, check_finite=False)) ** 2).sum())
 
     @staticmethod
     def kullback(covmat1, covmat2):
