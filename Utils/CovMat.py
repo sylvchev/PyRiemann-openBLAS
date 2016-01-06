@@ -192,8 +192,8 @@ class CovMat(object):
         self.__numpy_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type, copy=False)
         self.__fields_initialization()
 
-    def norm(self, ord=None, axis=None, keepdims=False):
-        return numpy.linalg.norm(self.__numpy_array, ord, axis, keepdims)
+    def norm(self, ord=None, axis=None):
+        return numpy.linalg.norm(self.__numpy_array, ord, axis)
 
     def trace(self, offset=0):
         return self.__numpy_array.trace(offset)
