@@ -1,5 +1,6 @@
 import numpy
 import scipy
+import scipy.linalg as linalg
 
 ###############################################################
 # Basic Functions
@@ -19,7 +20,7 @@ def sqrtm(Ci):
     :returns: the matrix square root
 
     """
-    D, V = scipy.linalg.eigh(Ci)
+    D, V = linalg.eigh(Ci)
     D = numpy.matrix(numpy.diag(numpy.sqrt(D)))
     V = numpy.matrix(V)
     Out = numpy.matrix(V * D * V.T)
@@ -39,7 +40,7 @@ def logm(Ci):
     :returns: the matrix logarithm
 
     """
-    D, V = scipy.linalg.eigh(Ci)
+    D, V = linalg.eigh(Ci)
     Out = numpy.dot(numpy.multiply(V, numpy.log(D)), V.T)
     return Out
 
@@ -57,7 +58,7 @@ def expm(Ci):
     :returns: the matrix exponential
 
     """
-    D, V = scipy.linalg.eigh(Ci)
+    D, V = linalg.eigh(Ci)
     D = numpy.matrix(numpy.diag(numpy.exp(D)))
     V = numpy.matrix(V)
     Out = numpy.matrix(V * D * V.T)
@@ -77,7 +78,7 @@ def invsqrtm(Ci):
     :returns: the inverse matrix square root
 
     """
-    D, V = scipy.linalg.eigh(Ci)
+    D, V = linalg.eigh(Ci)
     D = numpy.matrix(numpy.diag(1.0 / numpy.sqrt(D)))
     V = numpy.matrix(V)
     Out = numpy.matrix(V * D * V.T)
@@ -98,7 +99,7 @@ def powm(Ci, alpha):
     :returns: the matrix power
 
     """
-    D, V = scipy.linalg.eigh(Ci)
+    D, V = linalg.eigh(Ci)
     D = numpy.matrix(numpy.diag(D ** alpha))
     V = numpy.matrix(V)
     Out = numpy.matrix(V * D * V.T)

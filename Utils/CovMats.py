@@ -12,9 +12,12 @@ class CovMats(object):
     # ------------------------------- COVMATS CONSTRUCTORS ------------------------------ #
     # ----------------------------------------------------------------------------------- #
 
-    def __init__(self, arg):
-        self.__covmats = arg
-        self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
+    def __init__(self, arg=None):
+        if arg is None:
+            self.__covmats = []
+        else:
+            self.__covmats = arg
+            self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
 
     @staticmethod
     def random(matrices_order, size, data_type=CovMat.DataType.double):
@@ -28,12 +31,23 @@ class CovMats(object):
     # ----------------------------------------------------------------------- #
 
     @property
+    def length(self):
+        return len(self.__covmats)
+
+    @property
+    def matrices_order(self):
+        return self.__covmats[0].matrice_order
+
+    @property
     def shape(self):
         return self.__numpy_array.shape
 
     @property
     def numpy_array(self):
-        return self.__numpy_array
+        if len(self.__covmats) > 0:
+            return self.__numpy_array
+        else:
+            raise ValueError("There is currently no covmat in the list")
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
@@ -53,7 +67,7 @@ class CovMats(object):
 
     def append(self, arg):
         if isinstance(arg, list):
-            self.__covmats += list
+            self.__covmats += arg
         else:
             self.__covmats.append(arg)
         self.__numpy_array = numpy.array([covmat.numpy_array for covmat in self.__covmats], copy=False)
