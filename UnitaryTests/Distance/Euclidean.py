@@ -1,13 +1,11 @@
 import os
 import sys
-import numpy
-
-from Utils.CovMat import CovMat
-
-from Utils.Distance import Distance
-from oldPyRiemann.distance import distance_euclid
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
+from Utils.CovMat import CovMat
+from Utils.Distance import Distance
+from oldPyRiemann.distance import distance_euclid
 
 def test_euclidean():
     m1 = CovMat.random(10)
