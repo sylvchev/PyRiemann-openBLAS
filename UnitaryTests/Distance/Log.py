@@ -12,7 +12,6 @@ B = numpy.random.rand(100)
 m1 = CovMat.random(10)
 m2 = CovMat.random(10)
 
-
 def test_distance_logdet():
     old_dist = distance_logdet(m1.numpy_array, m2.numpy_array)
     m1.reset_fields()
