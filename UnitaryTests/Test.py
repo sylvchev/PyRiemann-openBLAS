@@ -15,9 +15,15 @@ from UnitaryTests.Base.Invsqrtm import test_invsqrtm
 
 # Distance test cases
 
-
+from UnitaryTests.Distance.Kullback import test_distance_kullback, test_distance_kullback_right, test_distance_kullback_sym
+from UnitaryTests.Distance.Euclidean import test_euclidean
+from UnitaryTests.Distance.Log import test_distance_logdet, test_log_euclidean
 
 # Geodesic test cases
+
+
+
+# Mean
 
 
 
