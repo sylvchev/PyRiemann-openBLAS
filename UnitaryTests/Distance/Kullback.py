@@ -1,16 +1,13 @@
 import os
 import sys
-import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
+import numpy
 from Utils.Distance import Distance
 from Utils.CovMat import CovMat
 from oldPyRiemann.distance import distance_kullback, distance_kullback_right, distance_kullback_sym
 
-
-A = numpy.random.rand(100)
-B = numpy.random.rand(100)
 m1 = CovMat.random(10)
 m2 = CovMat.random(10)
 
@@ -43,8 +40,8 @@ def test_distance_kullback_sym():
 
 def _get_state(old, new, func_name):
     if abs( old - new ) < 1e-10:
-        print("%s : PASS")
+        print("%s : PASS" % func_name)
         return True
     else:
-        print("%s : FAIL")
+        print("%s : FAIL" % func_name)
         return False
