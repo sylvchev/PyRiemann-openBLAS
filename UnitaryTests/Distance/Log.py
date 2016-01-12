@@ -1,11 +1,12 @@
 import os
 import sys
 import numpy
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from Utils.Distance import Distance
 from Utils.CovMat import CovMat
 from oldPyRiemann.distance import distance_logdet, distance_logeuclid
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 A = numpy.random.rand(100)
 B = numpy.random.rand(100)
