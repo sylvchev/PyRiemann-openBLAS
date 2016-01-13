@@ -1,7 +1,8 @@
 import os
 import sys
 import numpy
-from scipy.linalg import inv, eigvalsh, eigh
+from scipy.linalg import eigvalsh, eigh
+from numpy.linalg import inv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -49,6 +50,10 @@ class CovMat(object):
         return CovMat(numpy.zeros((matrix_order, matrix_order)), False, data_type)
 
     @staticmethod
+    def eye(matrix_order, diagonal_id=0, data_type=DataType.double):
+        return CovMat(numpy.eye(matrix_order, k=diagonal_id), False, data_type)
+
+    @staticmethod
     def identity(matrix_order, data_type=DataType.double):
         return CovMat(numpy.eye(matrix_order), False, data_type)
 
@@ -93,7 +98,7 @@ class CovMat(object):
         if self.__inverse is not None:
             return self.__inverse
 
-        self.__inverse = CovMat(inv(self.__numpy_array, False, False), False)
+        self.__inverse = CovMat(inv(self.__numpy_array), False)
         return self.__inverse
 
     @property
