@@ -24,7 +24,11 @@ class Mean(object):
 
     @staticmethod
     def euclidean(covmats, sample_weight=None):
-        return CovMat(numpy.average(covmats.numpy_array, axis=0, weights=sample_weight))
+        sample_weight = Mean.get_sample_weight(sample_weight, covmats)
+        mean = numpy.zeros((covmats.matrices_order, covmats.matrices_order))
+        for i in range(covmats.length):
+            mean += sample_weight[i] * covmats[i].numpy_array
+        return CovMat(mean)
 
     @staticmethod
     def log_euclidean(covmats, sample_weight=None):

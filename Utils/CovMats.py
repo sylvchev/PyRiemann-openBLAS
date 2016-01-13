@@ -91,8 +91,8 @@ class CovMats(object):
     def mean(self, axis=None):
         if axis is None:
             mean = 0
-            for numpy_array in [covmat.numpy_array for covmat in self.__covmats]:
-                mean += numpy.mean(numpy_array)
+            for covmat in self.__covmats:
+                mean += covmat.mean()
             return mean / self.length
         elif axis == 0:
             mean = numpy.zeros((self.matrices_order, self.matrices_order))
