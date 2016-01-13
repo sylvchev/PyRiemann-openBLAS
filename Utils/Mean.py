@@ -12,15 +12,15 @@ class Mean(object):
     @staticmethod
     def get_sample_weight(sample_weight, covmats):
         if sample_weight is None:
-            sample_weight = numpy.ones(covmats.shape[0])
-        elif covmats.shape[0] != len(sample_weight):
+            sample_weight = numpy.ones(covmats.length)
+        elif covmats.length != len(sample_weight):
             raise ValueError("len of sample_weight must be equal to len of data.")
 
         return sample_weight / numpy.sum(sample_weight)
 
     @staticmethod
     def identity(covmats):
-        return CovMat.identity(covmats.shape[1])
+        return CovMat.identity(covmats.matrices_order)
 
     @staticmethod
     def euclidean(covmats, sample_weight=None):
@@ -30,9 +30,9 @@ class Mean(object):
     def log_euclidean(covmats, sample_weight=None):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
-        output = CovMat.zero(covmats.shape[1])
+        output = CovMat.zero(covmats.matrices_order)
 
-        for i in range(covmats.shape[0]):
+        for i in range(covmats.length):
             output += sample_weight[i] * covmats[i].logm
 
         return output.expm
@@ -48,13 +48,13 @@ class Mean(object):
 
         k = 0
         crit = numpy.finfo(numpy.double).max
-        tmp = CovMat(covmats.shape[1])
+        tmp = CovMat(covmats.matrices_order)
 
         while crit > tol and k < max_iter:
             k += 1
             tmp.fill(0)
 
-            for i in range(covmats.shape[0]):
+            for i in range(covmats.length):
                 tmp += sample_weight[i] * (0.5 * (covmats[i] + output)).inverse
 
             new_output = tmp.inverse
@@ -79,13 +79,13 @@ class Mean(object):
         nu = 1.0
         tau = numpy.finfo(numpy.double).max
         crit = numpy.finfo(numpy.double).max
-        tmp = CovMat(covmats.shape[1])
+        tmp = CovMat(covmats.matrices_order)
 
         while crit > tol and k < max_iter and nu > tol:
             k += 1
             tmp.fill(0)
 
-            for i in range(covmats.shape[0]):
+            for i in range(covmats.length):
                 tmp += sample_weight[i] * (output.invsqrtm * covmats[i] * output.invsqrtm).logm
 
             crit = tmp.norm(ord='fro')
@@ -115,13 +115,13 @@ class Mean(object):
 
         k = 0
         crit = numpy.finfo(numpy.double).max
-        tmp = CovMat(covmats.shape[1])
+        tmp = CovMat(covmats.matrices_order)
 
         while (crit > tol) and (k < max_iter):
             k += 1
             tmp.fill(0)
 
-            for i in range(covmats.shape[0]):
+            for i in range(covmats.length):
                 tmp += sample_weight[i] * (output.sqrtm * covmats[i] * output.sqrtm).sqrtm
 
             new_output = tmp.sqrtm

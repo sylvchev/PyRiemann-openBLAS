@@ -17,7 +17,7 @@ for i in range(0, 10):
     warm_up_covmat.expm
 
 for i in range(0, len(size)):
-    covmats = CovMats.random(size[i], 10)
+    covmats = CovMats.random(10, size[i])
 
     t = timeit.Timer("mean_euclid(covmats.numpy_array)",
                      setup="from __main__ import covmats; from oldPyRiemann.mean import mean_euclid; import Utils.OpenBLAS")

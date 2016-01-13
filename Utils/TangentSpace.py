@@ -12,15 +12,15 @@ from Utils.CovMats import CovMats
 class TangentSpace(object):
     @staticmethod
     def tangent(covmats, covmat):
-        idx = numpy.triu_indices_from(covmat.matrix)
-        output = numpy.empty((covmats.size, covmats.matrices_order * (covmats.matrices_order + 1) / 2))
+        idx = numpy.triu_indices_from(covmat.numpy_array)
+        output = numpy.empty((covmats.length, covmats.matrices_order * (covmats.matrices_order + 1) / 2))
         coeffs = (
             numpy.sqrt(2) * numpy.triu(numpy.ones((covmats.matrices_order, covmats.matrices_order)), 1) + numpy.eye(
                 covmats.matrices_order))[idx]
 
-        for i in range(covmats.size):
+        for i in range(covmats.length):
             tmp = (covmat.invsqrtm * covmats[i] * covmat.invsqrtm).logm
-            output[i, :] = numpy.multiply(coeffs, tmp.matrix[idx])
+            output[i, :] = numpy.multiply(coeffs, tmp[idx])
 
         return output
 
