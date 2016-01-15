@@ -77,6 +77,10 @@ class CovMat(object):
         self.__powm = None
         self.__power = 1
 
+    def set_numpy_array_for_covmats(self, numpy_array, check_equality=False):
+        if check_equality:
+            self.__numpy_array = numpy_array
+
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
     # ----------------------------------------------------------------------- #
@@ -220,6 +224,9 @@ class CovMat(object):
 
     def mean(self, axis=None):
         return self.__numpy_array.mean(axis)
+
+    def average(self, axis=None, weights=None):
+        return numpy.average(self.__numpy_array, axis, weights)
 
     def variance(self, axis=None):
         return self.__numpy_array.var(axis)

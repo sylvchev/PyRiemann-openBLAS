@@ -46,7 +46,7 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = covmats.mean(0)
+            output = CovMat(covmats.mean(0), False)
         else:
             output = init
 
@@ -75,7 +75,7 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = covmats.mean(0)
+            output = CovMat(covmats.mean(0), False)
         else:
             output = init
 
@@ -113,26 +113,27 @@ class Mean(object):
         sample_weight = Mean.get_sample_weight(sample_weight, covmats)
 
         if init is None:
-            output = covmats.mean(0)
+            output = CovMat(covmats.mean(0))
         else:
             output = init
 
         k = 0
         crit = numpy.finfo(numpy.double).max
         tmp = CovMat(covmats.matrices_order)
+        sqrtm = output.sqrtm
 
         while (crit > tol) and (k < max_iter):
             k += 1
             tmp.fill(0)
 
             for i in range(covmats.length):
-                tmp += sample_weight[i] * (output.sqrtm * covmats[i] * output.sqrtm).sqrtm
+                tmp += sample_weight[i] * (sqrtm * covmats[i] * sqrtm).sqrtm
 
-            new_output = tmp.sqrtm
-            crit = (new_output - output).norm(ord='fro')
-            output = new_output
+            new_sqrtm = tmp.sqrtm
+            crit = (new_sqrtm - sqrtm).norm(ord='fro')
+            sqrtm = new_sqrtm
 
         if k == max_iter:
             print("Max iter reach")
 
-        return output * output
+        return sqrtm * sqrtm
