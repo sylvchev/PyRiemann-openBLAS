@@ -20,8 +20,5 @@ def compute(matrice_order, loop_number):
 
     for i in range(0, loop_number):
         mean = mean_riemann(covmats)
-
-        for j in range(0, covmats.shape[0]):
-            l.append(geodesic_riemann(covmats[j, :, :], mean))
-
+        l += [geodesic_riemann(covmats[j, :, :], mean) for j in range(covmats.shape[0])]
         covmats = numpy.array(l)

@@ -16,9 +16,4 @@ def compute(matrice_order, loop_number):
 
     for i in range(0, loop_number):
         mean = Mean.riemannian(covmats)
-
-        l = []
-        for j in range(0, covmats.length):
-            l.append(Geodesic.riemannian(covmats[j], mean))
-
-        covmats.add_all(l)
+        covmats.add_all([Geodesic.riemannian(covmat, mean) for covmat in covmats])
