@@ -77,9 +77,8 @@ class CovMat(object):
         self.__powm = None
         self.__power = 1
 
-    def set_numpy_array_for_covmats(self, numpy_array, check_equality=False):
-        if check_equality:
-            self.__numpy_array = numpy_array
+    def set_numpy_array_for_covmats(self, numpy_array):
+        self.__numpy_array = numpy_array
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #

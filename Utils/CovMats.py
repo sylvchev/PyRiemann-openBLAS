@@ -47,21 +47,24 @@ class CovMats(object):
     def numpy_array(self):
         return self.__numpy_array
 
+    def get_covmat(self, index):
+        return self.__covmats[index]
+
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
 
     def __covmats_from_list(self, arg, data_type=CovMat.DataType.double):
         if len(arg) == 0:
-            raise ValueError("There is currently no covmat in the list")
+            raise ValueError("The list is empty.")
         self.__numpy_array = numpy.array([covmat.numpy_array for covmat in arg], dtype=data_type)
         self.__covmats = arg
-        for i in range(self.__numpy_array.shape[0]):
-            self.__covmats[i].set_numpy_array_for_covmats(self.__numpy_array[i, :, :])
+        for i, covmat in enumerate(self.__covmats):
+            covmat.set_numpy_array_for_covmats(self.__numpy_array[i, :, :])
 
     def __covmats_from_numpy_array(self, arg, copy, data_type=CovMat.DataType.double):
         self.__numpy_array = numpy.array(arg, dtype=data_type, copy=copy)
-        for i in range(self.__numpy_array.shape[0]):
+        for i in range(self.length):
             self.__covmats.append(CovMat(self.__numpy_array[i, :, :], False))
 
     def to_list(self):
@@ -99,15 +102,15 @@ class CovMats(object):
     def mean(self, axis=None):
         return numpy.mean(self.numpy_array, axis)
 
+    def average(self, axis=None, weigths=None):
+        return numpy.average(self.__numpy_array, axis, weigths)
+
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #
     # ------------------------------------------------------------------------- #
 
     def __getitem__(self, slice):
-        if isinstance(slice, int):
-            return self.__covmats[slice]
-        else:
-            return self.__numpy_array[slice]
+        return self.__numpy_array[slice]
 
     def __str__(self):
         return str(self.__numpy_array)

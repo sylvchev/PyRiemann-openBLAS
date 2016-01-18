@@ -129,12 +129,12 @@ def mean_logdet(covmats, tol=10e-5, maxiter=50, init=None, sample_weight=None):
         crit = numpy.linalg.norm(Cnew - C, ord='fro')
 
         C = Cnew
-    if k == maxiter:
-        print('Max iter reach')
+    # if k == maxiter:
+    #    print('Max iter reach')
     return C
 
 
-def mean_wasserstein(covmats, tol=10e-4, maxiter=50, init=None,
+def mean_wasserstein(covmats, tol=10e-4, maxiter=1, init=None,
                      sample_weight=None):
     """Return the mean covariance matrix according to the wasserstein metric.
 
@@ -181,8 +181,8 @@ def mean_wasserstein(covmats, tol=10e-4, maxiter=50, init=None,
         Knew = sqrtm(J)
         crit = numpy.linalg.norm(Knew - K, ord='fro')
         K = Knew
-    if k == maxiter:
-        print('Max iter reach')
+    # if k == maxiter:
+    #    print('Max iter reach')
     C = numpy.dot(K, K)
     return C
 
