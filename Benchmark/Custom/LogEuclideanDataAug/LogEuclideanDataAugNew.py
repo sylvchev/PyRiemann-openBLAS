@@ -12,5 +12,5 @@ def compute(matrice_order, loop_number):
     covmats = CovMats.random(2, matrice_order)
 
     for i in range(0, loop_number):
-        mean = Mean.riemannian(covmats)
-        covmats.add_all([Geodesic.riemannian(covmat, mean) for covmat in covmats])
+        mean = Mean.log_euclidean(covmats)
+        covmats.add_all([Geodesic.log_euclidean(covmat, mean) for covmat in covmats])
