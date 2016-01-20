@@ -12,7 +12,7 @@ from oldPyRiemann.mean import mean_euclid
 def test_mean_euclidean():
     covmats = CovMats.random(10, 10)
     old_dist = mean_euclid(covmats.numpy_array)
-    covmats.reset_fields()
+    covmats.reset_covmats_fields()
     new_dist = Mean.euclidean(covmats)
 
     return _get_state(old_dist, new_dist, "mean euclidian")

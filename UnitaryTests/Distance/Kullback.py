@@ -11,6 +11,7 @@ from oldPyRiemann.distance import distance_kullback, distance_kullback_right, di
 m1 = CovMat.random(10)
 m2 = CovMat.random(10)
 
+
 def test_distance_kullback():
     old_dist = distance_kullback(m1.numpy_array, m2.numpy_array)
     m1.reset_fields()

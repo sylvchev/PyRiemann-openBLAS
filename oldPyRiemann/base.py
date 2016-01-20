@@ -41,7 +41,9 @@ def logm(Ci):
 
     """
     D, V = linalg.eigh(Ci)
-    Out = numpy.dot(numpy.multiply(V, numpy.log(D)), V.T)
+    D = numpy.matrix(numpy.diag(numpy.log(D)))
+    V = numpy.matrix(V)
+    Out = numpy.matrix(V * D * V.T)
     return Out
 
 

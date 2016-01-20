@@ -10,6 +10,7 @@ from oldPyRiemann.distance import distance_logdet, distance_logeuclid
 m1 = CovMat.random(10)
 m2 = CovMat.random(10)
 
+
 def test_distance_logdet():
     new_dist = Distance.log_determinant(m1, m2)
     m1.reset_fields()

@@ -7,6 +7,7 @@ from Utils.CovMat import CovMat
 from Utils.Distance import Distance
 from oldPyRiemann.distance import distance_euclid
 
+
 def test_euclidean():
     m1 = CovMat.random(10)
     m2 = CovMat.random(10)

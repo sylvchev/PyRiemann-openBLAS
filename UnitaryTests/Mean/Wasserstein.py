@@ -12,7 +12,7 @@ from oldPyRiemann.mean import mean_wasserstein
 def test_mean_wasserstein():
     covmats = CovMats.random(10, 10)
     old_dist = mean_wasserstein(covmats.numpy_array)
-    covmats.reset_fields()
+    covmats.reset_covmats_fields()
     new_dist = Mean.wasserstein(covmats)
 
     return _get_state(old_dist, new_dist, "mean wasserstein")

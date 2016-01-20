@@ -16,6 +16,7 @@ class Distance(object):
 
     @staticmethod
     def log_euclidean(covmat1, covmat2):
+        print(covmat1.logm - covmat2.logm)
         return (covmat1.logm - covmat2.logm).norm(ord='fro')
 
     @staticmethod
