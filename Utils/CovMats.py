@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy
+from numpy.linalg import inv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -60,6 +61,68 @@ class CovMats(AbsCovMat):
 
     def get_covmat(self, index):
         return self.__covmats[index]
+
+    @property
+    def inverse(self):
+        if self._inverse is not None:
+            return self._inverse
+
+        self._inverse = CovMats(inv(self._numpy_array), False)
+        return self._inverse
+
+    @property
+    def sqrtm(self):
+        if self._sqrtm is not None:
+            return self._sqrtm
+
+        self._compute_eigen()
+        self._sqrtm = CovMats(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.sqrt(self._eigen_values))),
+                                        self._eigen_vectors_transpose), False)
+        return self._sqrtm
+
+    @property
+    def invsqrtm(self):
+        if self._invsqrtm is not None:
+            return self._invsqrtm
+
+        self._compute_eigen()
+        self._invsqrtm = CovMats(
+            numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(1.0 / numpy.sqrt(self._eigen_values))),
+                      self._eigen_vectors_transpose), False)
+        return self._invsqrtm
+
+    @property
+    def expm(self):
+        if self._expm is not None:
+            return self._expm
+
+        self._compute_eigen()
+        self._expm = CovMats(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.exp(self._eigen_values))),
+                                       self._eigen_vectors_transpose), False)
+        return self._expm
+
+    @property
+    def logm(self):
+        if self._logm is not None:
+            return self._logm
+
+        self._compute_eigen()
+        self._logm = CovMats(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.log(self._eigen_values))),
+                                       self._eigen_vectors_transpose), False)
+        return self._logm
+
+    def powm(self, power):
+        if power == 1:
+            return self
+
+        if self._power == power:
+            return self._powm
+
+        self._compute_eigen()
+        self._powm = CovMats(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(self._eigen_values ** power)),
+                                       self._eigen_vectors_transpose), False)
+        self._power = power
+        return self._powm
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #

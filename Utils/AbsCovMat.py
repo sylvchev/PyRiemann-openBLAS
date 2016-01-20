@@ -82,7 +82,7 @@ class AbsCovMat(object):
     def transpose(self):
         return self
 
-    @property
+    @abstractproperty
     def inverse(self):
         raise NotImplementedError
 
