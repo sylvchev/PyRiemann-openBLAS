@@ -26,6 +26,6 @@ for i in range(0, len(size)):
                      setup="from Utils.Mean import Mean; from __main__ import covmats")
     new_time = t.timeit(number=size[len(size) - i - 1]) / size[len(size) - i - 1]
 
-    print("matrix size : " + str(size[i]) + "x" + str(size[i]) + "\t\told time : " + str(
+    print("matrix size : " + "10x" + str(size[i]) + "x" + str(size[i]) + "\t\told time : " + str(
         old_time) + " sec\t\t" + "new time : " + str(new_time) + " sec\t\t" + "speed up : " + str(
         old_time / new_time))
