@@ -3,9 +3,6 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-import numpy
-from scipy.stats._discrete_distns import geom_gen
-
 from Utils.Geodesic import Geodesic
 from Utils.CovMat import CovMat
 

@@ -9,7 +9,7 @@ from Utils.Geodesic import Geodesic
 
 
 def compute(matrice_order, loop_number):
-    covmats = CovMats.random(2, matrice_order)
+    covmats = CovMats.random(1, matrice_order)
 
     for i in range(0, loop_number):
         mean = Mean.riemannian(covmats)

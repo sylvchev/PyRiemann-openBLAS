@@ -17,4 +17,3 @@ def test_powm():
     else:
         print("powm: FAIL")
         return False
-

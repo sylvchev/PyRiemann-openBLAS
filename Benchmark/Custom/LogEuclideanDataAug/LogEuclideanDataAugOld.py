@@ -12,10 +12,8 @@ from oldPyRiemann.geodesic import geodesic_logeuclid
 def compute(matrice_order, loop_number):
     tmp = numpy.random.rand(matrice_order, 2 * matrice_order)
     a = numpy.dot(tmp, tmp.T) / 1000
-    tmp = numpy.random.rand(matrice_order, 2 * matrice_order)
-    b = numpy.dot(tmp, tmp.T) / 1000
 
-    l = [a, b]
+    l = [a]
     covmats = numpy.array(l)
 
     for i in range(0, loop_number):

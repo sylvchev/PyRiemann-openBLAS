@@ -1,13 +1,12 @@
 import os
 import sys
-import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from Utils.CovMats import CovMats
-
 from Utils.Mean import Mean
 from oldPyRiemann.mean import mean_riemann
+
 
 def test_mean_riemann():
     covmats = CovMats.random(10, 10)

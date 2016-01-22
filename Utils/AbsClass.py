@@ -1,15 +1,15 @@
-from abc import ABCMeta, abstractproperty, abstractmethod
+from abc import ABCMeta, abstractproperty
 import os
 import sys
 import numpy
-from numpy.linalg import eigvalsh, eigh
+from scipy.linalg import eigvalsh, eigh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import Utils.OpenBLAS
 
 
-class AbsCovMat(object):
+class AbsClass(object):
     __metaclass__ = ABCMeta
 
     # ---------------------------------------------------------------------- #
@@ -78,32 +78,12 @@ class AbsCovMat(object):
         self.__determinant = numpy.linalg.det(self._numpy_array)
         return self.__determinant
 
-    @property
+    @abstractproperty
     def transpose(self):
-        return self
+        raise NotImplementedError
 
     @abstractproperty
     def inverse(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def sqrtm(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def invsqrtm(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def expm(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def logm(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def powm(self, power):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------- #
@@ -124,6 +104,7 @@ class AbsCovMat(object):
         self._power = 1
 
     def as_type(self, data_type):
+        self._data_type = data_type
         self._numpy_array.astype(data_type, copy=False)
 
     def _compute_eigen(self, eigen_values_only=False):

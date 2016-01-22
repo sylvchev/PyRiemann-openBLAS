@@ -5,11 +5,11 @@ from numpy.linalg import inv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from Utils.AbsCovMat import AbsCovMat
+from Utils.AbsClass import AbsClass
 from Utils.DataType import DataType
 
 
-class CovMat(AbsCovMat):
+class CovMat(AbsClass):
     # ----------------------------------------------------------------------------------- #
     # ------------------------------- COVMAT CONSTRUCTORS ------------------------------- #
     # ----------------------------------------------------------------------------------- #
@@ -56,6 +56,10 @@ class CovMat(AbsCovMat):
         return self._numpy_array.shape[0]
 
     @property
+    def transpose(self):
+        return self
+
+    @property
     def inverse(self):
         if self._inverse is not None:
             return self._inverse
@@ -69,7 +73,7 @@ class CovMat(AbsCovMat):
             return self._sqrtm
 
         self._compute_eigen()
-        self._sqrtm = CovMat(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.sqrt(self._eigen_values))),
+        self._sqrtm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.sqrt(self._eigen_values)),
                                        self._eigen_vectors_transpose), False)
         return self._sqrtm
 
@@ -80,7 +84,7 @@ class CovMat(AbsCovMat):
 
         self._compute_eigen()
         self._invsqrtm = CovMat(
-            numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(1.0 / numpy.sqrt(self._eigen_values))),
+            numpy.dot(numpy.multiply(self._eigen_vectors, 1.0 / numpy.sqrt(self._eigen_values)),
                       self._eigen_vectors_transpose), False)
         return self._invsqrtm
 
@@ -90,7 +94,7 @@ class CovMat(AbsCovMat):
             return self._expm
 
         self._compute_eigen()
-        self._expm = CovMat(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.exp(self._eigen_values))),
+        self._expm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.exp(self._eigen_values)),
                                       self._eigen_vectors_transpose), False)
         return self._expm
 
@@ -100,7 +104,7 @@ class CovMat(AbsCovMat):
             return self._logm
 
         self._compute_eigen()
-        self._logm = CovMat(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(numpy.log(self._eigen_values))),
+        self._logm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.log(self._eigen_values)),
                                       self._eigen_vectors_transpose), False)
         return self._logm
 
@@ -112,7 +116,7 @@ class CovMat(AbsCovMat):
             return self._powm
 
         self._compute_eigen()
-        self._powm = CovMat(numpy.dot(numpy.dot(self._eigen_vectors, numpy.diag(self._eigen_values ** power)),
+        self._powm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, self._eigen_values ** power),
                                       self._eigen_vectors_transpose), False)
         self._power = power
         return self._powm

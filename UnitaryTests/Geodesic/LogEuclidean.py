@@ -1,10 +1,7 @@
 import os
 import sys
-import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-
-from scipy.stats._discrete_distns import geom_gen
 
 from Utils.Geodesic import Geodesic
 from Utils.CovMat import CovMat

@@ -6,8 +6,6 @@ from scipy.linalg import eigvalsh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from Utils.CovMat import CovMat
-
 
 class Distance(object):
     @staticmethod

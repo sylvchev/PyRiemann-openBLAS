@@ -1,6 +1,5 @@
 import os
 import sys
-import numpy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
