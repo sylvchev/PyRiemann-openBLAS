@@ -1,8 +1,7 @@
-from abc import ABCMeta, abstractproperty
+from abc import ABCMeta, abstractproperty, abstractmethod
 import os
 import sys
 import numpy
-from scipy.linalg import eigvalsh, eigh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -18,17 +17,8 @@ class AbsClass(object):
 
     _numpy_array = None
     _data_type = None
-    _eigen_values = None
-    _eigen_vectors = None
-    _eigen_vectors_transpose = None
-    __determinant = None
+    _determinant = None
     _inverse = None
-    _sqrtm = None
-    _invsqrtm = None
-    _expm = None
-    _logm = None
-    _powm = None
-    _power = None
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -47,36 +37,12 @@ class AbsClass(object):
         return self._numpy_array.shape
 
     @property
-    def eigen_values(self):
-        if self._eigen_values is not None:
-            return self._eigen_values
-
-        self._compute_eigen(True)
-        return self._eigen_values
-
-    @property
-    def eigen_vectors(self):
-        if self._eigen_vectors is not None:
-            return self._eigen_vectors
-
-        self._compute_eigen()
-        return self._eigen_vectors
-
-    @property
-    def eigen_vectors_transpose(self):
-        if self._eigen_vectors_transpose is not None:
-            return self._eigen_vectors_transpose
-
-        self._compute_eigen()
-        return self._eigen_vectors_transpose
-
-    @property
     def determinant(self):
-        if self.__determinant is not None:
-            return self.__determinant
+        if self._determinant is not None:
+            return self._determinant
 
-        self.__determinant = numpy.linalg.det(self._numpy_array)
-        return self.__determinant
+        self._determinant = numpy.linalg.det(self._numpy_array)
+        return self._determinant
 
     @abstractproperty
     def transpose(self):
@@ -90,35 +56,13 @@ class AbsClass(object):
     # ------------------------------- METHODS ------------------------------- #
     # ----------------------------------------------------------------------- #
 
+    @abstractmethod
     def reset_fields(self):
-        self._eigen_values = None
-        self._eigen_vectors = None
-        self._eigen_vectors_transpose = None
-        self.__determinant = None
-        self._inverse = None
-        self._sqrtm = None
-        self._invsqrtm = None
-        self._expm = None
-        self._logm = None
-        self._powm = None
-        self._power = 1
+        raise NotImplementedError
 
     def as_type(self, data_type):
         self._data_type = data_type
         self._numpy_array.astype(data_type, copy=False)
-
-    def _compute_eigen(self, eigen_values_only=False):
-        if self._eigen_values is not None and self._eigen_vectors is not None:
-            return
-
-        if eigen_values_only:
-            if self._eigen_values is not None:
-                return
-
-            self._eigen_values = eigvalsh(self._numpy_array)
-        else:
-            self._eigen_values, self._eigen_vectors = eigh(self._numpy_array)
-            self._eigen_vectors_transpose = self._eigen_vectors.T
 
     def fill(self, value):
         self._numpy_array.fill(value)

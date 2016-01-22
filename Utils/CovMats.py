@@ -22,6 +22,7 @@ class CovMats(AbsClass):
     # ----------------------------------------------------------------------------------- #
 
     def __init__(self, arg, copy=True, data_type=DataType.double):
+        self._data_type = data_type
         if isinstance(arg, list):
             self.__covmats_from_list(arg, data_type)
         elif isinstance(arg, numpy.ndarray):
@@ -78,16 +79,19 @@ class CovMats(AbsClass):
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
 
+    def reset_fields(self):
+        self._determinant = None
+        self._inverse = None
+
+    def reset_covmats_fields(self):
+        for covmat in self.__covmats:
+            covmat.reset_fields()
+
     def get_list(self):
         return self.__covmats
 
     def randomize(self, data_type=DataType.double):
         self.__covmats_from_list([CovMat.random(self.matrices_order, data_type) for i in range(self.length)])
-
-    def reset_covmats_fields(self):
-        for covmat in self.__covmats:
-            covmat.reset_fields()
-        self.reset_fields()
 
     def add(self, arg):
         self.__covmats.append(arg)

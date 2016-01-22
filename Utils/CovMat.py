@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy
+from scipy.linalg import eigvalsh, eigh
 from numpy.linalg import inv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -10,12 +11,25 @@ from Utils.DataType import DataType
 
 
 class CovMat(AbsClass):
+    # ---------------------------------------------------------------------- #
+    # ------------------------------- FIELDS ------------------------------- #
+    # ---------------------------------------------------------------------- #
+
+    __eigen_values = None
+    __eigen_vectors = None
+    __eigen_vectors_transpose = None
+    __sqrtm = None
+    __invsqrtm = None
+    __expm = None
+    __logm = None
+    __powm = None
+    __power = None
+
     # ----------------------------------------------------------------------------------- #
     # ------------------------------- COVMAT CONSTRUCTORS ------------------------------- #
     # ----------------------------------------------------------------------------------- #
 
     def __init__(self, arg, copy=True, data_type=DataType.double):
-        self.reset_fields()
         self._data_type = data_type
         if isinstance(arg, int):
             self._numpy_array = numpy.empty((arg, arg), dtype=data_type)
@@ -68,62 +82,99 @@ class CovMat(AbsClass):
         return self._inverse
 
     @property
-    def sqrtm(self):
-        if self._sqrtm is not None:
-            return self._sqrtm
+    def eigen_values(self):
+        if self.__eigen_values is not None:
+            return self.__eigen_values
+
+        self._compute_eigen(True)
+        return self.__eigen_values
+
+    @property
+    def eigen_vectors(self):
+        if self.__eigen_vectors is not None:
+            return self.__eigen_vectors
 
         self._compute_eigen()
-        self._sqrtm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.sqrt(self._eigen_values)),
-                                       self._eigen_vectors_transpose), False)
-        return self._sqrtm
+        return self.__eigen_vectors
+
+    @property
+    def eigen_vectors_transpose(self):
+        if self.__eigen_vectors_transpose is not None:
+            return self.__eigen_vectors_transpose
+
+        self._compute_eigen()
+        return self.__eigen_vectors_transpose
+
+    @property
+    def sqrtm(self):
+        if self.__sqrtm is not None:
+            return self.__sqrtm
+
+        self._compute_eigen()
+        self.__sqrtm = CovMat(numpy.dot(numpy.multiply(self.__eigen_vectors, numpy.sqrt(self.__eigen_values)),
+                                        self.__eigen_vectors_transpose), False)
+        return self.__sqrtm
 
     @property
     def invsqrtm(self):
-        if self._invsqrtm is not None:
-            return self._invsqrtm
+        if self.__invsqrtm is not None:
+            return self.__invsqrtm
 
         self._compute_eigen()
-        self._invsqrtm = CovMat(
-            numpy.dot(numpy.multiply(self._eigen_vectors, 1.0 / numpy.sqrt(self._eigen_values)),
-                      self._eigen_vectors_transpose), False)
-        return self._invsqrtm
+        self.__invsqrtm = CovMat(
+            numpy.dot(numpy.multiply(self.__eigen_vectors, 1.0 / numpy.sqrt(self.__eigen_values)),
+                      self.__eigen_vectors_transpose), False)
+        return self.__invsqrtm
 
     @property
     def expm(self):
-        if self._expm is not None:
-            return self._expm
+        if self.__expm is not None:
+            return self.__expm
 
         self._compute_eigen()
-        self._expm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.exp(self._eigen_values)),
-                                      self._eigen_vectors_transpose), False)
-        return self._expm
+        self.__expm = CovMat(numpy.dot(numpy.multiply(self.__eigen_vectors, numpy.exp(self.__eigen_values)),
+                                       self.__eigen_vectors_transpose), False)
+        return self.__expm
 
     @property
     def logm(self):
-        if self._logm is not None:
-            return self._logm
+        if self.__logm is not None:
+            return self.__logm
 
         self._compute_eigen()
-        self._logm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, numpy.log(self._eigen_values)),
-                                      self._eigen_vectors_transpose), False)
-        return self._logm
+        self.__logm = CovMat(numpy.dot(numpy.multiply(self.__eigen_vectors, numpy.log(self.__eigen_values)),
+                                       self.__eigen_vectors_transpose), False)
+        return self.__logm
 
     def powm(self, power):
         if power == 1:
             return self
 
-        if self._power == power:
-            return self._powm
+        if self.__power == power:
+            return self.__powm
 
         self._compute_eigen()
-        self._powm = CovMat(numpy.dot(numpy.multiply(self._eigen_vectors, self._eigen_values ** power),
-                                      self._eigen_vectors_transpose), False)
-        self._power = power
-        return self._powm
+        self.__powm = CovMat(numpy.dot(numpy.multiply(self.__eigen_vectors, self.__eigen_values ** power),
+                                       self.__eigen_vectors_transpose), False)
+        self.__power = power
+        return self.__powm
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
+
+    def reset_fields(self):
+        self.__eigen_values = None
+        self.__eigen_vectors = None
+        self.__eigen_vectors_transpose = None
+        self._determinant = None
+        self._inverse = None
+        self.__sqrtm = None
+        self.__invsqrtm = None
+        self.__expm = None
+        self.__logm = None
+        self.__powm = None
+        self.__power = 1
 
     def randomize(self, data_type=None):
         if data_type is None:
@@ -131,6 +182,19 @@ class CovMat(AbsClass):
         tmp = numpy.random.rand(self.matrix_order, 2 * self.matrix_order)
         self._numpy_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type, copy=False)
         self.reset_fields()
+
+    def _compute_eigen(self, eigen_values_only=False):
+        if self.__eigen_values is not None and self.__eigen_vectors is not None:
+            return
+
+        if eigen_values_only:
+            if self.__eigen_values is not None:
+                return
+
+            self.__eigen_values = eigvalsh(self._numpy_array)
+        else:
+            self.__eigen_values, self.__eigen_vectors = eigh(self._numpy_array)
+            self.__eigen_vectors_transpose = self.__eigen_vectors.T
 
     @staticmethod
     def multiply(covmat1, covmat2):
@@ -165,7 +229,7 @@ class CovMat(AbsClass):
             return CovMat(self._numpy_array - arg, False)
 
     def __rsub__(self, arg):
-        return CovMat(-1 * self._numpy_array + arg, False)
+        return CovMat(arg - self._numpy_array, False)
 
     def __isub__(self, arg):
         if isinstance(arg, CovMat):
