@@ -6,6 +6,8 @@ from scipy.linalg import eigvalsh
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import Utils.OpenBLAS
+
 
 class Distance(object):
     @staticmethod

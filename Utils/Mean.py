@@ -7,18 +7,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from Utils.CovMat import CovMat
 from Utils.CovMats import CovMats
+import Utils.OpenBLAS
 
 
 class Mean(object):
-    @staticmethod
-    def get_sample_weight(sample_weight, covmats):
-        if sample_weight is None:
-            sample_weight = numpy.ones(covmats.length)
-        elif covmats.length != len(sample_weight):
-            raise ValueError("len of sample_weight must be equal to len of data.")
-
-        return sample_weight / numpy.sum(sample_weight)
-
     @staticmethod
     def identity(covmats):
         return CovMat.identity(covmats.matrices_order)

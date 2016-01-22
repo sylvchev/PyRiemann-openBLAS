@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from Utils.AbsClass import AbsClass
 from Utils.DataType import DataType
+import Utils.OpenBLAS
 
 
 class CovMat(AbsClass):

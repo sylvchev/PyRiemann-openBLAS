@@ -3,6 +3,8 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import Utils.OpenBLAS
+
 
 class Geodesic(object):
     @staticmethod
