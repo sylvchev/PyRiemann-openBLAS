@@ -204,75 +204,78 @@ class CovMat(AbsClass):
     # ------------------------------- OPERATORS ------------------------------- #
     # ------------------------------------------------------------------------- #
 
-    def __add__(self, arg):
-        if isinstance(arg, CovMat):
-            return CovMat(self._numpy_array + arg.numpy_array, False)
+    def __add__(self, other):
+        if isinstance(other, CovMat):
+            return CovMat(self._numpy_array + other.numpy_array, False)
         else:
-            return CovMat(self._numpy_array + arg, False)
+            return CovMat(self._numpy_array + other, False)
 
-    def __radd__(self, arg):
-        return self.__add__(arg)
+    def __radd__(self, other):
+        return self.__add__(other)
 
-    def __iadd__(self, arg):
-        if isinstance(arg, CovMat):
-            self._numpy_array += arg.numpy_array
+    def __iadd__(self, other):
+        if isinstance(other, CovMat):
+            self._numpy_array += other.numpy_array
         else:
-            self._numpy_array += arg
+            self._numpy_array += other
 
         self.reset_fields()
         return self
 
-    def __sub__(self, arg):
-        if isinstance(arg, CovMat):
-            return CovMat(self._numpy_array - arg.numpy_array, False)
+    def __sub__(self, other):
+        if isinstance(other, CovMat):
+            return CovMat(self._numpy_array - other.numpy_array, False)
         else:
-            return CovMat(self._numpy_array - arg, False)
+            return CovMat(self._numpy_array - other, False)
 
-    def __rsub__(self, arg):
-        return CovMat(arg - self._numpy_array, False)
+    def __rsub__(self, other):
+        return CovMat(other - self._numpy_array, False)
 
-    def __isub__(self, arg):
-        if isinstance(arg, CovMat):
-            self._numpy_array -= arg.numpy_array
+    def __isub__(self, other):
+        if isinstance(other, CovMat):
+            self._numpy_array -= other.numpy_array
         else:
-            self._numpy_array -= arg
+            self._numpy_array -= other
 
         self.reset_fields()
         return self
 
-    def __mul__(self, arg):
-        if isinstance(arg, CovMat):
-            return CovMat(numpy.dot(self._numpy_array, arg.numpy_array), False)
+    def __mul__(self, other):
+        if isinstance(other, CovMat):
+            return CovMat(numpy.dot(self._numpy_array, other.numpy_array), False)
         else:
-            return CovMat(self._numpy_array * arg, False)
+            return CovMat(self._numpy_array * other, False)
 
-    def __rmul__(self, arg):
-        return self.__mul__(arg)
+    def __rmul__(self, other):
+        return self.__mul__(other)
 
-    def __imul__(self, arg):
-        if isinstance(arg, CovMat):
-            self._numpy_array = numpy.dot(self._numpy_array, arg.numpy_array)
+    def __imul__(self, other):
+        if isinstance(other, CovMat):
+            self._numpy_array = numpy.dot(self._numpy_array, other.numpy_array)
         else:
-            self._numpy_array *= arg
+            self._numpy_array *= other
 
         self.reset_fields()
         return self
 
-    def __truediv__(self, arg):
-        return CovMat(self._numpy_array / arg, False)
+    def __truediv__(self, other):
+        return CovMat(self._numpy_array / other, False)
 
-    def __rtruediv__(self, arg):
-        return CovMat(arg / self._numpy_array, False)
+    def __rtruediv__(self, other):
+        return CovMat(other / self._numpy_array, False)
 
-    def __itruediv__(self, arg):
-        self._numpy_array /= arg
+    def __itruediv__(self, other):
+        self._numpy_array /= other
         self.reset_fields()
         return self
 
-    def __pow__(self, arg):
-        return self.powm(arg)
+    def __pow__(self, other):
+        return self.powm(other)
 
-    def __ipow__(self, arg):
-        self._numpy_array = self.powm(arg).numpy_array
+    def __ipow__(self, other):
+        self._numpy_array = self.powm(other).numpy_array
         self.reset_fields()
         return self
+
+    def __eq__(self, other):
+        return self._numpy_array == other.numpy_array
