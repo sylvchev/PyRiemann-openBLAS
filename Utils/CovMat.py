@@ -270,6 +270,22 @@ class CovMat(AbsClass):
         self.reset_fields()
         return self
 
+    # -------------------------------------------------------
+    # Python 2.7 division
+
+    def __div__(self, other):
+        return CovMat(self._numpy_array / other, False)
+
+    def __rdiv__(self, other):
+        return CovMat(other / self._numpy_array, False)
+
+    def __idiv__(self, other):
+        self._numpy_array /= other
+        self.reset_fields()
+        return self
+
+    # -------------------------------------------------------
+
     def __pow__(self, other):
         return self.powm(other)
 
