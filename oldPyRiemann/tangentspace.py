@@ -26,10 +26,12 @@ def tangent_space(covmats, Cref):
                  Ne)),
             1) +
         numpy.eye(Ne))[idx]
+
     for index in range(Nt):
         tmp = numpy.dot(numpy.dot(Cm12, covmats[index, :, :]), Cm12)
         tmp = logm(tmp)
         T[index, :] = numpy.multiply(coeffs, tmp[idx])
+
     return T
 
 
@@ -48,6 +50,7 @@ def untangent_space(T, Cref):
     idx = numpy.triu_indices_from(Cref)
     covmats = numpy.empty((Nt, Ne, Ne))
     covmats[:, idx[0], idx[1]] = T
+
     for i in range(Nt):
         covmats[i] = numpy.diag(numpy.diag(covmats[i])) + numpy.triu(
             covmats[i], 1) / numpy.sqrt(2) + numpy.triu(covmats[i], 1).T / numpy.sqrt(2)

@@ -59,8 +59,8 @@ class CovMat(AbsClass):
     # ------------------------------- SETTERS ------------------------------- #
     # ----------------------------------------------------------------------- #
 
-    def set_numpy_array_for_covmats(self, numpy_array):
-        self._numpy_array = numpy_array
+    def set_numpy_array_for_covmats(self, covmats, index):
+        self._numpy_array = covmats[index, :, :]
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -181,7 +181,8 @@ class CovMat(AbsClass):
         if data_type is None:
             data_type = self._data_type
         tmp = numpy.random.rand(self.matrix_order, 2 * self.matrix_order)
-        self._numpy_array = (numpy.dot(tmp, numpy.transpose(tmp)) / 1000).astype(data_type, copy=False)
+        self._numpy_array = (numpy.dot(tmp, numpy.transpose(tmp)) / self.matrix_order ** 2).astype(data_type,
+                                                                                                   copy=False)
         self.reset_fields()
 
     def _compute_eigen(self, eigen_values_only=False):

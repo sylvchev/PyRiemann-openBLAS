@@ -36,7 +36,7 @@ class CovMats(AbsClass):
         self._numpy_array = numpy.array([covmat.numpy_array for covmat in arg], dtype=data_type)
         self.__covmats = arg
         for i, covmat in enumerate(self.__covmats):
-            covmat.set_numpy_array_for_covmats(self._numpy_array[i, :, :])
+            covmat.set_numpy_array_for_covmats(self, i)
 
     def __covmats_from_numpy_array(self, arg, copy, data_type=DataType.double):
         self.reset_fields()
@@ -120,3 +120,6 @@ class CovMats(AbsClass):
 
     def __iter__(self):
         return iter(self.__covmats)
+
+    def __setitem__(self, key, value):
+        self._numpy_array[key] = value

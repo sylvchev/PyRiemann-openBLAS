@@ -64,10 +64,6 @@ class AbsClass(object):
         self._data_type = data_type
         self._numpy_array.astype(data_type, copy=False)
 
-    def fill(self, value):
-        self._numpy_array.fill(value)
-        self.reset_fields()
-
     def norm(self, ord=None, axis=None):
         return numpy.linalg.norm(self._numpy_array, ord, axis)
 
