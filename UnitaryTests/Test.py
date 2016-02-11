@@ -35,6 +35,11 @@ from UnitaryTests.Mean.Log import test_mean_log_determinant, test_mean_log_eucli
 from UnitaryTests.Mean.Riemann import test_mean_riemann
 from UnitaryTests.Mean.Wasserstein import test_mean_wasserstein
 
+# Tangent Space test cases
+
+from UnitaryTests.TangentSpace.Tangent import test_tangent
+from UnitaryTests.TangentSpace.Untangent import test_untangent
+
 # end of test cases
 """
 if test_expm():
@@ -42,8 +47,3 @@ if test_expm():
 else:
     print("Test expm : Failed")
 """
-
-
-
-
-
