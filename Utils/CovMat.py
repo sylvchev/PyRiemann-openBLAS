@@ -209,10 +209,9 @@ class CovMat(AbsClass):
     # ------------------------------- OPERATORS ------------------------------- #
     # ------------------------------------------------------------------------- #
 
-    def __setitem__(self, key, value, reset_fields=True):
+    def __setitem__(self, key, value):
         self._numpy_array[key] = value
-        if reset_fields:
-            self.reset_fields()
+        self.reset_fields()
 
     def __add__(self, other):
         if isinstance(other, CovMat):
