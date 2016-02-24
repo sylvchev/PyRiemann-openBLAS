@@ -36,14 +36,12 @@ class CovMats(AbsClass):
         self._numpy_array = numpy.array([covmat.numpy_array for covmat in arg], dtype=data_type)
         self.__covmats = arg
         for i, covmat in enumerate(self.__covmats):
-            covmat[:] = self._numpy_array[i, :, :]
+            covmat.set_numpy_array_from_covmats(self._numpy_array[i, :, :])
 
     def __covmats_from_numpy_array(self, arg, copy, data_type=DataType.double):
         self.reset_fields()
         self._numpy_array = numpy.array(arg, dtype=data_type, copy=copy)
-        self.__covmats = []
-        for i in range(self.length):
-            self.__covmats.append(CovMat(self._numpy_array[i, :, :], False))
+        self.__covmats = [CovMat(self._numpy_array[i, :, :], False) for i in range(self.length)]
 
     @staticmethod
     def random(length, matrices_order, data_type=DataType.double):
@@ -67,14 +65,6 @@ class CovMats(AbsClass):
     @property
     def transpose(self):
         return self._numpy_array.T
-
-    @property
-    def inverse(self):
-        if self._inverse is not None:
-            return self._inverse
-
-        self._inverse = CovMats(inv(self._numpy_array), False)
-        return self._inverse
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #

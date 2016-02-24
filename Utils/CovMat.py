@@ -19,6 +19,8 @@ class CovMat(AbsClass):
     __eigen_values = None
     __eigen_vectors = None
     __eigen_vectors_transpose = None
+    __determinant = None
+    __inverse = None
     __sqrtm = None
     __invsqrtm = None
     __expm = None
@@ -54,6 +56,14 @@ class CovMat(AbsClass):
         covmat = CovMat(matrix_order, False, data_type)
         covmat.randomize(data_type)
         return covmat
+    
+    # ----------------------------------------------------------------------- #
+    # ------------------------------- SETTERs ------------------------------- #
+    # ----------------------------------------------------------------------- #
+    
+    # Special setter, do not use
+    def set_numpy_array_from_covmats(self, numpy_array):
+        self._numpy_array = numpy_array
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -64,16 +74,24 @@ class CovMat(AbsClass):
         return self._numpy_array.shape[0]
 
     @property
+    def determinant(self):
+        if self.__determinant is not None:
+            return self.__determinant
+
+        self.__determinant = numpy.linalg.det(self._numpy_array)
+        return self.__determinant
+
+    @property
     def transpose(self):
         return self
 
     @property
     def inverse(self):
-        if self._inverse is not None:
-            return self._inverse
+        if self.__inverse is not None:
+            return self.__inverse
 
-        self._inverse = CovMat(inv(self._numpy_array), False)
-        return self._inverse
+        self.__inverse = CovMat(inv(self._numpy_array), False)
+        return self.__inverse
 
     @property
     def eigen_values(self):
@@ -199,10 +217,9 @@ class CovMat(AbsClass):
     # ------------------------------- OPERATORS ------------------------------- #
     # ------------------------------------------------------------------------- #
 
-    def __setitem__(self, key, value, reset_fields=True):
+    def __setitem__(self, key, value):
         self._numpy_array[key] = value
-        if reset_fields:
-            self.reset_fields()
+        self.reset_fields()
 
     def __add__(self, other):
         if isinstance(other, CovMat):
