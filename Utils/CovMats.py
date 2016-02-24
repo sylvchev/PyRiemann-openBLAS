@@ -66,14 +66,6 @@ class CovMats(AbsClass):
     def transpose(self):
         return self._numpy_array.T
 
-    @property
-    def inverse(self):
-        if self._inverse is not None:
-            return self._inverse
-
-        self._inverse = CovMats(inv(self._numpy_array), False)
-        return self._inverse
-
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
