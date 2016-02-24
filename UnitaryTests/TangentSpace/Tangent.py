@@ -20,6 +20,7 @@ def test_tangent():
 
     return _get_state(old, new, "tangent space")
 
+
 def _get_state(old, new, func_name):
     if abs( old.sum() - new.sum() ) < 1e-10:
         print("%s : PASS" % func_name)
