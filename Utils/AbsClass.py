@@ -17,8 +17,6 @@ class AbsClass(object):
 
     _numpy_array = None
     _data_type = None
-    _determinant = None
-    _inverse = None
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -36,20 +34,8 @@ class AbsClass(object):
     def shape(self):
         return self._numpy_array.shape
 
-    @property
-    def determinant(self):
-        if self._determinant is not None:
-            return self._determinant
-
-        self._determinant = numpy.linalg.det(self._numpy_array)
-        return self._determinant
-
     @abstractproperty
     def transpose(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def inverse(self):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------- #
