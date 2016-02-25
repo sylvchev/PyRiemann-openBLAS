@@ -56,14 +56,6 @@ class CovMat(AbsClass):
         covmat = CovMat(matrix_order, False, data_type)
         covmat.randomize(data_type)
         return covmat
-    
-    # ----------------------------------------------------------------------- #
-    # ------------------------------- SETTERs ------------------------------- #
-    # ----------------------------------------------------------------------- #
-    
-    # Special setter, do not use
-    def set_numpy_array_from_covmats(self, numpy_array):
-        self._numpy_array = numpy_array
 
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
