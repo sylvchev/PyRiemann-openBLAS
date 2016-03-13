@@ -35,7 +35,7 @@ class Covariance_Matrices(Abstract_Covariance_Matrix): # , BaseEstimator, Transf
         if len(arg) == 0:
             raise ValueError("The list is empty.")
         self.reset_fields()
-        self._array = np.array([covmat._array for covmat in arg], dtype=dtype)
+        self._array = np.array([covmat for covmat in arg], dtype=dtype)
         self.__covmats = arg
         for i, covmat in enumerate(self.__covmats):
             covmat[:] = self._array[i, :, :]
@@ -75,14 +75,11 @@ class Covariance_Matrices(Abstract_Covariance_Matrix): # , BaseEstimator, Transf
     # ------------------------------------------------------------------------------ #
 
     def reset_fields(self):
-        # self.__det = None
-        # self.__inv = None
+        self.__mean = None
+
+    def reset_covmats_fields(self):
         for covmat in self.__covmats:
             covmat.reset_fields()
-
-    # def reset_covmats_fields(self):
-    #     for covmat in self.__covmats:
-    #         covmat.reset_fields()
 
     def get_list(self):
         return self.__covmats
@@ -122,6 +119,6 @@ class Covariance_Matrices(Abstract_Covariance_Matrix): # , BaseEstimator, Transf
 
     def __setitem__(self, key, value):
         self._array[key] = value
-        # self.reset_fields()
+        self.reset_fields()
         self.reset_covmats_fields()
 

@@ -56,7 +56,7 @@ class Covariance_Matrix(Abstract_Covariance_Matrix):
     @staticmethod
     def random(dim, dtype=np.double):
         covmat = Covariance_Matrix(dim, False, dtype)
-        covmat.randomize(dtype)
+        covmat.randomize(dim, dtype)
         return covmat
 
     # ----------------------------------------------------------------------- #
@@ -166,8 +166,8 @@ class Covariance_Matrix(Abstract_Covariance_Matrix):
         self.__e_val = None
         self.__e_vec = None
         self.__e_vec_t = None
-        self._determinant = None
-        self._inverse = None
+        self.__det = None
+        self.__inv = None
         self.__sqrtm = None
         self.__invsqrtm = None
         self.__expm = None
