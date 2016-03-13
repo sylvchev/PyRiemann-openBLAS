@@ -1,18 +1,18 @@
 # import os
 # import sys
-import numpy
 import numpy as np
-from numpy.linalg import inv
+# import numpy as np
+# from numpy.linalg import inv
 
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from .AbsClass import AbsClass
-from .CovMat import CovMat
+from .AbsClass import Abstract_Covariance_Matrix
+from .CovMat import Covariance_Matrix
 # from Utils.DataType import DataType
 # import Utils.OpenBLAS
-from sklearn.base import BaseEstimator, TransformerMixin
+# from sklearn.base import BaseEstimator, TransformerMixin
 
-class CovMats(AbsClass, BaseEstimator, TransformerMixin):
+class Covariance_Matrices(Abstract_Covariance_Matrix): # , BaseEstimator, TransformerMixin
     # ---------------------------------------------------------------------- #
     # ------------------------------- FIELDS ------------------------------- #
     # ---------------------------------------------------------------------- #
@@ -23,31 +23,33 @@ class CovMats(AbsClass, BaseEstimator, TransformerMixin):
     # ------------------------------- COVMATS CONSTRUCTORS ------------------------------ #
     # ----------------------------------------------------------------------------------- #
 
-    def __init__(self, arg=None, copy=True, data_type=np.double, estimator='scm'):
-        self._data_type = data_type
-        self.estimator = estimator
+    def __init__(self, arg=None, copy=True, dtype=np.double): # , estimator='scm'
+        self._dtype = dtype
+        # self.estimator = estimator
         if isinstance(arg, list):
-            self.__covmats_from_list(arg, data_type)
-        elif isinstance(arg, numpy.ndarray):
-            self.__covmats_from_numpy_array(arg, copy, data_type)
+            self.__covmats_from_list(arg, dtype)
+        elif isinstance(arg, np.ndarray):
+            self.__covmats_from_array(arg, copy, dtype)
 
-    def __covmats_from_list(self, arg, data_type=np.double):
+    def __covmats_from_list(self, arg, dtype=np.double):
         if len(arg) == 0:
             raise ValueError("The list is empty.")
         self.reset_fields()
-        self._numpy_array = numpy.array([covmat.numpy_array for covmat in arg], dtype=data_type)
+        self._array = np.array([covmat._array for covmat in arg], dtype=dtype)
         self.__covmats = arg
         for i, covmat in enumerate(self.__covmats):
-            covmat[:] = self._numpy_array[i, :, :]
+            covmat[:] = self._array[i, :, :]
 
-    def __covmats_from_numpy_array(self, arg, copy, data_type=np.double):
+    def __covmats_from_array(self, arg, copy, dtype=np.double):
         self.reset_fields()
-        self._numpy_array = numpy.array(arg, dtype=data_type, copy=copy)
-        self.__covmats = [CovMat(self._numpy_array[i, :, :], False) for i in range(self.length)]
+        self._array = np.array(arg, dtype=dtype, copy=copy)
+        self.__covmats = [Covariance_Matrix(self._array[i, :, :], False)
+                          for i in range(self.length)]
 
     @staticmethod
-    def random(length, matrices_order, data_type=np.double):
-        return CovMats([CovMat.random(matrices_order, data_type) for i in range(length)])
+    def random(nb_mat, dim, dtype=np.double):
+        return Covariance_Matrices([Covariance_Matrix.random(dim, dtype)
+                                    for i in range(nb_mat)])
     
     # ----------------------------------------------------------------------- #
     # ------------------------------- GETTERS ------------------------------- #
@@ -55,56 +57,61 @@ class CovMats(AbsClass, BaseEstimator, TransformerMixin):
 
     @property
     def length(self):
-        return self._numpy_array.shape[0]
+        return self._array.shape[0]
 
     @property
-    def matrices_order(self):
-        return self._numpy_array.shape[1]
+    def dim(self):
+        return self._array.shape[1]
 
     def get_covmat(self, index):
         return self.__covmats[index]
 
     @property
     def transpose(self):
-        return self._numpy_array.T
+        return self._array.T
 
     # ------------------------------------------------------------------------------ #
     # ------------------------------- USUAL FUNCTIONS ------------------------------ #
     # ------------------------------------------------------------------------------ #
 
     def reset_fields(self):
-        self._determinant = None
-        self._inverse = None
-
-    def reset_covmats_fields(self):
+        # self.__det = None
+        # self.__inv = None
         for covmat in self.__covmats:
             covmat.reset_fields()
+
+    # def reset_covmats_fields(self):
+    #     for covmat in self.__covmats:
+    #         covmat.reset_fields()
 
     def get_list(self):
         return self.__covmats
 
-    def randomize(self, data_type=np.double):
-        self.__covmats_from_list([CovMat.random(self.matrices_order, data_type) for i in range(self.length)])
+    # See random
+    # def randomize(self, dtype=np.double):
+    #     self.__covmats_from_list([CovMat.random(self.dim, dtype)
+    #                               for i in range(self.length)])
 
+    
     def add(self, arg):
         self.__covmats.append(arg)
-        self.__covmats_from_list(self.__covmats, self._data_type)
+        self.__covmats_from_list(self.__covmats, self._dtype)
 
     def add_all(self, arg):
         self.__covmats += arg
-        self.__covmats_from_list(self.__covmats, self._data_type)
+        self.__covmats_from_list(self.__covmats, self._dtype)
 
     def remove(self, arg):
         self.__covmats.remove(arg)
-        self.__covmats_from_list(self.__covmats, self._data_type)
+        self.__covmats_from_list(self.__covmats, self._dtype)
 
     def remove_all(self, arg):
         self.__covmats = [covmat for covmat in self.__covmats if covmat not in arg]
-        self.__covmats_from_list(self.__covmats, self._data_type)
+        self.__covmats_from_list(self.__covmats, self._dtype)
 
     def pop(self, arg):
         self.__covmats.pop(arg)
-        self.__covmats_from_list(self.__covmats, self._data_type)
+        self.__covmats_from_list(self.__covmats, self._dtype)
 
     # ------------------------------------------------------------------------- #
     # ------------------------------- OPERATORS ------------------------------- #
@@ -114,47 +121,7 @@ class CovMats(AbsClass, BaseEstimator, TransformerMixin):
         return iter(self.__covmats)
 
     def __setitem__(self, key, value):
-        self._numpy_array[key] = value
-        self.reset_fields()
+        self._array[key] = value
+        # self.reset_fields()
         self.reset_covmats_fields()
 
-    # ------------------------------------------------------------------------- #
-    # -------------------------------- SKLEARN -------------------------------- #
-    # ------------------------------------------------------------------------- #
-    
-    def fit(self, X, y=None):
-        """Fit.
-
-        Do nothing. For compatibility purpose.
-
-        Parameters
-        ----------
-        X : ndarray, shape (n_trials, n_channels, n_samples)
-            ndarray of trials.
-        y : ndarray shape (n_trials, 1)
-            labels corresponding to each trial, not used.
-
-        Returns
-        -------
-        self : Covariances instance
-            The Covariances instance.
-        """
-        return self
-
-    def transform(self, X):
-        """Estimate covariance matrices.
-
-        Parameters
-        ----------
-        X : ndarray, shape (n_trials, n_channels, n_samples)
-            ndarray of trials.
-
-        Returns
-        -------
-        covmats : ndarray, shape (n_trials, n_channels, n_channels)
-            ndarray of covariance matrices for each trials.
-        """
-        # covmats = covariances(X, estimator=self.estimator)
-        # return covmats
-        return self
-        
