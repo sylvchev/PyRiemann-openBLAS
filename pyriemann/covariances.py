@@ -1,5 +1,5 @@
 from sklearn.base import BaseEstimator, TransformerMixin
-from .estimation import covariances
+from .utils.estimation import covariances
 
 class Covariances(BaseEstimator, TransformerMixin):
 
