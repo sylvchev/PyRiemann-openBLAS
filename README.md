@@ -9,7 +9,9 @@ This is a fork from [Alexandre Barachant's pyRiemann toolbox](https://github.com
 We have benchmark two main Python distributions (Canopy, Anaconda) and we have build our own Python toolchain, with numpy compiled against MKL and OpenBLAS.
 A canevas script to build the benchmark is available [from this gist](https://gist.github.com/sylvchev/87e42c8fe761a5279213). Some results are plotted below for 500x500 covariance matrices, with the [code available here](https://gist.github.com/sylvchev/97682447313a1d16f642). Nota bene, Anaconda is used in its vanilla version (the free one), it is possible to pay to obtain a version compiled against MKL.
 
-![scipybench](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/scipybench.png)
+<p align="center">
+  <img src="img/scipybench.png" width="500"/>
+</p>
 
 Extensive testing shows that OpenBLAS is largely suitable for our computation and that it is much more easier to deploy than MKL. See also [this benchmark](http://stackoverflow.com/questions/7596612/benchmarking-python-vs-c-using-blas-and-numpy).
 
@@ -28,21 +30,17 @@ Covariance matrices have a dedicated class, which can be handle as a list and as
 
 Below are some speed-up test comparison with direct numpy implementation, without cached storage.
 
-![base-speedup](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/base-speedup.png)
-
-![distance-speedup](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/distance-speedup.png)
-
-![geodesic-speedup](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/geodesic-speedup.png)
-
 <p align="center">
-  <img src="img/mean-speedup.png" width="700"/>
+  <img src="img/base-speedup.png" width="450"/>
+
+  <img src="img/distance-speedup.png" width="450"/>
+
+  <img src="img/geodesic-speedup.png" width="450"/>
+
+  <img src="img/mean-speedup.png" width="450"/>
   
-  <img src="img/tangent-speedup.png" width="350"/>
+  <img src="img/tangent-speedup.png" width="450"/>
 </p>
-
-![mean-speedup](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/mean-speedup.png)
-
-![tangent-speedup](https://github.com/sylvchev/PyRiemannEigen/raw/master/img/tangent-speedup.png)
 
 ## Dependencies
 
