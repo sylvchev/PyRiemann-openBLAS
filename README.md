@@ -28,17 +28,18 @@ A specific class is designed for the covariance matrix and the intermediate comp
 
 Covariance matrices have a dedicated class, which can be handle as a list and as numpy ndarray. This class also store some cached storage, for intermediate computation.
 
-Below are some speed-up test comparison with direct numpy implementation, without cached storage.
+Below are some speed-up test comparison with direct numpy implementation, without cached storage. The most important facts are that:
+- for euclidean case, the overhead is the most visible and increase the computation cost. This effecti vanishes when increasing the dimension of the matrices
+- for Riemannian metric, there a clear effect for the small dimension problem, the speed up factor is around 1.25. For larger problem, it is less obvious.
+- For computing mean values, especially for small scale problem, the Riemannian cases shows a good speed-up (around 1.15) and the euclidean ones are not as efficient. The values obtained by the log-euclidean may be the result of good performances of the rewriting covariance class on top of a specific issue with the original code.
 
 <p align="center">
   <img src="img/base-speedup.png" width="450"/>
-
   <img src="img/distance-speedup.png" width="450"/>
 
   <img src="img/geodesic-speedup.png" width="450"/>
-
   <img src="img/mean-speedup.png" width="450"/>
-  
+
   <img src="img/tangent-speedup.png" width="450"/>
 </p>
 
