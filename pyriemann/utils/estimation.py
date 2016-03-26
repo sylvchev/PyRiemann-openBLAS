@@ -48,7 +48,7 @@ def _check_est(est):
                  estimators.keys())))
     return est
 
-def covariances(X, estimator='cov'):
+def estimate_covariances(X, estimator='cov'):
     est = _check_est(estimator)
     Nt, Ne, Ns = X.shape
     covlist = []
@@ -58,15 +58,17 @@ def covariances(X, estimator='cov'):
     covmats = Covariance_Matrices(covlist) 
     return covmats
 
-# def covariances_EP(X, P, estimator='cov'):
-#     est = _check_est(estimator)
-#     Nt, Ne, Ns = X.shape
-#     Np, Ns = P.shape
-#     covmats = numpy.zeros((Nt, Ne + Np, Ne + Np))
-#     for i in range(Nt):
-#         covmats[i, :, :] = est(numpy.concatenate((P, X[i, :, :]), axis=0))
-#     return covmats
-
+def estimate_covariances_EP(X, P, estimator='cov'):
+    est = _check_est(estimator)
+    Nt, Ne, Ns = X.shape
+    Np, Ns = P.shape
+    # covmats = numpy.zeros((Nt, Ne + Np, Ne + Np))
+    covlist = []
+    for i in range(Nt):
+        covlist.append(est(np.concatenate((P, X[i, :, :]), axis=0)))
+        # covmats[i, :, :] = est(numpy.concatenate((P, X[i, :, :]), axis=0))
+    covmats = Covariance_Matrices(covlist) 
+    return covmats
 
 # def eegtocov(sig, window=128, overlapp=0.5, padding=True, estimator='cov'):
 #     est = _check_est(estimator)

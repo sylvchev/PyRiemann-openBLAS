@@ -21,6 +21,9 @@ class Covariance_Matrix(Abstract_Covariance_Matrix):
     __e_val = None
     __e_vec = None
     __e_vec_t = None
+    __e_val_b = None
+    __e_vec_b = None
+    __e_vec_t_b = None
     __det = None
     __inv = None
     __sqrtm = None
@@ -86,18 +89,23 @@ class Covariance_Matrix(Abstract_Covariance_Matrix):
         return self.__inv
 
     @property
-    def eigenval(self):
-        if self.__e_val is not None:
-            return self.__e_val
-        self._compute_eigen(True)
-        return self.__e_val
+    def eigenval(self, b=None):
+        return self._compute_eigen(eigenvalues_only=True, b=b)
+        # if b is not None and (self.__e_val_b is not None and
+        #                       self.__e_val_b.has_key(hash(str(b))))
+        #     return self.__e_val_b[hash(str(b))]
+        # elif self.__e_val is not None:
+        #     return self.__e_val
+        # return self._compute_eigen(eigenvalues_only=True, b)
+        # return self.__e_val
 
     @property
-    def eigenvec(self):
-        if self.__e_vec is not None:
-            return self.__e_vec
-        self._compute_eigen()
-        return self.__e_vec
+    def eigenvec(self, b=None):
+        return self._compute_eigen(eigenvalues_only=True, b=b)
+        # if self.__e_vec is not None:
+        #     return self.__e_vec
+        # self._compute_eigen(eigenvalues_only=False, b=b)
+        # return self.__e_vec
 
     @property
     def eigenvec_transpose(self):
@@ -183,15 +191,35 @@ class Covariance_Matrix(Abstract_Covariance_Matrix):
         self._array = (tmp.dot(tmp.T)/self.dim**2).astype(dtype, copy=False)
         self.reset_fields()
 
-    def _compute_eigen(self, eigenvalues_only=False):
-        if self.__e_val is not None and self.__e_vec is not None:
-            return
+    def _compute_eigen(self, eigenvalues_only=False, b=None):
         if eigenvalues_only:
-            if self.__e_val is not None: return
-            else: self.__e_val = eigvalsh(self._array)
+            if b is None:
+                if self.__e_val is not None: return self.__e_val
+                else:
+                    self.__e_val = eigvalsh(self._array)
+                    return self.__e_val
+            else:
+                if self.__e_val_b.has_key(hash(str(b))):
+                    return self.__e_val_b[hash(str(b))]
+                else:
+                    self.__e_val_b[hash(str(b))]=eigvalsh(self._array, b)
+                    return self.__e_val_b[hash(str(b))]
         else:
-            self.__e_val, self.__e_vec = eigh(self._array)
-            self.__e_vec_t = self.__e_vec.T
+            if b is None:
+                if self.__e_val is not None and self.__e_vec is not None:
+                    return self.__e_val, self.__e_vec
+                else:
+                    self.__e_val, self.__e_vec = eigh(self._array)
+                    return self.__e_val, self.__e_vec
+            else:
+                if (self.__e_val_b.has_key(hash(str(b))) and
+                    self.__e_vec_b.has_key(hash(str(b)))):
+                    return self.__e_val_b[hash(str(b))], self.__e_vec_b[hash(str(b))]
+                else:
+                    self.__e_val_b[hash(str(b))], self.__e_vec_b[hash(str(b))] \
+                       = eigvalsh(self._array, b)
+                    self.__e_vec_t_b = self.__e_vec_b[hash(str(b))].T
+                    return self.__e_val_b[hash(str(b))], self.__e_vec_b[hash(str(b))]
 
     @staticmethod
     def multiply(covmat1, covmat2):
